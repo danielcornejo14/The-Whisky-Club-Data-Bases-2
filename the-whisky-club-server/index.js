@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
+const mssql = require('./Databases/MsSql/mssql_controller')
 
 const auth = require('./middleware/auth')
 
@@ -9,6 +10,13 @@ const app = express()
 
 app.use(cors())
 app.use(bodyParser.json())
+
+app.use('/user', require('./users/users.controller'))
+
+app.get('/', (req, res)=>{
+    mssql.testDatabase()
+    res.json({message: "tomelo"})
+})
 
 app.post('/getToken', (req, res) =>{
     console.log(req.body.username)
@@ -20,7 +28,7 @@ app.get('/authToken', auth.verifyToken, (req, res)=>{
     res.json({message: "authorized"})
 })
 
-const port = process.env.PORT
+const port = process.env.API_PORT
 
 app.listen(port, ()=>{
     console.log(`server is running on port ${port}`)
