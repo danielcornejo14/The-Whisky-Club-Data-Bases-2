@@ -1,1 +1,9 @@
-<p>admin-login works!</p>
+<div [formGroup]="adminLogInForm">
+    <mat-form-field appearance="fill">
+        <input matInput type="text" placeholder="username" formControlName="userName"> 
+    </mat-form-field>
+    
+    <mat-form-field appearance="fill">
+        <input matInput type="password" placeholder="password" formControlName="password">
+    </mat-form-field>
+</div>

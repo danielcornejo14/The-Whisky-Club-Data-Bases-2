@@ -9,7 +9,7 @@ function generateToken(username){
     return jwt.sign(username, process.env.TOKEN_SECRET, {expiresIn: '120000s'})
 }
 function verifyToken (req, res, next){
-    const authHeader = req.headers['auth']
+    const authHeader = req.headers['Authorization']
     const token = authHeader && authHeader.split(' ')[1]
 
     console.log(token)
