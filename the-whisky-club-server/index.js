@@ -13,7 +13,7 @@ app.use(bodyParser.json())
 app.post('/getToken', (req, res) =>{
     console.log(req.body.username)
     const token = auth.generateToken({username: req.body.username})
-    res.json({message: token})
+    res.json({jwt: token})
 })
 
 app.get('/authToken', auth.verifyToken, (req, res)=>{

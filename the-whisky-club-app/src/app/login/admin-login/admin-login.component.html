@@ -1,4 +1,4 @@
-<div [formGroup]="adminLogInForm">
+<form [formGroup]="adminLogInForm" (ngSubmit)="submitLogin()">
     <mat-form-field appearance="fill">
         <input matInput type="text" placeholder="username" formControlName="userName"> 
     </mat-form-field>
@@ -6,4 +6,6 @@
     <mat-form-field appearance="fill">
         <input matInput type="password" placeholder="password" formControlName="password">
     </mat-form-field>
-</div>
+
+    <button mat-button type="submit">Submit</button>
+</form>

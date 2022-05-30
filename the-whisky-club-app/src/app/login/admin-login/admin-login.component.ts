@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { AuthService } from 'src/app/_services/auth/auth.service';
+import { TokenStorageService } from 'src/app/_services/auth/token-storage.service';
 
 
 @Component({
@@ -9,7 +11,11 @@ import { FormBuilder } from '@angular/forms';
 })
 export class AdminLoginComponent implements OnInit {
 
-  constructor(private fb: FormBuilder) { }
+  constructor(
+    private fb: FormBuilder,
+    private auth: AuthService,
+    private storage: TokenStorageService
+  ) { }
 
   adminLogInForm = this.fb.group({
     userName: [''],
@@ -17,8 +23,21 @@ export class AdminLoginComponent implements OnInit {
   })
 
   ngOnInit(): void {
-    this.adminLogInForm.get('userName')?.setValue('Daniel')
-    this.adminLogInForm.get('password')?.setValue('Cornejo')
+
+  }
+
+  submitLogin(): void{
+    let user = {
+      username: this.adminLogInForm.get('userName')?.value,
+      password: this.adminLogInForm.get('password')?.value
+    }
+
+    this.auth.login(user.username, user.password).subscribe(x => {
+      this.storage.saveToken(x.jwt)
+      console.log(this.storage.getToken())
+      console.log(x.jwt)
+    })
+
   }
 
 }
