@@ -1,15 +1,13 @@
-CREATE FUNCTION validateAdministrator (
-    @idAdministrator int,
+CREATE PROCEDURE validateAdministrator
+    @userName varchar(64),
     @password varchar(64)
-)
-RETURNS varchar(2)
 AS
 BEGIN
-    IF (SELECT COUNT(idAdministrator) FROM Administrator WHERE idAdministrator = @idAdministrator
+    IF (SELECT COUNT(idAdministrator) FROM Administrator WHERE userName = @userName
         AND status = 1 AND password = HASHBYTES('MD4', @password)) > 0
     BEGIN
-        return '01' --The idAdmin and password are correct.
+        select '01' as message --The idAdmin and password are correct.
     END
-    return '00' --The idAdmin or password are incorrect.
+    select '00' as message --The idAdmin or password are incorrect.
 END
 GO
