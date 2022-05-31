@@ -38,7 +38,7 @@ BEGIN
                                     SET emailAddress = @emailAddress,
                                         name = @name,
                                         userName = @userName,
-                                        password = @password,
+                                        password = HASHBYTES('MD4', @password),
                                         lastName1 = @lastName1,
                                         lastName2 = @lastName2
                                     WHERE idAdministrator = @idAdministrator

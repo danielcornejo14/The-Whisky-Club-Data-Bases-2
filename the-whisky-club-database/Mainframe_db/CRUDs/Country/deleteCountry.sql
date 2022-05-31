@@ -9,6 +9,7 @@ BEGIN
         BEGIN
             BEGIN TRANSACTION
                 BEGIN TRY
+                    --EXEC deleteShop
                     UPDATE Country
                     SET status = 0
                     WHERE idCountry = @idCountry

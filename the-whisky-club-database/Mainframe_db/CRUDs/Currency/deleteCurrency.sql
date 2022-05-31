@@ -22,9 +22,7 @@ BEGIN
                     END
                     CLOSE whiskeyCursor
                     DEALLOCATE whiskeyCursor
-                    UPDATE Country
-                    SET status = 0
-                    WHERE idCurrency = @idCurrency
+                    --CURSOR CON EXEC deleteCountry
                     UPDATE Currency
                     SET status = 0
                     WHERE idCurrency = @idCurrency

@@ -31,7 +31,7 @@ BEGIN
                             BEGIN TRANSACTION
                                 BEGIN TRY
                                     INSERT INTO Administrator(emailAddress, name, userName, password, lastName1, lastName2)
-                                    VALUES (@emailAddress, @name, @userName, @password, @lastName1, @lastName2)
+                                    VALUES (@emailAddress, @name, @userName, HASHBYTES('MD4', @password), @lastName1, @lastName2)
                                     PRINT('Administrator inserted.')
                                     COMMIT TRANSACTION
                                 END TRY

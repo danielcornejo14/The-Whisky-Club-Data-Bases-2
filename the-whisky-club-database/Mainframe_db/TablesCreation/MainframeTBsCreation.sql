@@ -57,7 +57,7 @@ CREATE TABLE Administrator (
     emailAddress varchar(64) NOT NULL,
     name varchar(64) NOT NULL,
     userName varchar(64) NOT NULL,
-    password varchar(64) NOT NULL,
+    password binary(64) NOT NULL,
     lastName1 varchar(64) NOT NULL,
     lastName2 varchar(64) NOT NULL,
     status bit NOT NULL DEFAULT 1
