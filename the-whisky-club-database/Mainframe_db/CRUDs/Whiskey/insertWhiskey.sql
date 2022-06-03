@@ -52,9 +52,9 @@ BEGIN
         END
         ELSE
         BEGIN
-            RAISERROR('The ids must exist, the brand name cannot be repeated' +
-                      ', the quantity arguments must be greater than 0 and the ' +
-                      'due date must be before the production date.', 11, 1)
+            RAISERROR('The ids must exist, the brand name cannot be repeated,' +
+                      ' the quantity arguments must be greater than 0 and the' +
+                      ' due date must be before the production date.', 11, 1)
         END
     END
     ELSE

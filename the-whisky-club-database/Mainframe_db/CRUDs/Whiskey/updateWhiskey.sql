@@ -24,7 +24,7 @@ BEGIN
             AND status = 1) > 0
             AND (SELECT COUNT(idWhiskeyType) FROM WhiskeyType WHERE idWhiskeyType = @idWhiskeyType
             AND status = 1) > 0
-            AND (SELECT COUNT(brand) FROM Whiskey WHERE brand = @brand) >= 0
+            AND (SELECT COUNT(brand) FROM Whiskey WHERE brand = @brand) = 0
             AND (SELECT COUNT(idWhiskey) FROM Whiskey WHERE idWhiskey = @idWhiskey
             AND status = 1) > 0
             AND @price > 0
@@ -61,9 +61,9 @@ BEGIN
         END
         ELSE
         BEGIN
-            RAISERROR('The ids must exist, the brand name cannot be repeated,' +
-                      ' the quantity arguments must be greater than 0 and the' +
-                      ' due date must be before the production date.', 11, 1)
+            RAISERROR('The ids must exist, the brand name cannot be repeated, the quantity' +
+                      ' arguments must be greater than 0 and the due date must be before the' +
+                      ' production date.', 11, 1)
         END
     END
     ELSE

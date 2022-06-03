@@ -1,26 +1,4 @@
 --Countries_dbs tables creation
-CREATE TABLE State(
-    idState int PRIMARY KEY IDENTITY(1,1) NOT NULL,
-    name varchar(64) NOT NULL,
-    status bit NOT NULL DEFAULT 1 --1 active and 0 inactive (deleted)
-)
-CREATE TABLE County(
-    idCounty int PRIMARY KEY IDENTITY(1,1) NOT NULL,
-    idState int NOT NULL FOREIGN KEY REFERENCES State(idState),
-    name varchar(64) NOT NULL,
-    status bit NOT NULL DEFAULT 1 --1 active and 0 inactive (deleted)
-)
-CREATE TABLE City(
-    idCity int PRIMARY KEY IDENTITY(1,1) NOT NULL,
-    idCounty int NOT NULL FOREIGN KEY REFERENCES County(idCounty),
-    name varchar(64) NOT NULL,
-    status bit NOT NULL DEFAULT 1--1 active and 0 inactive (deleted)
-)
-CREATE TABLE Address(
-    idAddress int PRIMARY KEY IDENTITY(1,1) NOT NULL,
-    idCity int NOT NULL FOREIGN KEY REFERENCES City(idCity) UNIQUE,
-    status bit NOT NULL DEFAULT 1--1 active and 0 inactive (deleted)
-)
 CREATE TABLE Currency(
     idCurrency int PRIMARY KEY IDENTITY (1,1) NOT NULL,
     name varchar(64) NOT NULL,
@@ -35,7 +13,6 @@ CREATE TABLE Country(
 CREATE TABLE Shop(
     idShop int PRIMARY KEY IDENTITY(1,1) NOT NULL,
     idCountry int NOT NULL FOREIGN KEY REFERENCES Country(idCountry),
-    idAddress int NOT NULL FOREIGN KEY REFERENCES Address(idAddress),
     name varchar(64) NOT NULL,
     phone varchar(8) NOT NULL,
     location geometry NOT NULL,
@@ -101,7 +78,6 @@ CREATE TABLE Subscription(
 CREATE TABLE Customer(
     idCustomer int PRIMARY KEY IDENTITY(1,1) NOT NULL,
     idSubscription int NOT NULL FOREIGN KEY REFERENCES Subscription(idSubscription),
-    idAddress int NOT NULL FOREIGN KEY REFERENCES Address(idAddress),
     emailAddress varchar(64) NOT NULL,
     name varchar(64) NOT NULL,
     lastName1 varchar(64) NOT NULL,
@@ -120,12 +96,50 @@ CREATE TABLE WhiskeyReview(
     date date NOT NULL,
     status bit NOT NULL DEFAULT 1
 )
+CREATE TABLE Department (
+    idDepartment int PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    idShop int NOT NULL,
+    name varchar(64) NOT NULL,
+    status bit NOT NULL DEFAULT 1,
+    FOREIGN KEY (idShop) REFERENCES Shop(idShop)
+)
+CREATE TABLE EmployeeType (
+    idEmployeeType int PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    name varchar(64) NOT NULL,
+    status bit NOT NULL DEFAULT 1
+)
+CREATE TABLE Employee(
+    idEmployee int PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    idDepartment int NOT NULL,
+    idEmployeeType int NOT NULL,
+    name varchar(64) NOT NULL,
+    lastName1 varchar(64) NOT NULL,
+    lastName2 varchar(64) NOT NULL,
+    localSalary decimal(15,4) NOT NULL,
+    dollarSalary decimal(15,4) NOT NULL,
+    userName varchar(64) NOT NULL,
+    password binary(64) NOT NULL,
+    status bit NOT NULL DEFAULT 1,
+    FOREIGN KEY (idDepartment) REFERENCES Department(idDepartment),
+    FOREIGN KEY (idEmployeeType) REFERENCES EmployeeType(idEmployeeType)
+)
+CREATE TABLE EmployeeReview(
+    idEmployeeReview int PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    idCustomer int NOT NULL,
+    idEmployee int NOT NULL,
+    comment varchar(64) NOT NULL,
+    evaluation int NOT NULL,
+    date date NOT NULL,
+    status bit NOT NULL DEFAULT 1,
+    FOREIGN KEY (idCustomer) REFERENCES Customer(idCustomer),
+    FOREIGN KEY (idEmployee) REFERENCES Employee(idEmployee)
+)
 CREATE TABLE WhiskeyXCustomer(
     idWhiskeyXCustomer int PRIMARY KEY IDENTITY(1,1) NOT NULL,
     idWhiskey int NOT NULL FOREIGN KEY REFERENCES Whiskey(idWhiskey),
     idPaymentMethod int NOT NULL FOREIGN KEY REFERENCES PaymentMethod(idPaymentMethod),
-    idCashier int NOT NULL FOREIGN KEY REFERENCES Customer(idCustomer),
-    idCourier int NOT NULL FOREIGN KEY REFERENCES Customer(idCustomer),
+    idCashier int NOT NULL FOREIGN KEY REFERENCES Employee(idEmployee),
+    idCourier int NOT NULL FOREIGN KEY REFERENCES Employee(idEmployee),
     idDeliveryReviewType int NOT NULL FOREIGN KEY REFERENCES DeliveryReviewType(idDeliveryReviewType),
     idShop int NOT NULL FOREIGN KEY REFERENCES Shop(idShop),
     idCustomer int NOT NULL FOREIGN KEY REFERENCES Customer(idCustomer),

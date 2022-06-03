@@ -10,29 +10,34 @@ BEGIN
         IF ((SELECT COUNT(name) FROM Shop WHERE name = @name) = 0
             AND (SELECT COUNT(idCountry) FROM Country WHERE idCountry = @idCountry
                 AND status = 1) > 0
-            AND (SELECT COUNT(idAddress) FROM Address WHERE idAddress = @idAddress
-                AND status = 1) > 0
             AND (SELECT COUNT(idShop) FROM Shop WHERE idShop = @idShop
-                AND status = 1) > 0)
+                AND status = 1) > 0
+            AND (SELECT COUNT(location) FROM Shop WHERE (location.STEquals(@location) = 1)) = 0)
         BEGIN
             IF @phone LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
             BEGIN
-                BEGIN TRANSACTION
-                    BEGIN TRY
-                        UPDATE Shop
-                        SET idCountry = @idCountry,
-                            idAddress = @idAddress,
-                            name = @name,
-                            phone = @phone,
-                            location = @location
-                        WHERE idShop = @idShop
-                        PRINT('Shop updated.')
-                        COMMIT TRANSACTION
-                    END TRY
-                    BEGIN CATCH
-                        ROLLBACK TRANSACTION
-                        RAISERROR('An error has occurred in the database.', 11, 1)
-                    END CATCH
+                IF (SELECT COUNT(phone) FROM Shop WHERE phone = @phone) = 0
+                BEGIN
+                    BEGIN TRANSACTION
+                        BEGIN TRY
+                            UPDATE Shop
+                            SET idCountry = @idCountry,
+                                name = @name,
+                                phone = @phone,
+                                location = @location
+                            WHERE idShop = @idShop
+                            PRINT('Shop updated.')
+                            COMMIT TRANSACTION
+                        END TRY
+                        BEGIN CATCH
+                            ROLLBACK TRANSACTION
+                            RAISERROR('An error has occurred in the database.', 11, 1)
+                        END CATCH
+                END
+                ELSE
+                BEGIN
+                    RAISERROR('The phone number cannot be repeated.', 11, 1)
+                END
             END
             ELSE
             BEGIN
@@ -41,7 +46,7 @@ BEGIN
         END
         ELSE
         BEGIN
-            RAISERROR('The shop name cannot be repeated and the ids must exist.', 11, 1)
+            RAISERROR('The shop name and the location cannot be repeated, and the ids must exist.', 11, 1)
         END
     END
     ELSE

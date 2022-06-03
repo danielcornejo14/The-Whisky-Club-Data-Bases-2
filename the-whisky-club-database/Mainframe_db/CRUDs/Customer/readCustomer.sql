@@ -7,9 +7,9 @@ BEGIN
         IF (SELECT COUNT(idCustomer) FROM Customer WHERE idCustomer = @idCustomer AND
              status = 1) > 0
         BEGIN
-            SELECT idCustomer, idSubscription, idAddress,
-                   emailAddress, name, lastName1, lastName2,
-                   location, userName, password, status
+            SELECT idCustomer, idSubscription, emailAddress,
+                   name, lastName1, lastName2, location,
+                   userName, password, status
             FROM Customer
             WHERE idCustomer = @idCustomer
         END

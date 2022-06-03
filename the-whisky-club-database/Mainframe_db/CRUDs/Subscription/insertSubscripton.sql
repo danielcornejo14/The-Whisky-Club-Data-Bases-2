@@ -14,8 +14,8 @@ BEGIN
         BEGIN
             BEGIN TRANSACTION
                 BEGIN TRY
-                    INSERT INTO Subscription(idShop, name, shoppingDiscount, shippingDiscount)
-                    VALUES (@idShop , @name, @shoppingDiscount, @shippingDiscount)
+                    INSERT INTO Subscription(name, shoppingDiscount, shippingDiscount)
+                    VALUES (@name, @shoppingDiscount, @shippingDiscount)
                     PRINT('Subscription inserted.')
                     COMMIT TRANSACTION
                 END TRY
