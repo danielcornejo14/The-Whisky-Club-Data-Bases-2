@@ -22,6 +22,15 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { AdminDashboardComponent } from './dashboard/admin-dashboard/admin-dashboard.component';
+import { CatalogComponent } from './dashboard/admin-dashboard/catalog/catalog.component';
+import {MatListModule} from '@angular/material/list';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatDialogModule} from '@angular/material/dialog';
+import { CatalogUpdateComponent } from './dashboard/admin-dashboard/catalog/catalog-update/catalog-update.component';
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatSelectModule} from "@angular/material/select";
+import { CatalogCreateComponent } from './dashboard/admin-dashboard/catalog/catalog-create/catalog-create.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +40,12 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     AdminLoginComponent,
     CustomerLoginComponent,
     SignupComponent,
-    CustomerSignupComponent
+    CustomerSignupComponent,
+    AdminDashboardComponent,
+    CatalogComponent,
+    CatalogUpdateComponent,
+    CatalogCreateComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -40,10 +54,16 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     MatToolbarModule,
     MatButtonModule,
     MatFormFieldModule,
-    MatInputModule, 
+    MatInputModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatListModule,
+    MatDividerModule,
+    MatDialogModule,
+    MatCheckboxModule,
+    MatSelectModule
+
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]

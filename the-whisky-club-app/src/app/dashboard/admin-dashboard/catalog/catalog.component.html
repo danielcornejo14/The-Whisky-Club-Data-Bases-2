@@ -1,0 +1,30 @@
+<button mat-button (click)="addProduct()">Add<</button>
+<div class="catalogContainer">
+  <div *ngFor="let item of this.WhiskyList" class="product">
+    <div class="productInformation">
+      <div>Item ID: {{item.idWhiskey}}</div>
+      <div>Supplier: {{findSupplier(item.idSupplier).name}}</div>
+      <div>Currency: {{findCurrency(item.idCurrency).name}}</div>
+      <div>Brand: {{item.brand}}</div>
+    </div>
+    <div class="productCharacteristics">
+      <div>Price: {{item.price}}</div>
+      <div>Presentation: {{findPresentation(item.idPresentation).description}}</div>
+      <div>Type: {{findWhiskeyType(item.idWhiskeyType).name}}</div>
+      <div>Alcohol Content: {{item.alcoholContent}}</div>
+      <div>Production Date:{{item.productionDate}}</div>
+      <div>Due Date: {{item.dueDate}}</div>
+      <div>Milliliters: {{item.millilitersQuantity}}</div>
+      <div>Aging: {{item.whiskeyAging}}</div>
+      <div>Available: {{item.availability}}</div>
+      <div>Special: {{item.special}}</div>
+    </div>
+
+    <button mat-raised-button type="button" color="primary" (click)="updateWhiskey(item)">Edit</button>
+
+  </div>
+
+
+
+</div>
+

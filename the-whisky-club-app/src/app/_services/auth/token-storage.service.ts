@@ -10,12 +10,16 @@ export class TokenStorageService {
 
   constructor() { }
 
+  loginStatus = false
+
   logOut(): void{
     window.sessionStorage.clear()
+    this.loginStatus = false
   }
   public saveToken(token: string): void {
     window.sessionStorage.removeItem(TOKEN_KEY)
     window.sessionStorage.setItem(TOKEN_KEY, token)
+    this.loginStatus = true
   }
 
   public getToken(): string | null {

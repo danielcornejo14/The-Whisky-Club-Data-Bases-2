@@ -1,0 +1,24 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.formContainer{
+  display: flex;
+  justify-content: space-around;
+}
+
+.productInformation{
+  display: flex;
+  flex-direction: column;
+}
+
+.productCharacteristics{
+  display: flex;
+  flex-direction: column;
+}

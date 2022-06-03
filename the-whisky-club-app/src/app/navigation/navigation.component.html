@@ -1,8 +1,16 @@
-<mat-toolbar color="primary" class="navbar">
+<mat-toolbar class="navbar">
   <a routerLink="" class="navBrand">The Whisky Club</a>
-
   <div class="navLinkWrap">
-    <a mat-button class="navLink" routerLink="login">Login</a>
-    <a mat-button class="navLink" routerLink="signup">Sign Up</a>
+
+    <div *ngIf="!this.storage.loginStatus; else logout">
+      <a mat-button class="navLink" routerLink="login">Log In</a>
+      <a mat-button class="navLink" routerLink="signup">Sign Up</a>
+    </div>
+
+    <ng-template #logout>
+      <a mat-button class="navLink" (click)="logOut()">Log Out</a>
+    </ng-template>
+
   </div>
 </mat-toolbar>
+
