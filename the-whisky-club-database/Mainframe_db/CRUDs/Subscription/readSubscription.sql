@@ -7,7 +7,7 @@ BEGIN
         IF (SELECT COUNT(idSubscription) FROM Subscription WHERE idSubscription = @idSubscription AND
              status = 1) > 0
         BEGIN
-            SELECT idSubscription, idShop, name, shoppingDiscount, shippingDiscount, status
+            SELECT idSubscription, name, shoppingDiscount, shippingDiscount, status
             FROM Subscription
             WHERE idSubscription = @idSubscription
         END

@@ -1,22 +1,18 @@
-CREATE PROCEDURE deleteCountry @idCountry int
+CREATE PROCEDURE deleteWhiskeyXShop @idWhiskeyXShop int
 WITH ENCRYPTION
 AS
 BEGIN
-    IF @idCountry IS NOT NULL
+    IF @idWhiskeyXShop IS NOT NULL
     BEGIN
-        IF (SELECT COUNT(idCountry) FROM Country WHERE idCountry = @idCountry
+        IF (SELECT COUNT(idWhiskeyXShop) FROM WhiskeyXShop WHERE idWhiskeyXShop = @idWhiskeyXShop
             AND status = 1) > 0
         BEGIN
             BEGIN TRANSACTION
                 BEGIN TRY
-                    --EXEC deleteShop
-                    UPDATE UnitedStates_db.dbo.Shop
-                    SET
-
-                    UPDATE Country
+                    UPDATE WhiskeyXShop
                     SET status = 0
-                    WHERE idCountry = @idCountry
-                    PRINT('Country deleted.')
+                    WHERE idWhiskeyXShop = @idWhiskeyXShop
+                    PRINT('WhiskeyXShop deleted.')
                     COMMIT TRANSACTION
                 END TRY
                 BEGIN CATCH
@@ -26,7 +22,7 @@ BEGIN
         END
         ELSE
         BEGIN
-            RAISERROR('The country id must exist.', 11, 1)
+            RAISERROR('The WhiskeyXShop id must exist.', 11, 1)
         END
     END
     ELSE

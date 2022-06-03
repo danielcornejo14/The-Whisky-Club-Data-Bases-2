@@ -16,9 +16,8 @@ BEGIN
             AND lastName2 = @lastName2) = 0
             AND (SELECT COUNT(idSubscription) FROM Subscription WHERE idSubscription = @idSubscription
             AND status = 1) > 0
-            AND (SELECT COUNT(idAddress) FROM Address WHERE idAddress = @idAddress
-            AND status = 1) > 0
-            AND (SELECT COUNT(userName) FROM Customer WHERE userName = @userName) = 0)
+            AND (SELECT COUNT(userName) FROM Customer WHERE userName = @userName) = 0
+            AND (SELECT COUNT(location) FROM Customer WHERE (location.STEquals(@location) = 1)) = 0)
         BEGIN
             IF @emailAddress LIKE '%_@__%.__%'
             BEGIN
@@ -39,10 +38,10 @@ BEGIN
                         BEGIN
                             BEGIN TRANSACTION
                                 BEGIN TRY
-                                    INSERT INTO Customer(idSubscription, idAddress, emailAddress,
+                                    INSERT INTO Customer(idSubscription, emailAddress,
                                                          name, lastName1, lastName2, location,
                                                          userName, password)
-                                    VALUES (@idSubscription , @idAddress, @emailAddress,
+                                    VALUES (@idSubscription , @emailAddress,
                                             @name, @lastName1, @lastName2, @location,
                                             @userName, HASHBYTES('MD4', @password))
                                     PRINT('Customer inserted.')
@@ -60,7 +59,8 @@ BEGIN
                     END
                     ELSE
                     BEGIN
-                        RAISERROR('The password must have a special character, a capital letter, a number, and the minimum length is 8 and maximum length is 64.', 11, 1)
+                        RAISERROR('The password must have a special character, a capital letter,' +
+                                  ' a number, and the minimum length is 8 and maximum length is 64.', 11, 1)
                     END
                 END
                 ELSE
@@ -75,7 +75,7 @@ BEGIN
         END
         ELSE
         BEGIN
-            RAISERROR('The customer name and userName cannot be repeated, and the ids must exist.', 11, 1)
+            RAISERROR('The customer name, the userName and the location cannot be repeated, and the ids must exist.', 11, 1)
         END
     END
     ELSE

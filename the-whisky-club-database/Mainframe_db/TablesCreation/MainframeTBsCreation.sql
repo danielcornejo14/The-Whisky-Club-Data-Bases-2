@@ -1,26 +1,4 @@
 --Mainframe_db tables creation
-CREATE TABLE State(
-    idState int PRIMARY KEY IDENTITY(1,1) NOT NULL,
-    name varchar(64) NOT NULL,
-    status bit NOT NULL DEFAULT 1 --1 active and 0 inactive (deleted)
-)
-CREATE TABLE County(
-    idCounty int PRIMARY KEY IDENTITY(1,1) NOT NULL,
-    idState int NOT NULL FOREIGN KEY REFERENCES State(idState),
-    name varchar(64) NOT NULL,
-    status bit NOT NULL DEFAULT 1 --1 active and 0 inactive (deleted)
-)
-CREATE TABLE City(
-    idCity int PRIMARY KEY IDENTITY(1,1) NOT NULL,
-    idCounty int NOT NULL FOREIGN KEY REFERENCES County(idCounty),
-    name varchar(64) NOT NULL,
-    status bit NOT NULL DEFAULT 1--1 active and 0 inactive (deleted)
-)
-CREATE TABLE Address(
-    idAddress int PRIMARY KEY IDENTITY(1,1) NOT NULL,
-    idCity int NOT NULL FOREIGN KEY REFERENCES City(idCity) UNIQUE,
-    status bit NOT NULL DEFAULT 1--1 active and 0 inactive (deleted)
-)
 CREATE TABLE Currency(
     idCurrency int PRIMARY KEY IDENTITY (1,1) NOT NULL,
     name varchar(64) NOT NULL,
@@ -42,7 +20,6 @@ CREATE TABLE Subscription(
 CREATE TABLE Customer(
     idCustomer int PRIMARY KEY IDENTITY(1,1) NOT NULL,
     idSubscription int NOT NULL FOREIGN KEY REFERENCES Subscription(idSubscription),
-    idAddress int NOT NULL FOREIGN KEY REFERENCES Address(idAddress),
     emailAddress varchar(64) NOT NULL,
     name varchar(64) NOT NULL,
     lastName1 varchar(64) NOT NULL,
