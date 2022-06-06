@@ -47,10 +47,3 @@ export class AdminLoginComponent implements OnInit {
   }
 
 }
-
-// res => {
-
-// },
-// err => {
-//   window.alert(err)
-// }

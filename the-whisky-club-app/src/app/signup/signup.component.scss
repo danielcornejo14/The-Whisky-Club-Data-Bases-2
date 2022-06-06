@@ -1,0 +1,26 @@
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 100%;
+
+
+    form{
+        display: flex;
+        flex-direction: column;
+
+        width: 35%;
+
+        text-align: center;
+
+        .personalInfo{
+            display: flex;
+            flex-direction: row;
+
+            justify-content: space-between;
+            align-items: center;
+        }
+
+    }
+}

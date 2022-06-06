@@ -1,13 +1,3 @@
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
--webkit-appearance: none;
-margin: 0;
-}
-
-input[type=number] {
-  -moz-appearance: textfield;
-}
-
 .formContainer{
   display: flex;
   justify-content: space-around;

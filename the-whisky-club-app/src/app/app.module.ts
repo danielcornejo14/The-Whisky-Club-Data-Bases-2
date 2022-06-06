@@ -13,7 +13,6 @@ import { LoginComponent } from './login/login.component';
 import { AdminLoginComponent } from './login/admin-login/admin-login.component';
 import { CustomerLoginComponent } from './login/customer-login/customer-login.component';
 import { SignupComponent } from './signup/signup.component';
-import { CustomerSignupComponent } from './signup/customer-signup/customer-signup.component';
 
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -40,7 +39,6 @@ import { CatalogCreateComponent } from './dashboard/admin-dashboard/catalog/cata
     AdminLoginComponent,
     CustomerLoginComponent,
     SignupComponent,
-    CustomerSignupComponent,
     AdminDashboardComponent,
     CatalogComponent,
     CatalogUpdateComponent,

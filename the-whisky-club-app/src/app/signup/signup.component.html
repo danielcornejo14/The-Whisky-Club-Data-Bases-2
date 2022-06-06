@@ -1,2 +1,43 @@
+<div class="container">
+    <form action="post" [formGroup]="customerSignup" (ngSubmit)="test()"> 
 
+        <h1>New Account</h1>
 
+        <div class="personalInfo">
+            <mat-form-field appearance="outline">
+                <mat-label>Name</mat-label>
+                <input matInput type="text" placeholder="Ex: Adan" formControlName="name">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Last Name</mat-label>
+                <input matInput type="text" alt="lastName" formControlName="lastName">
+            </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Username</mat-label>
+            <input matInput type="text" placeholder="Ex: adan18" formControlName="username">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" placeholder="New Password" formControlName="password">
+        </mat-form-field>
+
+        <div class="personalInfo">
+            <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" placeholder="Ex: adan18@fakemail.com" formControlName="email">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Phone Number</mat-label>
+                <input matInput type="number" placeholder="Ex: 876541234" minlength="8" maxlength="8" formControlName="phone">
+            </mat-form-field>
+        </div>
+        
+        <button mat-raised-button type="submit" color="primary">Sign Up</button>
+
+    </form>
+</div>

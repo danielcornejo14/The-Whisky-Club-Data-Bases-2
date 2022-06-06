@@ -22,7 +22,7 @@ export class AuthService {
     }).pipe(catchError(this.handleError))
   }
   customerLogin(username: string, password: string): Observable<any>{
-    return this.http.post(AUTH_API+'authCustomer', {
+    return this.http.post(AUTH_API+'/authCustomer', {
       username,
       password
     }).pipe(catchError(this.handleError))

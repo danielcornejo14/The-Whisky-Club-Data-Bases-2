@@ -21,6 +21,8 @@ const routes: Routes = [
   {path: 'login-admin', component: AdminLoginComponent},
   {path: 'login-customer', component: CustomerLoginComponent},
 
+  //SignUp
+  {path:'signup', component: SignupComponent},
 
   //dashboard
   {path: 'admin-dashboard', component: AdminDashboardComponent, children:[
