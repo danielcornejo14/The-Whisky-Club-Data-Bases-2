@@ -59,8 +59,8 @@ BEGIN
                     END
                     ELSE
                     BEGIN
-                        RAISERROR('The password must have a special character, a capital letter,' +
-                                  ' a number, and the minimum length is 8 and maximum length is 64.', 11, 1)
+                        SELECT '03' AS message --This is the code error when the password format is invalid.
+                        RAISERROR('The password must have a special character, a capital letter, a number, and the minimum length is 8 and maximum length is 64.', 11, 1)
                     END
                 END
                 ELSE
@@ -70,6 +70,7 @@ BEGIN
             END
             ELSE
             BEGIN
+                SELECT '02' AS message --This is the code error when the email format is invalid.
                 RAISERROR('The email address is not valid.', 11, 1)
             END
         END
