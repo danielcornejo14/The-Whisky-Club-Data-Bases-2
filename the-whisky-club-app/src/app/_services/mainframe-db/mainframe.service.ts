@@ -6,6 +6,7 @@ import {Presentation} from "../../_interfaces/Presentation";
 import {WhiskyType} from "../../_interfaces/WhiskyType";
 import {Supplier} from "../../_interfaces/Supplier";
 import {Currency} from "../../_interfaces/Currency";
+import { Customer } from 'src/app/_interfaces/Customer';
 
 const MAIN_DB_URL = environment.apiUrl+'/main-db'
 
@@ -25,6 +26,10 @@ export class MainframeService {
 
   createWhiskey(whiskey: Whisky){
     return this.http.post(MAIN_DB_URL+'/insertWhiskey', whiskey)
+  }
+
+  createCustomer(customer: Customer){
+    return this.http.post(MAIN_DB_URL+'/insertCustomer', customer)
   }
 
   // =================

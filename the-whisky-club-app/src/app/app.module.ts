@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -69,7 +70,9 @@ import {MatIconModule} from '@angular/material/icon';
     MatTabsModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatIconModule
+    MatIconModule,
+    GoogleMapsModule,
+    HttpClientJsonpModule
 
   ],
   providers: [authInterceptorProviders],

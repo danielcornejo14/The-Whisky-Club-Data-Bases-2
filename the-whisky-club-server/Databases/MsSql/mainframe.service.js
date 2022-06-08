@@ -10,6 +10,7 @@ module.exports = {
     selectCurrency,
     updateWhiskey,
     insertWhiskey,
+    insertCustomer,
     deleteWhiskey
 }
 
@@ -27,10 +28,11 @@ const mainframe = {
 
 async function testdb(){
     await mssql.connect(mainframe)
-    const result = await mssql.query(`select * from Administrator`)
+    const result = await mssql.query(`select * from Customer`)
     return result.recordset
 }
 
+//=============================INSERT==============================
 
 
 async function insertWhiskey(whiskey){
@@ -52,6 +54,29 @@ async function insertWhiskey(whiskey){
     ${whiskey.whiskeyAging},
     ${whiskey.special}`)
 }
+
+async function insertCustomer(customer){
+    await mssql.connect(mainframe)
+
+// TODO Insert suscription 0 
+
+    console.log(customer) 
+
+    const result = await mssql.query(`declare @location geometry;
+    set @location = geometry::Point(${customer.location.lng}, ${customer.location.lat}, 0)
+    exec insertCustomer '${customer.email}',
+    '${customer.name}',
+    '${customer.lastName1}',
+    '${customer.lastName2}',
+    @location,
+    '${customer.username}',
+    '${customer.password}'`).catch(err => console.log(err))
+
+    return result.recordset
+
+}
+
+//=============================SELECT==============================
 
 
 async function verifyAdmin(username, password){

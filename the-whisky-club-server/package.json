@@ -4,7 +4,7 @@
   "description": "api for data base 2 project",
   "main": "index.js",
   "scripts": {
-    "test": "nodemon index.js"
+    "start": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",

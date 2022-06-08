@@ -14,6 +14,7 @@ router.get('/selectCurrency', selectCurrency)
 router.post('/updateWhiskey', updateWhiskey)
 router.post('/insertWhiskey', insertWhiskey)
 router.post('/deleteWhiskey', deleteWhiskey)
+router.post('/insertCustomer', insertCustomer)
 
 module.exports = router
 
@@ -25,8 +26,14 @@ async function testdb(req, res){
 
 async function insertWhiskey(req, res){
     const data = req.body
-    await mainframeService.insertWhiskey(data)
-    res.json({message: "tomelo"})
+    const result = await mainframeService.insertWhiskey(data)
+    res.json(result)
+}
+
+async function insertCustomer(req, res){
+    const data = req.body
+    await mainframeService.insertCustomer(data)
+    res.json({message: "tolebrio"})
 }
 
 //===================================SELECT=============================

@@ -1,19 +1,35 @@
 <div class="container">
-    <form action="post" [formGroup]="customerSignup" (ngSubmit)="test()"> 
+
+    <div *ngIf="apiLoaded | async">
+        <google-map 
+        (mapClick)="addMarker($event)"
+        [center]="center"
+        [zoom]="zoom">
+            <map-marker *ngIf="this.markerPosition !== undefined"
+            [position]="markerPosition"
+            [options]="markerOptions"></map-marker>
+        </google-map>
+    </div>
+
+    <form action="post" [formGroup]="customerSignup" (ngSubmit)="submitNewCustomer()"> 
 
         <h1>New Account</h1>
 
-        <div class="personalInfo">
-            <mat-form-field appearance="outline">
-                <mat-label>Name</mat-label>
-                <input matInput type="text" placeholder="Ex: Adan" formControlName="name">
-            </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" placeholder="Ex: Adan" formControlName="name">
+        </mat-form-field>
 
-            <mat-form-field appearance="outline">
-                <mat-label>Last Name</mat-label>
-                <input matInput type="text" alt="lastName" formControlName="lastName">
-            </mat-form-field>
-        </div>
+        <mat-form-field appearance="outline">
+            <mat-label>First Last Name</mat-label>
+            <input matInput type="text" alt="lastName" formControlName="lastName1">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Second Last Name</mat-label>
+            <input matInput type="text" alt="lastName" formControlName="lastName2">
+        </mat-form-field>
+  
 
         <mat-form-field appearance="outline">
             <mat-label>Username</mat-label>
@@ -40,4 +56,5 @@
         <button mat-raised-button type="submit" color="primary">Sign Up</button>
 
     </form>
+
 </div>
