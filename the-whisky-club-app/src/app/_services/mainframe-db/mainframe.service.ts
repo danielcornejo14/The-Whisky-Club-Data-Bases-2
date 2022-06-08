@@ -54,4 +54,12 @@ export class MainframeService {
     return this.http.post(MAIN_DB_URL+'/updateWhiskey', whiskey)
   }
 
+  // =================
+  // ==== Deletes ====
+  // =================
+
+  deleteWhiskey(whiskeyId: number){
+    return this.http.post(MAIN_DB_URL+'/deleteWhiskey', {"id":whiskeyId})
+  }
+
 }

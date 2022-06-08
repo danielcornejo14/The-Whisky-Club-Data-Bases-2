@@ -9,6 +9,8 @@ module.exports = {
     selectWhiskeyType,
     selectCurrency,
     updateWhiskey,
+    insertWhiskey,
+    deleteWhiskey
 }
 
 const mainframe = {
@@ -22,11 +24,35 @@ const mainframe = {
     }
 }
 
+
 async function testdb(){
     await mssql.connect(mainframe)
     const result = await mssql.query(`select * from Administrator`)
     return result.recordset
 }
+
+
+
+async function insertWhiskey(whiskey){
+
+    console.log(whiskey)
+
+    await mssql.connect(mainframe)
+    const result = await mssql.query(`exec insertWhiskey ${whiskey.idSupplier},
+    ${whiskey.idPresentation},
+    ${whiskey.idCurrency},
+    ${whiskey.idWhiskeyType},
+    '${whiskey.brand}',
+    ${parseFloat(whiskey.price)},
+    ${whiskey.alcoholContent},
+    '${whiskey.productionDate}',
+    '${whiskey.dueDate}',
+    ${whiskey.availability},
+    ${whiskey.millilitersQuantity},
+    ${whiskey.whiskeyAging},
+    ${whiskey.special}`)
+}
+
 
 async function verifyAdmin(username, password){
     await mssql.connect(mainframe)
@@ -98,4 +124,11 @@ async function updateWhiskey(whiskey){
     ${whiskey.idWhiskey}`)
 
 
+}
+
+//=============================DELETE==============================
+
+async function deleteWhiskey(id){
+    await mssql.connect(mainframe)
+    const result = await mssql.query(`exec deleteWhiskey ${id}`)
 }

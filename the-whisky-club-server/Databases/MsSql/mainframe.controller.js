@@ -12,12 +12,24 @@ router.get('/selectSupplier', selectSupplier)
 router.get('/selectCurrency', selectCurrency)
 
 router.post('/updateWhiskey', updateWhiskey)
+router.post('/insertWhiskey', insertWhiskey)
+router.post('/deleteWhiskey', deleteWhiskey)
 
 module.exports = router
 
 async function testdb(req, res){
     res.json(await mainframeService.testdb())
 }
+
+//===================================INSERT=============================
+
+async function insertWhiskey(req, res){
+    const data = req.body
+    await mainframeService.insertWhiskey(data)
+    res.json({message: "tomelo"})
+}
+
+//===================================SELECT=============================
 
 async function selectWhiskey(req, res){
     const recordset = await mainframeService.selectWhisky()
@@ -48,4 +60,11 @@ async function updateWhiskey(req, res){
     const data = req.body
     await mainframeService.updateWhiskey(data)
     res.json({message: "tomelo"})
+}
+
+//===================================DELETE=============================
+async function deleteWhiskey(req, res){
+   const data = req.body
+   await mainframeService.deleteWhiskey(data.id) 
+   res.json({message:"tomelo"})
 }

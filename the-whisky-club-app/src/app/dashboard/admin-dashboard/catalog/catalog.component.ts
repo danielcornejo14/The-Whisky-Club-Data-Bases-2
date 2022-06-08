@@ -69,8 +69,10 @@ export class CatalogComponent implements OnInit {
       }
     })
     updateWindow.afterClosed().subscribe((result: Whisky) => {
-      this.mainframe.updateWhiskey(result).subscribe(res => console.log(res))
-      window.location.reload()
+      if(result !== undefined){
+        this.mainframe.createWhiskey(result).subscribe(res => console.log(res))
+        window.location.reload()
+      }
     })
   }
 
@@ -86,10 +88,18 @@ export class CatalogComponent implements OnInit {
     })
 
     addWindow.afterClosed().subscribe((result: Whisky) => {
-      this.mainframe.createWhiskey(result).subscribe(res => console.log(res))
-      console.log(result)
+      if(result !== undefined){
+        this.mainframe.createWhiskey(result).subscribe(res => console.log(res))
+        window.location.reload()
+      }
+
     })
 
+  }
+
+  deleteWhiskey(whiskeyId: number){
+    this.mainframe.deleteWhiskey(whiskeyId).subscribe(res => console.log(res))
+    window.location.reload()
   }
 
 

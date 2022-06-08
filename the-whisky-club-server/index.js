@@ -19,5 +19,5 @@ app.get('/', (req,res)=>{
 const port = process.env.API_PORT
 
 app.listen(port, ()=>{
-    console.log(`server is running on port http://localhost:${port}`)
+    console.log(`server is running on port http://localhost:${port}`)    
 })

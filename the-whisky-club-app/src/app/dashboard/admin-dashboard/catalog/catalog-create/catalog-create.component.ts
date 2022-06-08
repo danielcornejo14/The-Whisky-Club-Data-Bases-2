@@ -25,10 +25,10 @@ export class CatalogCreateComponent implements OnInit {
     alcoholContent: [''],
     productionDate: [''],
     dueDate: [''],
-    availability: [''],
+    availability: [false],
     millilitersQuantity: [''],
     whiskeyAging: [''],
-    special: ['']
+    special: [false]
   })
 
 
