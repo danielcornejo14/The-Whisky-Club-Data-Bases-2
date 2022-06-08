@@ -12,6 +12,9 @@ BEGIN
                 BEGIN TRY
                     INSERT INTO Country(idCurrency, name)
                     VALUES (@idCurrency , @name)
+                    DECLARE @idCurrencyString varchar(5)
+                    SET @idCurrencyString = CAST(@idCurrency as varchar(5))
+                    EXEC('CALL replicateInsertCountry(' + @idCurrencyString + ', ''' + @name + ''')')
                     PRINT('Country inserted.')
                     COMMIT TRANSACTION
                 END TRY

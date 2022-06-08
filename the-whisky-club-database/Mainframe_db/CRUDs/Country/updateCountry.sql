@@ -17,6 +17,11 @@ BEGIN
                     SET idCurrency = @idCurrency,
                         name = @name
                     WHERE idCountry = @idCountry
+                    DECLARE @idCountryString varchar(5)
+                    SET @idCountryString = CAST(@idCountry as varchar(5))
+                    DECLARE @idCurrencyString varchar(5)
+                    SET @idCurrencyString = CAST(@idCurrency as varchar(5))
+                    EXEC('CALL replicateUpdateCountry(' + @idCountry + ', ' + @idCurrencyString + ', ''' + @name + ''')')
                     PRINT('Country updated.')
                     COMMIT TRANSACTION
                 END TRY

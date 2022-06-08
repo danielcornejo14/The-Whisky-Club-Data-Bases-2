@@ -20,9 +20,11 @@ BEGIN
             THEN
                 IF (SELECT COUNT(phone) FROM Shop WHERE phone = pPhone) = 0
                 THEN
+                    START TRANSACTION;
                     INSERT INTO shop(idCountry, name, phone, location)
                     VALUES(pIdCountry, pName, pPhone, pLocation);
                     SELECT 'Shop inserted.';
+                    COMMIT;
                 ELSE
                     SELECT 'The phone number cannot be repeated.';
                 END IF;
