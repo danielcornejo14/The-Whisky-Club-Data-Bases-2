@@ -10,6 +10,9 @@ BEGIN
             BEGIN TRANSACTION
                 BEGIN TRY
                     --EXEC deleteShop
+                    UPDATE UnitedStates_db.dbo.Shop
+                    SET
+
                     UPDATE Country
                     SET status = 0
                     WHERE idCountry = @idCountry

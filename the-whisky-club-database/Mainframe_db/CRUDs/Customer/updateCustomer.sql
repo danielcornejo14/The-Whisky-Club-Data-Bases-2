@@ -16,11 +16,10 @@ BEGIN
             AND lastName2 = @lastName2) = 0
             AND (SELECT COUNT(idSubscription) FROM Subscription WHERE idSubscription = @idSubscription
             AND status = 1) > 0
-            AND (SELECT COUNT(idAddress) FROM Address WHERE idAddress = @idAddress
-            AND status = 1) > 0
             AND (SELECT COUNT(userName) FROM Customer WHERE userName = @userName) = 0
             AND (SELECT COUNT(idCustomer) FROM Customer WHERE idCustomer = @idCustomer
-            AND status = 1) > 0)
+            AND status = 1) > 0
+            AND (SELECT COUNT(location) FROM Customer WHERE (location.STEquals(@location) = 1)) = 0)
         BEGIN
             IF @emailAddress LIKE '%_@__%.__%'
             BEGIN
@@ -41,7 +40,6 @@ BEGIN
                             BEGIN TRY
                                 UPDATE Customer
                                 SET idSubscription = @idSubscription,
-                                    idAddress = @idAddress,
                                     emailAddress = @emailAddress,
                                     name = @name,
                                     lastName1 = @lastName1,
@@ -65,17 +63,19 @@ BEGIN
                 END
                 ELSE
                 BEGIN
+                    SELECT '03' AS message --This is the code error when the password format is invalid.
                     RAISERROR('The password must have a special character, a capital letter, a number, and the minimum length is 8 and maximum length is 64.', 11, 1)
                 END
             END
             ELSE
             BEGIN
+                SELECT '02' AS message --This is the code error when the email format is invalid.
                 RAISERROR('The email address is not valid. ', 11, 1)
             END
         END
         ELSE
         BEGIN
-            RAISERROR('The customer name and userName can not be repeated, and the ids must exist.', 11, 1)
+            RAISERROR('The customer name, the userName and the location can not be repeated, and the ids must exist.', 11, 1)
         END
     END
     ELSE

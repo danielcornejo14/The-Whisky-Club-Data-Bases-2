@@ -52,6 +52,7 @@ BEGIN
                         END
                         ELSE
                         BEGIN
+                            SELECT '03' AS message --This is the code error when the password format is invalid.
                             RAISERROR('The password can not be repeated. ', 11, 1)
                         END
                     END
@@ -62,6 +63,7 @@ BEGIN
                 END
                 ELSE
                 BEGIN
+                    SELECT '02' AS message --This is the code error when the email format is invalid.
                     RAISERROR('The email address can not be repeated.', 11, 1)
                 END
             END
