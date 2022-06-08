@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken')
 const router = express.Router()
 const mainframeService = require('./mainframe.service')
 
+router.get('/testdb', testdb)
+
 router.get('/selectWhiskey', selectWhiskey)
 router.get('/selectWhiskeyType', selectWhiskeyType)
 router.get('/selectPresentation', selectPresentation)
@@ -12,6 +14,10 @@ router.get('/selectCurrency', selectCurrency)
 router.post('/updateWhiskey', updateWhiskey)
 
 module.exports = router
+
+async function testdb(req, res){
+    res.json(await mainframeService.testdb())
+}
 
 async function selectWhiskey(req, res){
     const recordset = await mainframeService.selectWhisky()

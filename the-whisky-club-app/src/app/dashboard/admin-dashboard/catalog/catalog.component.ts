@@ -34,11 +34,13 @@ export class CatalogComponent implements OnInit {
   CurrencyList: Currency[] = []
 
   ngOnInit(): void {
+
     this.WhiskyList = this.route.snapshot.data['whiskey']
     this.WhiskyTypeList = this.route.snapshot.data['whiskeyType']
     this.SupplierList = this.route.snapshot.data['supplier']
     this.PresentationList = this.route.snapshot.data['presentation']
     this.CurrencyList = this.route.snapshot.data['currency']
+  
   }
 
 
@@ -67,17 +69,25 @@ export class CatalogComponent implements OnInit {
       }
     })
     updateWindow.afterClosed().subscribe((result: Whisky) => {
-      this.mainframe.updateWhiskey(result).subscribe(x => console.log(x))
+      this.mainframe.updateWhiskey(result).subscribe(res => console.log(res))
       window.location.reload()
     })
   }
+
   addWhiskey(){
     const addWindow = this.dialog.open(CatalogCreateComponent, {
       width: '35%',
+      data: {
+        typeList: this.WhiskyTypeList,
+        supplier: this.SupplierList,
+        presentation: this.PresentationList,
+        currency: this.CurrencyList
+      }
     })
 
     addWindow.afterClosed().subscribe((result: Whisky) => {
-      this.mainframe
+      this.mainframe.createWhiskey(result).subscribe(res => console.log(res))
+      console.log(result)
     })
 
   }

@@ -8,13 +8,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminDashboardComponent implements OnInit {
 
+  links = ['catalog']
+  activeLink = this.links[0];
+
+
   constructor(
 
   ) { }
 
 
-
   ngOnInit(): void {
+  }
+
+
+  addLink() {
+    this.links.push(`Link ${this.links.length + 1}`);
   }
 
 }

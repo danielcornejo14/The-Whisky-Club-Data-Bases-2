@@ -18,9 +18,18 @@ export class MainframeService {
     private http: HttpClient
   ) { }
 
-  // =================
-  // ==== Select ====
 
+  // =================
+  // ==== Insert =====
+  // =================
+
+  createWhiskey(whiskey: Whisky){
+    return this.http.post(MAIN_DB_URL+'/insertWhiskey', whiskey)
+  }
+
+  // =================
+  // ==== Select =====
+  // =================
   getWhiskey(){
     return this.http.get<Whisky[]>(MAIN_DB_URL+'/selectWhiskey')
   }

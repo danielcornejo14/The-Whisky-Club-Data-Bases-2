@@ -39,8 +39,6 @@ export class CatalogUpdateComponent implements OnInit {
 
   }
 
-
-
   onNoClick(){
     this.updateWindow.close();
   }

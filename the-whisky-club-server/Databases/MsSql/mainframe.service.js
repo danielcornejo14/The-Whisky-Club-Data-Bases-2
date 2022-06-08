@@ -1,13 +1,14 @@
 const mssql = require('mssql')
 
 module.exports = {
+    testdb,
     verifyAdmin,
     selectWhisky,
     selectSupplier,
     selectPresentation,
     selectWhiskeyType,
     selectCurrency,
-    updateWhiskey
+    updateWhiskey,
 }
 
 const mainframe = {
@@ -19,6 +20,12 @@ const mainframe = {
         encrypt: true, // for azure
         trustServerCertificate: true // change to true for local dev / self-signed certs
     }
+}
+
+async function testdb(){
+    await mssql.connect(mainframe)
+    const result = await mssql.query(`select * from Administrator`)
+    return result.recordset
 }
 
 async function verifyAdmin(username, password){
