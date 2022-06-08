@@ -22,12 +22,14 @@ BEGIN
             THEN
                 IF (SELECT COUNT(phone) FROM Shop WHERE phone = pPhone) = 0
                 THEN
+                    START TRANSACTION;
                     UPDATE Shop
                     SET idCountry = pIdCountry,
                         name = pName,
                         phone = pPhone,
                         location = pLocation
                     WHERE idShop = pIdShop;
+                    COMMIT;
                 ELSE
                     SELECT 'The phone number cannot be repeated.';
                 END IF;

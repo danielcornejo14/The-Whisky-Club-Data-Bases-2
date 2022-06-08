@@ -1,21 +1,17 @@
-CREATE PROCEDURE insertCustomer @idSubscription int, @idAddress int,
-                                @emailAddress int, @name varchar(64),
+CREATE PROCEDURE insertCustomer @emailAddress varchar(64), @name varchar(64),
                                 @lastName1 varchar(64), @lastName2 varchar(64),
                                 @location geometry, @userName varchar(64),
                                 @password varchar(64)
 WITH ENCRYPTION
 AS
 BEGIN
-    IF @idSubscription IS NOT NULL AND @idAddress IS NOT NULL
-        AND @emailAddress IS NOT NULL AND @name IS NOT NULL
+    IF @emailAddress IS NOT NULL AND @name IS NOT NULL
         AND @lastName1 IS NOT NULL AND @lastName2 IS NOT NULL
         AND @location IS NOT NULL AND @userName IS NOT NULL
         AND @password IS NOT NULL
     BEGIN
         IF ((SELECT COUNT(*) FROM Customer WHERE name = @name AND lastName1 = @lastName1
             AND lastName2 = @lastName2) = 0
-            AND (SELECT COUNT(idSubscription) FROM Subscription WHERE idSubscription = @idSubscription
-            AND status = 1) > 0
             AND (SELECT COUNT(userName) FROM Customer WHERE userName = @userName) = 0
             AND (SELECT COUNT(location) FROM Customer WHERE (location.STEquals(@location) = 1)) = 0)
         BEGIN
@@ -23,7 +19,7 @@ BEGIN
             BEGIN
                 IF (SELECT COUNT(emailAddress) FROM Customer WHERE emailAddress = @emailAddress) = 0
                 BEGIN
-                        /*              Password requirements
+                    /*              Password requirements
                     1. The minimum length is 8 and maximum length is 64.
                     2. The password must have a special character.
                     3. The password must have a capital letter.
@@ -41,7 +37,7 @@ BEGIN
                                     INSERT INTO Customer(idSubscription, emailAddress,
                                                          name, lastName1, lastName2, location,
                                                          userName, password)
-                                    VALUES (@idSubscription , @emailAddress,
+                                    VALUES (1 , @emailAddress,
                                             @name, @lastName1, @lastName2, @location,
                                             @userName, HASHBYTES('MD4', @password))
                                     PRINT('Customer inserted.')
