@@ -12,11 +12,18 @@ BEGIN
                 BEGIN TRY
                     INSERT INTO Country(idCurrency, name)
                     VALUES (@idCurrency , @name)
+                    INSERT INTO UnitedStates_db.dbo.Country(idCurrency, name)
+                    VALUES (@idCurrency , @name)
+                    INSERT INTO Scotland_db.dbo.Country(idCurrency, name)
+                    VALUES (@idCurrency , @name)
+                    INSERT INTO Ireland_db.dbo.Country(idCurrency, name)
+                    VALUES (@idCurrency , @name)
+                    COMMIT TRANSACTION
+                    --The inserted country is replicated in the Employees_db.
                     DECLARE @idCurrencyString varchar(5)
                     SET @idCurrencyString = CAST(@idCurrency as varchar(5))
-                    EXEC('CALL replicateInsertCountry(' + @idCurrencyString + ', ''' + @name + ''')')
+                    EXEC('CALL replicateInsertCountry(' + @idCurrencyString + ', ''' + @name + ''')') AT MYSQL_SERVER
                     PRINT('Country inserted.')
-                    COMMIT TRANSACTION
                 END TRY
                 BEGIN CATCH
                     ROLLBACK TRANSACTION
@@ -25,7 +32,7 @@ BEGIN
         END
         ELSE
         BEGIN
-            RAISERROR('The Country name cannot be repeated and currency id must exist.', 11, 1)
+            RAISERROR('The Country name cannot be repeated and the currency id must exist.', 11, 1)
         END
     END
     ELSE

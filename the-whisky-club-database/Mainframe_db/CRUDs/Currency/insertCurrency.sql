@@ -10,8 +10,16 @@ BEGIN
                 BEGIN TRY
                     INSERT INTO Currency(name)
                     VALUES (@name)
-                    PRINT('Currency inserted.')
+                    INSERT INTO UnitedStates_db.dbo.Currency(name)
+                    VALUES (@name)
+                    INSERT INTO Scotland_db.dbo.Currency(name)
+                    VALUES (@name)
+                    INSERT INTO Ireland_db.dbo.Currency(name)
+                    VALUES (@name)
                     COMMIT TRANSACTION
+                    --Replication in the Employees_db.
+                    EXEC('CALL replicateInsertCurrency(''' + @name + ''')') AT MYSQL_SERVER
+                    PRINT('Currency inserted.')
                 END TRY
                 BEGIN CATCH
                     ROLLBACK TRANSACTION

@@ -16,21 +16,29 @@ BEGIN
             BEGIN
                 IF (SELECT COUNT(phone) FROM Shop WHERE phone = @phone) = 0
                 BEGIN
-                    INSERT INTO Shop(idCountry, name, phone, location)
-                    VALUES (@idCountry, @name, @phone, @location)
-                    INSERT INTO Ireland_db.dbo.Shop(idCountry, name, phone, location)
-                    VALUES(@idCountry, @name, @phone, @location)
-                    INSERT INTO Scotland_db.dbo.Shop(idCountry, name, phone, location)
-                    VALUES(@idCountry, @name, @phone, @location)
-                    --The inserted shop is replicated in the Employees_db.
-                    DECLARE @point varchar(64)
-                    SET @point = @location.STAsText()
-                    DECLARE @idCountryString varchar(5)
-                    SET @idCountryString = CAST(@idCountry as varchar(5))
-                    DECLARE @phoneString varchar(8)
-                    SET @phoneString = CAST(@phone as varchar(8))
-                    EXEC('CALL replicateInsertShop(' + @idCountryString + ', ''' + @name + ''', ' + @phoneString + ', '''  + @point + ''')') AT MYSQL_SERVER
-                    PRINT('Shop inserted.')
+                    BEGIN TRANSACTION
+                        BEGIN TRY
+                            INSERT INTO Shop(idCountry, name, phone, location)
+                            VALUES (@idCountry, @name, @phone, @location)
+                            INSERT INTO Ireland_db.dbo.Shop(idCountry, name, phone, location)
+                            VALUES(@idCountry, @name, @phone, @location)
+                            INSERT INTO Scotland_db.dbo.Shop(idCountry, name, phone, location)
+                            VALUES(@idCountry, @name, @phone, @location)
+                            COMMIT TRANSACTION
+                            --The inserted shop is replicated in the Employees_db.
+                            DECLARE @point varchar(64)
+                            SET @point = @location.STAsText()
+                            DECLARE @idCountryString varchar(5)
+                            SET @idCountryString = CAST(@idCountry as varchar(5))
+                            DECLARE @phoneString varchar(8)
+                            SET @phoneString = CAST(@phone as varchar(8))
+                            EXEC('CALL replicateInsertShop(' + @idCountryString + ', ''' + @name + ''', ' + @phoneString + ', '''  + @point + ''')') AT MYSQL_SERVER
+                            PRINT('Shop inserted.')
+                        END TRY
+                        BEGIN CATCH
+                            ROLLBACK TRANSACTION
+                            RAISERROR('An error has occurred in the database.', 11, 1)
+                        END CATCH
                 END
                 ELSE
                 BEGIN
