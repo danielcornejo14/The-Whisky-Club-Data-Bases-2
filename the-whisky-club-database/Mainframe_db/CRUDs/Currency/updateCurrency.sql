@@ -13,8 +13,21 @@ BEGIN
                     UPDATE Currency
                     SET name = @name
                     WHERE idCurrency = @idCurrency
-                    PRINT('Currency updated.')
+                    UPDATE UnitedStates_db.dbo.Currency
+                    SET name = @name
+                    WHERE idCurrency = @idCurrency
+                    UPDATE Scotland_db.dbo.Currency
+                    SET name = @name
+                    WHERE idCurrency = @idCurrency
+                    UPDATE Ireland_db.dbo.Currency
+                    SET name = @name
+                    WHERE idCurrency = @idCurrency
                     COMMIT TRANSACTION
+                    --Replication in the Employees_db.
+                    DECLARE @idCurrencyString varchar(5)
+                    SET @idCurrencyString = CAST(@idCurrency as varchar(5))
+                    EXEC('CALL replicateUpdateCurrency(' + @idCurrencyString + ', ' + '''' + @name + '''' + ')') AT MYSQL_SERVER
+                    PRINT('Currency updated.')
                 END TRY
                 BEGIN CATCH
                     ROLLBACK TRANSACTION

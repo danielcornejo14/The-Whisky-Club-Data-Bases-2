@@ -15,35 +15,43 @@ BEGIN
             BEGIN
                 IF (SELECT COUNT(phone) FROM Shop WHERE phone = @phone) = 0
                 BEGIN
-                    UPDATE Shop
-                    SET idCountry = @idCountry,
-                        name = @name,
-                        phone = @phone,
-                        location = @location
-                    WHERE idShop = @idShop
-                    UPDATE UnitedStates_db.dbo.Shop
-                    SET idCountry = @idCountry,
-                        name = @name,
-                        phone = @phone,
-                        location = @location
-                    WHERE idShop = @idShop
-                    UPDATE Ireland_db.dbo.Shop
-                    SET idCountry = @idCountry,
-                        name = @name,
-                        phone = @phone,
-                        location = @location
-                    WHERE idShop = @idShop
-                    --The updated shop is replicated in the Employees_db.
-                    DECLARE @point varchar(64)
-                    SET @point = @location.STAsText()
-                    DECLARE @idCountryString varchar(5)
-                    SET @idCountryString = CAST(@idCountry as varchar(5))
-                    DECLARE @phoneString varchar(8)
-                    SET @phoneString = CAST(@phone as varchar(8))
-                    DECLARE @idShopString varchar(5)
-                    SET @idShopString = CAST(@idShop as varchar(5))
-                    EXEC('CALL replicateUpdateShop(' + @idShopString + ', ' + @idCountryString + ', ''' + @name + ''', ' + @phoneString + ', '''  + @point + ''')') AT MYSQL_SERVER
-                    PRINT('Shop updated.')
+                    BEGIN TRANSACTION
+                        BEGIN TRY
+                            UPDATE Shop
+                            SET idCountry = @idCountry,
+                                name = @name,
+                                phone = @phone,
+                                location = @location
+                            WHERE idShop = @idShop
+                            UPDATE UnitedStates_db.dbo.Shop
+                            SET idCountry = @idCountry,
+                                name = @name,
+                                phone = @phone,
+                                location = @location
+                            WHERE idShop = @idShop
+                            UPDATE Ireland_db.dbo.Shop
+                            SET idCountry = @idCountry,
+                                name = @name,
+                                phone = @phone,
+                                location = @location
+                            WHERE idShop = @idShop
+                            COMMIT TRANSACTION
+                            --The updated shop is replicated in the Employees_db.
+                            DECLARE @point varchar(64)
+                            SET @point = @location.STAsText()
+                            DECLARE @idCountryString varchar(5)
+                            SET @idCountryString = CAST(@idCountry as varchar(5))
+                            DECLARE @phoneString varchar(8)
+                            SET @phoneString = CAST(@phone as varchar(8))
+                            DECLARE @idShopString varchar(5)
+                            SET @idShopString = CAST(@idShop as varchar(5))
+                            EXEC('CALL replicateUpdateShop(' + @idShopString + ', ' + @idCountryString + ', ''' + @name + ''', ' + @phoneString + ', '''  + @point + ''')') AT MYSQL_SERVER
+                            PRINT('Shop updated.')
+                        END TRY
+                        BEGIN CATCH
+                            ROLLBACK TRANSACTION
+                            RAISERROR('An error has occurred in the database.', 11, 1)
+                        END CATCH
                 END
                 ELSE
                 BEGIN

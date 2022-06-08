@@ -12,7 +12,7 @@ BEGIN
         THEN
             START TRANSACTION;
             INSERT INTO country(idCurrency, name)
-            VALUES(pIdCountry, pIdCurrency, pName);
+            VALUES(pIdCurrency, pName);
             SELECT 'Country inserted.';
             COMMIT;
         ELSE

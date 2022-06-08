@@ -6,10 +6,13 @@ CREATE PROCEDURE replicateUpdateCountry (
 )
 BEGIN
     IF pIdCountry IS NOT NULL AND pName IS NOT NULL
+        AND pIdCurrency IS NOT NULL
     THEN
         IF ((SELECT COUNT(name) FROM country WHERE name = pName) = 0
             AND (SELECT COUNT(idCountry) FROM Country WHERE idCountry = pIdCountry
                 AND status = 1) > 0)
+            AND (SELECT COUNT(idCurrency) FROM currency WHERE idCurrency = pIdCurrency
+                AND status = 1) > 0
         THEN
             START TRANSACTION;
             UPDATE country
@@ -19,7 +22,7 @@ BEGIN
             SELECT 'Country updated.';
             COMMIT;
         ELSE
-            SELECT 'The country name cannot be repeated, the id must exist.';
+            SELECT 'The country name cannot be repeated, the ids must exist.';
         END IF;
     ELSE
         SELECT 'Null data is not allowed.';

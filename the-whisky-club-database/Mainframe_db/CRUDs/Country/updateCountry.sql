@@ -17,13 +17,26 @@ BEGIN
                     SET idCurrency = @idCurrency,
                         name = @name
                     WHERE idCountry = @idCountry
+                    UPDATE UnitedStates_db.dbo.Country
+                    SET idCurrency = @idCurrency,
+                        name = @name
+                    WHERE idCountry = @idCountry
+                    UPDATE Scotland_db.dbo.Country
+                    SET idCurrency = @idCurrency,
+                        name = @name
+                    WHERE idCountry = @idCountry
+                    UPDATE Ireland_db.dbo.Country
+                    SET idCurrency = @idCurrency,
+                        name = @name
+                    WHERE idCountry = @idCountry
+                    COMMIT TRANSACTION
+                    --Country replication in the employees_db
                     DECLARE @idCountryString varchar(5)
                     SET @idCountryString = CAST(@idCountry as varchar(5))
                     DECLARE @idCurrencyString varchar(5)
                     SET @idCurrencyString = CAST(@idCurrency as varchar(5))
-                    EXEC('CALL replicateUpdateCountry(' + @idCountry + ', ' + @idCurrencyString + ', ''' + @name + ''')')
+                    EXEC('CALL replicateUpdateCountry(' + @idCountryString + ', ' + @idCurrencyString + ', ''' + @name + ''')') AT MYSQL_SERVER
                     PRINT('Country updated.')
-                    COMMIT TRANSACTION
                 END TRY
                 BEGIN CATCH
                     ROLLBACK TRANSACTION
@@ -32,7 +45,7 @@ BEGIN
         END
         ELSE
         BEGIN
-            RAISERROR('The Country name cannot be repeated and both ids must exist.', 11, 1)
+            RAISERROR('The country name cannot be repeated and both ids must exist.', 11, 1)
         END
     END
     ELSE
