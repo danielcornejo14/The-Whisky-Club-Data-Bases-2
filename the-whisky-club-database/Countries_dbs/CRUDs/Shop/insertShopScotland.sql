@@ -1,4 +1,4 @@
-CREATE PROCEDURE insertShop @idCountry int, @name varchar(64),
+CREATE PROCEDURE insertShopScotland @idCountry int, @name varchar(64),
                             @phone varchar(8), @location geometry
 WITH ENCRYPTION
 AS
@@ -16,17 +16,21 @@ BEGIN
             BEGIN
                 IF (SELECT COUNT(phone) FROM Shop WHERE phone = @phone) = 0
                 BEGIN
-                    BEGIN TRANSACTION
-                        BEGIN TRY
-                            INSERT INTO Shop(idCountry, name, phone, location)
-                            VALUES (@idCountry, @name, @phone, @location)
-                            PRINT('Shop inserted.')
-                            COMMIT TRANSACTION
-                        END TRY
-                        BEGIN CATCH
-                            ROLLBACK TRANSACTION
-                            RAISERROR('An error has occurred in the database.', 11, 1)
-                        END CATCH
+                    INSERT INTO Shop(idCountry, name, phone, location)
+                    VALUES (@idCountry, @name, @phone, @location)
+                    INSERT INTO UnitedStates_db.dbo.Shop(idCountry, name, phone, location)
+                    VALUES (@idCountry, @name, @phone, @location)
+                    INSERT INTO Ireland_db.dbo.Shop(idCountry, name, phone, location)
+                    VALUES (@idCountry, @name, @phone, @location)
+                    --The inserted shop is replicated in the Employees_db.
+                    DECLARE @point varchar(64)
+                    SET @point = @location.STAsText()
+                    DECLARE @idCountryString varchar(5)
+                    SET @idCountryString = CAST(@idCountry as varchar(5))
+                    DECLARE @phoneString varchar(8)
+                    SET @phoneString = CAST(@phone as varchar(8))
+                    EXEC('CALL replicateInsertShop(' + @idCountryString + ', ''' + @name + ''', ' + @phoneString + ', '''  + @point + ''')') AT MYSQL_SERVER
+                    PRINT('Shop inserted.')
                 END
                 ELSE
                 BEGIN

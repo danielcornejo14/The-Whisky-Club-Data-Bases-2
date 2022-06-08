@@ -51,6 +51,12 @@ CREATE TABLE Whiskey(
     special bit NOT NULL, --0 indicates that is not a special whiskey and 1 when it is.
     status bit NOT NULL DEFAULT 1
 )
+CREATE TABLE Image(
+    idImage int PRIMARY KEY IDENTITY (1,1),
+    idWhiskey int NOT NULL FOREIGN KEY REFERENCES Whiskey(idWhiskey),
+    image VARBINARY(MAX) NOT NULL,
+    status bit NOT NULL DEFAULT 1
+)
 CREATE TABLE WhiskeyXShop (
     idWhiskeyXShop int PRIMARY KEY IDENTITY(1,1),
     idShop int NOT NULL FOREIGN KEY REFERENCES Shop(idShop),

@@ -9,6 +9,9 @@ BEGIN
         BEGIN
             BEGIN TRANSACTION
                 BEGIN TRY
+                    UPDATE UnitedStates_db.dbo.WhiskeyXShop
+                    SET status = 0
+                    WHERE idWhiskey = @idWhiskey
                     UPDATE WhiskeyReview
                     SET status = 0
                     WHERE idWhiskey = @idWhiskey
