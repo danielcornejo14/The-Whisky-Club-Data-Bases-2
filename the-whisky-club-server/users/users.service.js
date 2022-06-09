@@ -1,4 +1,4 @@
-const mainframeService = require("../Databases/MsSql/mainframe.service");
+const mainframeService = require("../Databases/mainframe/mainframe.service");
 const jwt = require("jsonwebtoken");
 
 module.exports = {

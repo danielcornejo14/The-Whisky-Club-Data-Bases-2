@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const mainframe = require('../Databases/MsSql/mainframe.controller')
+const mainframe = require('../Databases/mainframe/mainframe.controller')
 
 module.exports = {
     login,

@@ -2,6 +2,11 @@
 
 <div class="catalogContainer">
   <div *ngFor="let item of this.WhiskyList" class="product">
+
+    <div>
+      <img [src]="buildImage(item.images[0])" alt="">
+    </div>
+
     <div class="productInformation">
       <div>Item ID: {{item.idWhiskey}}</div>
       <div>Supplier: {{findSupplier(item.idSupplier).name}}</div>

@@ -1,0 +1,20 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: calc(100% - 50px);
+
+    a{
+        width: 200px;
+        height: 80px;
+        margin-bottom: 20px;
+        
+        text-align: center;
+        line-height: 80px;
+
+        font-size: 20px;
+
+    }
+}

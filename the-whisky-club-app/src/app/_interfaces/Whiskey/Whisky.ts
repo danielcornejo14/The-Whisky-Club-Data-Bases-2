@@ -12,6 +12,7 @@ export interface Whisky{
   availability: boolean,
   millilitersQuantity: number,
   whiskeyAging: number,
-  special: boolean
+  special: boolean,
+  images: Array<string>
 }
 

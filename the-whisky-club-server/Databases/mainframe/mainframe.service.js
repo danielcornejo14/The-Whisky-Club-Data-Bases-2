@@ -14,7 +14,7 @@ module.exports = {
     deleteWhiskey
 }
 
-const mainframe = {
+const config = {
     user: process.env.MSSQL_USER,
     password: process.env.MSSQL_PASSWORD,
     database: 'Mainframe_db',
@@ -27,7 +27,7 @@ const mainframe = {
 
 
 async function testdb(){
-    await mssql.connect(mainframe)
+    await mssql.connect(config)
     const result = await mssql.query(`select * from Customer`)
     return result.recordset
 }
@@ -39,7 +39,7 @@ async function insertWhiskey(whiskey){
 
     console.log(whiskey)
 
-    await mssql.connect(mainframe)
+    await mssql.connect(config)
     const result = await mssql.query(`exec insertWhiskey ${whiskey.idSupplier},
     ${whiskey.idPresentation},
     ${whiskey.idCurrency},
@@ -52,15 +52,13 @@ async function insertWhiskey(whiskey){
     ${whiskey.availability},
     ${whiskey.millilitersQuantity},
     ${whiskey.whiskeyAging},
-    ${whiskey.special}`)
+    ${whiskey.special}`).catch(err => console.log(err))
+
+    return result.recordset
 }
 
 async function insertCustomer(customer){
-    await mssql.connect(mainframe)
-
-// TODO Insert suscription 0 
-
-    console.log(customer) 
+    await mssql.connect(config)
 
     const result = await mssql.query(`declare @location geometry;
     set @location = geometry::Point(${customer.location.lng}, ${customer.location.lat}, 0)
@@ -80,7 +78,7 @@ async function insertCustomer(customer){
 
 
 async function verifyAdmin(username, password){
-    await mssql.connect(mainframe)
+    await mssql.connect(config)
     const result = await mssql.query(`exec validateAdministrator '${username}', '${password}'`)
 
     if(result.recordset[0].message === '00'){
@@ -92,35 +90,47 @@ async function verifyAdmin(username, password){
 }
 
 async function  selectWhisky(){
-    await  mssql.connect(mainframe)
+    await  mssql.connect(config)
     const result = await mssql.query(`exec selectWhiskey`)
+
+    for(let i = 0; i < result.recordset.length; i++){
+        const imageRecordset = await mssql.query(`exec selectImage ${result.recordset[i].idWhiskey}`)
+        let imageSet = []
+
+        for(let j = 0; j < imageRecordset.recordset.length; j++){
+            imageSet.push(imageRecordset.recordset[j].image)
+        }
+        
+        result.recordset[i].images = imageSet
+    }
+    
 
     return result.recordset
 }
 
 async function selectPresentation(){
-    await mssql.connect(mainframe)
+    await mssql.connect(config)
     const result = await mssql.query(`exec selectPresentation`)
 
     return result.recordset
 }
 
 async function selectSupplier(){
-    await mssql.connect(mainframe)
+    await mssql.connect(config)
     const result = await mssql.query(`exec selectSupplier`)
 
     return result.recordset
 }
 
 async function selectWhiskeyType(){
-    await mssql.connect(mainframe)
+    await mssql.connect(config)
     const result = await mssql.query(`exec selectWhiskeyType`)
 
     return result.recordset
 }
 
 async function selectCurrency(){
-    await mssql.connect(mainframe)
+    await mssql.connect(config)
     const result = await mssql.query(`exec selectCurrency`)
 
     return result.recordset
@@ -132,7 +142,7 @@ async function updateWhiskey(whiskey){
 
     console.log(whiskey.price)
 
-    await mssql.connect(mainframe)
+    await mssql.connect(config)
     const result = await mssql.query(`exec updateWhiskey ${whiskey.idSupplier},
     ${whiskey.idPresentation},
     ${whiskey.idCurrency},
@@ -146,14 +156,17 @@ async function updateWhiskey(whiskey){
     ${whiskey.millilitersQuantity},
     ${whiskey.whiskeyAging},
     ${whiskey.special},
-    ${whiskey.idWhiskey}`)
+    ${whiskey.idWhiskey}`).catch(err => console.log(err))
 
+    return result.recordset
 
 }
 
 //=============================DELETE==============================
 
 async function deleteWhiskey(id){
-    await mssql.connect(mainframe)
-    const result = await mssql.query(`exec deleteWhiskey ${id}`)
+    await mssql.connect(config)
+    const result = await mssql.query(`exec deleteWhiskey ${id}`).catch(err => console.log(err))
+    
+    return result.recordset
 }

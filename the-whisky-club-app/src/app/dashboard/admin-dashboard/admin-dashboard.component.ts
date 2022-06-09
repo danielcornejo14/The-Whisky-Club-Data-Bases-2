@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminDashboardComponent implements OnInit {
 
-  links = ['catalog']
+  links = ['catalog', 'employees']
   activeLink = this.links[0];
 
 

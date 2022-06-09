@@ -36,6 +36,9 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {MatIconModule} from '@angular/material/icon';
+import { EmployeesComponent } from './dashboard/admin-dashboard/employees/employees.component';
+import {MatCardModule} from '@angular/material/card';
+
 
 @NgModule({
   declarations: [
@@ -49,6 +52,7 @@ import {MatIconModule} from '@angular/material/icon';
     CatalogComponent,
     CatalogUpdateComponent,
     CatalogCreateComponent,
+    EmployeesComponent,
 
   ],
   imports: [
@@ -72,7 +76,8 @@ import {MatIconModule} from '@angular/material/icon';
     MatNativeDateModule,
     MatIconModule,
     GoogleMapsModule,
-    HttpClientJsonpModule
+    HttpClientJsonpModule,
+    MatCardModule
 
   ],
   providers: [authInterceptorProviders],

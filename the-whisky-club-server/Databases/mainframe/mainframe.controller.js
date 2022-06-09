@@ -65,8 +65,8 @@ async function selectCurrency(req, res){
 //===================================UPDATE=============================
 async function updateWhiskey(req, res){
     const data = req.body
-    await mainframeService.updateWhiskey(data)
-    res.json({message: "tomelo"})
+    const result = await mainframeService.updateWhiskey(data)
+    res.json(result)
 }
 
 //===================================DELETE=============================

@@ -5,13 +5,14 @@ import {MainframeService} from "../../../_services/mainframe-db/mainframe.servic
 
 import {MatDialog} from "@angular/material/dialog";
 
-import {Whisky} from "../../../_interfaces/Whisky";
-import {WhiskyType} from "../../../_interfaces/WhiskyType";
-import {Supplier} from "../../../_interfaces/Supplier";
-import {Presentation} from "../../../_interfaces/Presentation";
-import {Currency} from "../../../_interfaces/Currency";
+import {Whisky} from "../../../_interfaces/Whiskey/Whisky";
+import {WhiskyType} from "../../../_interfaces/Whiskey/WhiskyType";
+import {Supplier} from "../../../_interfaces/Whiskey/Supplier";
+import {Presentation} from "../../../_interfaces/Whiskey/Presentation";
+import {Currency} from "../../../_interfaces/Whiskey/Currency";
 import {CatalogUpdateComponent} from "./catalog-update/catalog-update.component";
 import {CatalogCreateComponent} from "./catalog-create/catalog-create.component";
+import { DomSanitizer } from '@angular/platform-browser';
 
 
 @Component({
@@ -24,7 +25,8 @@ export class CatalogComponent implements OnInit {
   constructor(
     private mainframe: MainframeService,
     private route: ActivatedRoute,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private sanitizer: DomSanitizer
   ) { }
 
   WhiskyList: Whisky[] = []
@@ -40,6 +42,8 @@ export class CatalogComponent implements OnInit {
     this.SupplierList = this.route.snapshot.data['supplier']
     this.PresentationList = this.route.snapshot.data['presentation']
     this.CurrencyList = this.route.snapshot.data['currency']
+
+    console.log(this.WhiskyList[0])
   
   }
 
@@ -106,6 +110,10 @@ export class CatalogComponent implements OnInit {
 
   testDbService(){
     console.log(this.WhiskyList. length)
+  }
+
+  buildImage(data: string){
+    return this.sanitizer.bypassSecurityTrustResourceUrl("data:image/png;base64, " +data) 
   }
 
 }

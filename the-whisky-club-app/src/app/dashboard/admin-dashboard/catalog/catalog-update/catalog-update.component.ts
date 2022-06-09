@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {Whisky} from "../../../../_interfaces/Whisky";
+import {Whisky} from "../../../../_interfaces/Whiskey/Whisky";
 
 import {FormBuilder} from "@angular/forms";
 

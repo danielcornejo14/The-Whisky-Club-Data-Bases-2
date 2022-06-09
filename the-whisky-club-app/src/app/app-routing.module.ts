@@ -11,6 +11,7 @@ import {WhiskeyTypeResolver} from "./_resolvers/dashboard/catalog/whiskey-type.r
 import {SupplierResolver} from "./_resolvers/dashboard/catalog/supplier.resolver";
 import {PresentationResolver} from "./_resolvers/dashboard/catalog/presentation.resolver";
 import {CurrencyResolver} from "./_resolvers/dashboard/catalog/currency.resolver";
+import { EmployeesComponent } from './dashboard/admin-dashboard/employees/employees.component';
 
 const routes: Routes = [
   //logIn
@@ -34,8 +35,10 @@ const routes: Routes = [
             presentation: PresentationResolver,
             currency: CurrencyResolver
           }
-      }
-    ]}
+      },
+      {path: 'employees', component: EmployeesComponent}
+    ]
+  }
 
 ];
 
