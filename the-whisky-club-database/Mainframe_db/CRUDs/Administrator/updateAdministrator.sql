@@ -30,7 +30,9 @@ BEGIN
                         AND @password LIKE '%[0-9]%'
                         AND LEN(@password) BETWEEN 8 AND 64
                     BEGIN
-                        IF (SELECT COUNT(password) FROM Customer WHERE password = HASHBYTES('MD4', @password)) = 0
+                        DECLARE @passwordEncrypted binary(64);
+                        SET @passwordEncrypted = HASHBYTES('SHA2_256', @password);
+                        IF (SELECT COUNT(password) FROM Customer WHERE password = @passwordEncrypted) = 0
                         BEGIN
                             BEGIN TRANSACTION
                                 BEGIN TRY
@@ -38,7 +40,7 @@ BEGIN
                                     SET emailAddress = @emailAddress,
                                         name = @name,
                                         userName = @userName,
-                                        password = HASHBYTES('MD4', @password),
+                                        password = @passwordEncrypted,
                                         lastName1 = @lastName1,
                                         lastName2 = @lastName2
                                     WHERE idAdministrator = @idAdministrator

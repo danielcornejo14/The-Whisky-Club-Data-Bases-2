@@ -36,7 +36,9 @@ BEGIN
                         AND @password LIKE '%[0-9]%'
                         AND LEN(@password) BETWEEN 8 AND 64
                     BEGIN
-                        IF (SELECT COUNT(password) FROM Customer WHERE password = HASHBYTES('MD4', @password)) = 0
+                        DECLARE @passwordEncrypted binary(64);
+                        SET @passwordEncrypted = HASHBYTES('SHA2_256', @password);
+                        IF (SELECT COUNT(password) FROM Customer WHERE password = @passwordEncrypted) = 0
                         BEGIN
                             BEGIN TRANSACTION
                                 BEGIN TRY
@@ -48,45 +50,102 @@ BEGIN
                                         lastName2 = @lastName2,
                                         location = @location,
                                         userName = @userName,
-                                        password = HASHBYTES('MD4', @password)
+                                        password = @passwordEncrypted
                                     WHERE idCustomer = @idCustomer
-                                    PRINT('Customer updated.')
+                                    UPDATE UnitedStates_db.dbo.Customer
+                                    SET idSubscription = @idSubscription,
+                                        emailAddress = @emailAddress,
+                                        name = @name,
+                                        lastName1 = @lastName1,
+                                        lastName2 = @lastName2,
+                                        location = @location,
+                                        userName = @userName,
+                                        password = @passwordEncrypted
+                                    WHERE idCustomer = @idCustomer
+                                    UPDATE Scotland_db.dbo.Customer
+                                    SET idSubscription = @idSubscription,
+                                        emailAddress = @emailAddress,
+                                        name = @name,
+                                        lastName1 = @lastName1,
+                                        lastName2 = @lastName2,
+                                        location = @location,
+                                        userName = @userName,
+                                        password = @passwordEncrypted
+                                    WHERE idCustomer = @idCustomer
+                                    UPDATE Ireland_db.dbo.Customer
+                                    SET idSubscription = @idSubscription,
+                                        emailAddress = @emailAddress,
+                                        name = @name,
+                                        lastName1 = @lastName1,
+                                        lastName2 = @lastName2,
+                                        location = @location,
+                                        userName = @userName,
+                                        password = @passwordEncrypted
+                                    WHERE idCustomer = @idCustomer
                                     COMMIT TRANSACTION
+                                    --Customer replication to Employees_db
+                                    DECLARE @locationPoint varchar(64)
+                                    SET @locationPoint = @location.STAsText()
+                                    DECLARE @idSubscriptionString varchar(5)
+                                    SET @idSubscriptionString = CAST(@idSubscription as varchar(5))
+                                    DECLARE @idCustomerString varchar(5)
+                                    SET @idCustomerString = CAST(@idCustomer as varchar(5))
+                                    EXEC('CALL replicateUpdateCustomer(' +
+                                        @idCustomerString + ', ' +
+                                        @idSubscriptionString + ', ''' +
+                                        @emailAddress + ''', ' + '''' +
+                                        @name + ''', ' + '''' + @lastName1 +
+                                        ''', ' + '''' + @lastName2 + ''', ' +
+                                        '''' + @locationPoint + '''' + ', ''' +
+                                        @userName + '''' + ', ''' + @password + '''' + ')') AT MYSQL_SERVER
+                                    PRINT('Customer updated.')
+									SELECT '00' AS CODE, 'Customer updated.' AS MESSAGE
                                 END TRY
                                 BEGIN CATCH
                                     ROLLBACK TRANSACTION
+									SELECT '01' AS CODE, 'An error has occurred in the database.' AS MESSAGE
                                     RAISERROR('An error has occurred in the database.', 11, 1)
                                 END CATCH
                         END
                         ELSE
                         BEGIN
-                            RAISERROR('The password cannot be repeated. ', 11, 1)
+							SELECT '02' AS CODE, 'The password can not be repeated. ' AS MESSAGE
+                            RAISERROR('The password can not be repeated. ', 11, 1)
                         END
                     END
                     ELSE
                     BEGIN
-                        SELECT '03' AS message --This is the code error when the password format is invalid.
-                        RAISERROR('The password must have a special character, a capital letter, a number, and the minimum length is 8 and maximum length is 64.', 11, 1)
+                        SELECT '03' AS CODE, 'The password must have a special character,' +
+                                             ' a capital letter, a number, and the minimum ' +
+                                             'length is 8 and maximum length is 64.' AS MESSAGE --This is the code error when the password format is invalid.
+                        RAISERROR('The password must have a special character,' +
+                                  ' a capital letter, a number, and the minimum' +
+                                  ' length is 8 and maximum length is 64.', 11, 1)
                     END
                 END
                 ELSE
                 BEGIN
-                    RAISERROR('The email address cannot be repeated. ', 11, 1)
+					SELECT '04' AS CODE, 'The email address can not be repeated.' AS MESSAGE
+                    RAISERROR('The email address can not be repeated.', 11, 1)
                 END
             END
             ELSE
             BEGIN
-                SELECT '02' AS message --This is the code error when the email format is invalid.
-                RAISERROR('The email address is not valid. ', 11, 1)
+                SELECT '05' AS CODE, 'The email address is not valid.' AS MESSAGE  --This is the code error when the email format is invalid.
+                RAISERROR('The email address is not valid.', 11, 1)
             END
         END
         ELSE
         BEGIN
-            RAISERROR('The customer name, the userName and the location can not be repeated, and the ids must exist.', 11, 1)
+			SELECT '06' AS CODE, 'The customer userName, the location and the ' +
+			                     'customer name cannot be repeated, and the ids must exist.' AS MESSAGE
+            RAISERROR('The customer userName, the location and the' +
+                      ' customer name cannot be repeated, and the ids must exist.', 11, 1)
         END
     END
     ELSE
     BEGIN
+		SELECT '07' AS CODE, 'Null data is not allowed.' AS MESSAGE
         RAISERROR('Null data is not allowed.', 11, 1)
     END
 END

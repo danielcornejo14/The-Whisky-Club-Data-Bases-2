@@ -10,7 +10,10 @@ BEGIN
         AND @location IS NOT NULL AND @userName IS NOT NULL
         AND @password IS NOT NULL
     BEGIN
-        IF ((SELECT COUNT(userName) FROM Customer WHERE userName = @userName) = 0)
+        IF ((SELECT COUNT(userName) FROM Customer WHERE userName = @userName) = 0
+            AND (SELECT COUNT(location) FROM Customer WHERE (location.STEquals(@location) = 1)) = 0
+            AND (SELECT COUNT(*) FROM Customer WHERE name = @name AND lastName1 = @lastName1
+                AND lastName2 = @lastName2) = 0)
         BEGIN
             IF @emailAddress LIKE '%_@__%.__%'
             BEGIN
@@ -27,7 +30,9 @@ BEGIN
                         AND @password LIKE '%[0-9]%'
                         AND LEN(@password) BETWEEN 8 AND 64
                     BEGIN
-                        IF (SELECT COUNT(password) FROM Customer WHERE password = HASHBYTES('MD4', @password)) = 0
+                        DECLARE @passwordEncrypted binary(64);
+                        SET @passwordEncrypted = HASHBYTES('SHA2_256', @password);
+                        IF (SELECT COUNT(password) FROM Customer WHERE password = @passwordEncrypted) = 0
                         BEGIN
                             BEGIN TRANSACTION
                                 BEGIN TRY
@@ -36,10 +41,46 @@ BEGIN
                                                          userName, password)
                                     VALUES (1 , @emailAddress,
                                             @name, @lastName1, @lastName2, @location,
-                                            @userName, HASHBYTES('MD4', @password))
+                                            @userName, @passwordEncrypted)
+                                    INSERT INTO UnitedStates_db.dbo.Customer(idSubscription,
+                                                                             emailAddress, name,
+                                                                             lastName1, lastName2,
+                                                                             location, userName,
+                                                                             password)
+                                    VALUES (1 , @emailAddress,
+                                            @name, @lastName1, @lastName2, @location,
+                                            @userName, @passwordEncrypted)
+                                    INSERT INTO Scotland_db.dbo.Customer(idSubscription,
+                                         emailAddress, name,
+                                         lastName1, lastName2,
+                                         location, userName,
+                                         password)
+                                    VALUES (1 , @emailAddress,
+                                            @name, @lastName1, @lastName2, @location,
+                                            @userName, @passwordEncrypted)
+                                    INSERT INTO Ireland_db.dbo.Customer(idSubscription,
+                                         emailAddress, name,
+                                         lastName1, lastName2,
+                                         location, userName,
+                                         password)
+                                    VALUES (1 , @emailAddress,
+                                            @name, @lastName1, @lastName2, @location,
+                                            @userName, @passwordEncrypted)
+                                    COMMIT TRANSACTION
+                                    --Customer replication to Employees_db
+                                    DECLARE @locationPoint varchar(64)
+                                    SET @locationPoint = @location.STAsText()
+                                    DECLARE @idSubscriptionString varchar(5)
+                                    SET @idSubscriptionString = CAST(1 as varchar(5))
+                                    EXEC('CALL replicateInsertCustomer(' +
+                                        @idSubscriptionString + ', ''' +
+                                        @emailAddress + ''', ' + '''' +
+                                        @name + ''', ' + '''' + @lastName1 +
+                                        ''', ' + '''' + @lastName2 + ''', ' +
+                                        '''' + @locationPoint + '''' + ', ''' +
+                                        @userName + '''' + ', ''' + @password + '''' + ')') AT MYSQL_SERVER
                                     PRINT('Customer inserted.')
 									SELECT '00' AS CODE, 'Customer inserted.' AS MESSAGE
-                                    COMMIT TRANSACTION
                                 END TRY
                                 BEGIN CATCH
                                     ROLLBACK TRANSACTION
@@ -55,8 +96,12 @@ BEGIN
                     END
                     ELSE
                     BEGIN
-                        SELECT '03' AS CODE, 'The password must have a special character, a capital letter, a number, and the minimum length is 8 and maximum length is 64.' AS MESSAGE --This is the code error when the password format is invalid.
-                        RAISERROR('The password must have a special character, a capital letter, a number, and the minimum length is 8 and maximum length is 64.', 11, 1)
+                        SELECT '03' AS CODE, 'The password must have a special character,' +
+                                             ' a capital letter, a number, and the minimum' +
+                                             ' length is 8 and maximum length is 64.' AS MESSAGE --This is the code error when the password format is invalid.
+                        RAISERROR('The password must have a special character,' +
+                                  ' a capital letter, a number, and the minimum' +
+                                  ' length is 8 and maximum length is 64.', 11, 1)
                     END
                 END
                 ELSE
@@ -73,8 +118,10 @@ BEGIN
         END
         ELSE
         BEGIN
-			SELECT '06' AS CODE, 'The customer userName and the location cannot be repeated, and the ids must exist.' AS MESSAGE
-            RAISERROR('The customer userName and the location cannot be repeated, and the ids must exist.', 11, 1)
+			SELECT '06' AS CODE, 'The customer userName, the location' +
+			                     ' and the customer name cannot be repeated.' AS MESSAGE
+            RAISERROR('The customer userName, the location and the' +
+                      ' customer name cannot be repeated.', 11, 1)
         END
     END
     ELSE

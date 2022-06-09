@@ -26,12 +26,14 @@ BEGIN
                         AND @password LIKE '%[0-9]%'
                         AND LEN(@password) BETWEEN 8 AND 64
                     BEGIN
-                        IF (SELECT COUNT(password) FROM Customer WHERE password = HASHBYTES('MD4', @password)) = 0
+                        DECLARE @passwordEncrypted binary(64);
+                        SET @passwordEncrypted = HASHBYTES('SHA2_256', @password);
+                        IF (SELECT COUNT(password) FROM Customer WHERE password = @passwordEncrypted) = 0
                         BEGIN
                             BEGIN TRANSACTION
                                 BEGIN TRY
                                     INSERT INTO Administrator(emailAddress, name, userName, password, lastName1, lastName2)
-                                    VALUES (@emailAddress, @name, @userName, HASHBYTES('MD4', @password), @lastName1, @lastName2)
+                                    VALUES (@emailAddress, @name, @userName, @passwordEncrypted, @lastName1, @lastName2)
                                     PRINT('Administrator inserted.')
                                     COMMIT TRANSACTION
                                 END TRY
