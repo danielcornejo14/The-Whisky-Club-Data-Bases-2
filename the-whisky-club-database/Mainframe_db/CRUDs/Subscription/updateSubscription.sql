@@ -19,8 +19,31 @@ BEGIN
                         shoppingDiscount = @shoppingDiscount,
                         shippingDiscount = @shippingDiscount
                     WHERE idSubscription = @idSubscription
-                    PRINT('Subscription updated.')
+                    UPDATE UnitedStates_db.dbo.Subscription
+                    SET name = @name,
+                        shoppingDiscount = @shoppingDiscount,
+                        shippingDiscount = @shippingDiscount
+                    WHERE idSubscription = @idSubscription
+                    UPDATE Ireland_db.dbo.Subscription
+                    SET name = @name,
+                        shoppingDiscount = @shoppingDiscount,
+                        shippingDiscount = @shippingDiscount
+                    WHERE idSubscription = @idSubscription
+                    UPDATE Scotland_db.dbo.Subscription
+                    SET name = @name,
+                        shoppingDiscount = @shoppingDiscount,
+                        shippingDiscount = @shippingDiscount
+                    WHERE idSubscription = @idSubscription
                     COMMIT TRANSACTION
+                    --Replication in the Employees_db.
+                    DECLARE @idSubscriptionString varchar(10)
+                    SET @idSubscriptionString = CAST(@idSubscription as varchar(10))
+                    DECLARE @shoppingString varchar(10)
+                    SET @shoppingString = CAST(@shoppingDiscount as varchar(10))
+                    DECLARE @shippingString varchar(10)
+                    SET @shippingString = CAST(@shippingDiscount as varchar(10))
+                    EXEC('CALL replicateUpdateSubscription(' + @idSubscriptionString + ', ' + '''' + @name + '''' + ', ' + @shoppingString + ', ' + @shippingString + ')') AT MYSQL_SERVER
+                    PRINT('Subscription inserted.')
                 END TRY
                 BEGIN CATCH
                     ROLLBACK TRANSACTION
