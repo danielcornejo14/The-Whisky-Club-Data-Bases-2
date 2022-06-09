@@ -16,6 +16,12 @@ BEGIN
                 BEGIN TRY
                     INSERT INTO WhiskeyReview(idCustomer, idWhiskey, comment, evaluation, date)
                     VALUES (@idCustomer, @idWhiskey, @comment, @evaluation, GETDATE())
+                    INSERT INTO UnitedStates_db.dbo.WhiskeyReview(idCustomer, idWhiskey, comment, evaluation, date)
+                    VALUES (@idCustomer, @idWhiskey, @comment, @evaluation, GETDATE())
+                    INSERT INTO Scotland_db.dbo.WhiskeyReview(idCustomer, idWhiskey, comment, evaluation, date)
+                    VALUES (@idCustomer, @idWhiskey, @comment, @evaluation, GETDATE())
+                    INSERT INTO Ireland_db.dbo.WhiskeyReview(idCustomer, idWhiskey, comment, evaluation, date)
+                    VALUES (@idCustomer, @idWhiskey, @comment, @evaluation, GETDATE())
                     PRINT('WhiskeyReview inserted.')
                     COMMIT TRANSACTION
                 END TRY

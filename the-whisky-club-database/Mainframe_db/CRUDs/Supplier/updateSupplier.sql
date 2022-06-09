@@ -17,6 +17,18 @@ BEGIN
                         SET name = @name,
                             emailAddress = @emailAddress
                         WHERE idSupplier = @idSupplier
+                        UPDATE UnitedStates_db.dbo.Supplier
+                        SET name = @name,
+                            emailAddress = @emailAddress
+                        WHERE idSupplier = @idSupplier
+                        UPDATE Ireland_db.dbo.Supplier
+                        SET name = @name,
+                            emailAddress = @emailAddress
+                        WHERE idSupplier = @idSupplier
+                        UPDATE Scotland_db.dbo.Supplier
+                        SET name = @name,
+                            emailAddress = @emailAddress
+                        WHERE idSupplier = @idSupplier
                         PRINT('Supplier updated.')
                         COMMIT TRANSACTION
                     END TRY

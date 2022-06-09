@@ -51,6 +51,51 @@ BEGIN
                         whiskeyAging = @whiskeyAging,
                         special = @special
                     WHERE idWhiskey = @idWhiskey
+                    UPDATE UnitedStates_db.dbo.Whiskey
+                    SET idSupplier = @idSupplier,
+                        idPresentation = @idPresentation,
+                        idCurrency = @idCurrency,
+                        idWhiskeyType = @idWhiskeyType,
+                        brand = @brand,
+                        price = @price,
+                        alcoholContent = @alcoholContent,
+                        productionDate = @productionDate,
+                        dueDate = @dueDate,
+                        availability = @availability,
+                        millilitersQuantity = @millilitersQuantity,
+                        whiskeyAging = @whiskeyAging,
+                        special = @special
+                    WHERE idWhiskey = @idWhiskey
+                    UPDATE Scotland_db.dbo.Whiskey
+                    SET idSupplier = @idSupplier,
+                        idPresentation = @idPresentation,
+                        idCurrency = @idCurrency,
+                        idWhiskeyType = @idWhiskeyType,
+                        brand = @brand,
+                        price = @price,
+                        alcoholContent = @alcoholContent,
+                        productionDate = @productionDate,
+                        dueDate = @dueDate,
+                        availability = @availability,
+                        millilitersQuantity = @millilitersQuantity,
+                        whiskeyAging = @whiskeyAging,
+                        special = @special
+                    WHERE idWhiskey = @idWhiskey
+                    UPDATE Ireland_db.dbo.Whiskey
+                    SET idSupplier = @idSupplier,
+                        idPresentation = @idPresentation,
+                        idCurrency = @idCurrency,
+                        idWhiskeyType = @idWhiskeyType,
+                        brand = @brand,
+                        price = @price,
+                        alcoholContent = @alcoholContent,
+                        productionDate = @productionDate,
+                        dueDate = @dueDate,
+                        availability = @availability,
+                        millilitersQuantity = @millilitersQuantity,
+                        whiskeyAging = @whiskeyAging,
+                        special = @special
+                    WHERE idWhiskey = @idWhiskey
                     PRINT('Whiskey updated.')
                     COMMIT TRANSACTION
                 END TRY
@@ -61,9 +106,7 @@ BEGIN
         END
         ELSE
         BEGIN
-            RAISERROR('The ids must exist, the brand name cannot be repeated, the quantity' +
-                      ' arguments must be greater than 0 and the due date must be before the' +
-                      ' production date.', 11, 1)
+            RAISERROR('The ids must exist, the brand name cannot be repeated, the quantity arguments must be greater than 0 and the due date must be before the production date.', 11, 1)
         END
     END
     ELSE

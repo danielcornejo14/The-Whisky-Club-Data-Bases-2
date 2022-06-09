@@ -10,6 +10,12 @@ BEGIN
                 BEGIN TRY
                     INSERT INTO WhiskeyType(name)
                     VALUES (@name)
+                    INSERT INTO UnitedStates_db.dbo.WhiskeyType(name)
+                    VALUES (@name)
+                    INSERT INTO Ireland_db.dbo.WhiskeyType(name)
+                    VALUES (@name)
+                    INSERT INTO Scotland_db.dbo.WhiskeyType(name)
+                    VALUES (@name)
                     PRINT('WhiskeyType inserted.')
                     COMMIT TRANSACTION
                 END TRY

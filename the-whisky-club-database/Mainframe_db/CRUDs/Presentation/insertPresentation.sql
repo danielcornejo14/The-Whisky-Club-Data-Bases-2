@@ -10,6 +10,12 @@ BEGIN
                 BEGIN TRY
                     INSERT INTO Presentation(description)
                     VALUES (@description)
+                    INSERT INTO UnitedStates_db.dbo.Presentation(description)
+                    VALUES (@description)
+                    INSERT INTO Scotland_db.dbo.Presentation(description)
+                    VALUES (@description)
+                    INSERT INTO Ireland_db.dbo.Presentation(description)
+                    VALUES (@description)
                     PRINT('Presentation inserted.')
                     COMMIT TRANSACTION
                 END TRY

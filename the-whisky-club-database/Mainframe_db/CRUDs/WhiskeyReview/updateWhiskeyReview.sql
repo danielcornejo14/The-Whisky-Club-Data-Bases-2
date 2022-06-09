@@ -25,6 +25,27 @@ BEGIN
                         evaluation = @evaluation,
                         date = GETDATE()
                     WHERE idWhiskeyReview = @idWhiskeyReview
+                    UPDATE UnitedStates_db.dbo.WhiskeyReview
+                    SET idCustomer = @idCustomer,
+                        idWhiskey = @idWhiskey,
+                        comment = @comment,
+                        evaluation = @evaluation,
+                        date = GETDATE()
+                    WHERE idWhiskeyReview = @idWhiskeyReview
+                    UPDATE Scotland_db.dbo.WhiskeyReview
+                    SET idCustomer = @idCustomer,
+                        idWhiskey = @idWhiskey,
+                        comment = @comment,
+                        evaluation = @evaluation,
+                        date = GETDATE()
+                    WHERE idWhiskeyReview = @idWhiskeyReview
+                    UPDATE Ireland_db.dbo.WhiskeyReview
+                    SET idCustomer = @idCustomer,
+                        idWhiskey = @idWhiskey,
+                        comment = @comment,
+                        evaluation = @evaluation,
+                        date = GETDATE()
+                    WHERE idWhiskeyReview = @idWhiskeyReview
                     PRINT('WhiskeyReview updated.')
                     COMMIT TRANSACTION
                 END TRY

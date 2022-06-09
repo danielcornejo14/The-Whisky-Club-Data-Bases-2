@@ -10,6 +10,12 @@ BEGIN
                 BEGIN TRY
                     INSERT INTO PaymentMethod(name)
                     VALUES (@name)
+                    INSERT INTO UnitedStates_db.dbo.PaymentMethod(name)
+                    VALUES (@name)
+                    INSERT INTO Scotland_db.dbo.PaymentMethod(name)
+                    VALUES (@name)
+                    INSERT INTO Ireland_db.dbo.PaymentMethod(name)
+                    VALUES (@name)
                     PRINT('PaymentMethod inserted.')
                     COMMIT TRANSACTION
                 END TRY

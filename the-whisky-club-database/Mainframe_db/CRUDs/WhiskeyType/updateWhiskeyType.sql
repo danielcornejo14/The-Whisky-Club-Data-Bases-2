@@ -13,6 +13,15 @@ BEGIN
                     UPDATE WhiskeyType
                     SET name = @name
                     WHERE idWhiskeyType = @idWhiskeyType
+                    UPDATE UnitedStates_db.dbo.WhiskeyType
+                    SET name = @name
+                    WHERE idWhiskeyType = @idWhiskeyType
+                    UPDATE Ireland_db.dbo.WhiskeyType
+                    SET name = @name
+                    WHERE idWhiskeyType = @idWhiskeyType
+                    UPDATE Scotland_db.dbo.WhiskeyType
+                    SET name = @name
+                    WHERE idWhiskeyType = @idWhiskeyType
                     PRINT('WhiskeyType updated.')
                     COMMIT TRANSACTION
                 END TRY

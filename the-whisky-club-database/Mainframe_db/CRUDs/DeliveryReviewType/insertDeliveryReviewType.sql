@@ -10,6 +10,12 @@ BEGIN
                 BEGIN TRY
                     INSERT INTO DeliveryReviewType(name)
                     VALUES (@name)
+                    INSERT INTO UnitedStates_db.dbo.DeliveryReviewType(name)
+                    VALUES (@name)
+                    INSERT INTO Scotland_db.dbo.DeliveryReviewType(name)
+                    VALUES (@name)
+                    INSERT INTO Ireland_db.dbo.DeliveryReviewType(name)
+                    VALUES (@name)
                     PRINT('DeliveryReviewType inserted.')
                     COMMIT TRANSACTION
                 END TRY

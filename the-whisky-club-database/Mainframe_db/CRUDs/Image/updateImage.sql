@@ -16,6 +16,18 @@ BEGIN
                     SET idWhiskey = @idWhiskey,
                         image = @image
                     WHERE idImage = @idImage
+                    UPDATE UnitedStates_db.dbo.Image
+                    SET idWhiskey = @idWhiskey,
+                        image = @image
+                    WHERE idImage = @idImage
+                    UPDATE Scotland_db.dbo.Image
+                    SET idWhiskey = @idWhiskey,
+                        image = @image
+                    WHERE idImage = @idImage
+                    UPDATE Ireland_db.dbo.Image
+                    SET idWhiskey = @idWhiskey,
+                        image = @image
+                    WHERE idImage = @idImage
                     PRINT('Image updated.')
                     COMMIT TRANSACTION
                 END TRY

@@ -13,6 +13,15 @@ BEGIN
                     UPDATE DeliveryReviewType
                     SET name = @name
                     WHERE idDeliveryReviewType = @idDeliveryReviewType
+                    UPDATE UnitedStates_db.dbo.DeliveryReviewType
+                    SET name = @name
+                    WHERE idDeliveryReviewType = @idDeliveryReviewType
+                    UPDATE Scotland_db.dbo.DeliveryReviewType
+                    SET name = @name
+                    WHERE idDeliveryReviewType = @idDeliveryReviewType
+                    UPDATE Ireland_db.dbo.DeliveryReviewType
+                    SET name = @name
+                    WHERE idDeliveryReviewType = @idDeliveryReviewType
                     PRINT('DeliveryReviewType updated.')
                     COMMIT TRANSACTION
                 END TRY

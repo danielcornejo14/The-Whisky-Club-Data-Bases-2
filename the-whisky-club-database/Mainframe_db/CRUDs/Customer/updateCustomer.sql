@@ -118,9 +118,8 @@ BEGIN
                         SELECT '03' AS CODE, 'The password must have a special character,' +
                                              ' a capital letter, a number, and the minimum ' +
                                              'length is 8 and maximum length is 64.' AS MESSAGE --This is the code error when the password format is invalid.
-                        RAISERROR('The password must have a special character,' +
-                                  ' a capital letter, a number, and the minimum' +
-                                  ' length is 8 and maximum length is 64.', 11, 1)
+                        RAISERROR('The password must have a special character, a capital letter,' +
+                                  ' a number, and the minimum length is 8 and maximum length is 64.', 11, 1)
                     END
                 END
                 ELSE
@@ -139,8 +138,8 @@ BEGIN
         BEGIN
 			SELECT '06' AS CODE, 'The customer userName, the location and the ' +
 			                     'customer name cannot be repeated, and the ids must exist.' AS MESSAGE
-            RAISERROR('The customer userName, the location and the' +
-                      ' customer name cannot be repeated, and the ids must exist.', 11, 1)
+            RAISERROR('The customer userName, the location and the customer name cannot be ' +
+                      'repeated, and the ids must exist.', 11, 1)
         END
     END
     ELSE

@@ -13,6 +13,12 @@ BEGIN
                     BEGIN TRY
                         INSERT INTO Supplier(name, emailAddress)
                         VALUES (@name, @emailAddress)
+                        INSERT INTO UnitedStates_db.dbo.Supplier(name, emailAddress)
+                        VALUES (@name, @emailAddress)
+                        INSERT INTO Scotland_db.dbo.Supplier(name, emailAddress)
+                        VALUES (@name, @emailAddress)
+                        INSERT INTO Ireland_db.dbo.Supplier(name, emailAddress)
+                        VALUES (@name, @emailAddress)
                         PRINT('Supplier inserted.')
                         COMMIT TRANSACTION
                     END TRY

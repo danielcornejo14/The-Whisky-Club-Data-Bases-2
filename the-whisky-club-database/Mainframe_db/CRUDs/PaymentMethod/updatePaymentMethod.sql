@@ -13,6 +13,15 @@ BEGIN
                     UPDATE PaymentMethod
                     SET name = @name
                     WHERE idPaymentMethod = @idPaymentMethod
+                    UPDATE UnitedStates_db.dbo.PaymentMethod
+                    SET name = @name
+                    WHERE idPaymentMethod = @idPaymentMethod
+                    UPDATE Scotland_db.dbo.PaymentMethod
+                    SET name = @name
+                    WHERE idPaymentMethod = @idPaymentMethod
+                    UPDATE Ireland_db.dbo.PaymentMethod
+                    SET name = @name
+                    WHERE idPaymentMethod = @idPaymentMethod
                     PRINT('PaymentMethod updated.')
                     COMMIT TRANSACTION
                 END TRY

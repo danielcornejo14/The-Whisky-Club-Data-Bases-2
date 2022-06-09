@@ -42,6 +42,30 @@ BEGIN
                             @idWhiskeyType, @brand, @price , @alcoholContent,
                             @productionDate, @dueDate, @availability,
                             @millilitersQuantity, @whiskeyAging, @special)
+                    INSERT INTO UnitedStates_db.dbo.Whiskey(idSupplier, idPresentation, idCurrency,
+                                        idWhiskeyType, brand, price, alcoholContent,
+                                        productionDate, dueDate, availability,
+                                        millilitersQuantity, whiskeyAging, special)
+                    VALUES (@idSupplier, @idPresentation, @idCurrency,
+                            @idWhiskeyType, @brand, @price , @alcoholContent,
+                            @productionDate, @dueDate, @availability,
+                            @millilitersQuantity, @whiskeyAging, @special)
+                    INSERT INTO Scotland_db.dbo.Whiskey(idSupplier, idPresentation, idCurrency,
+                                        idWhiskeyType, brand, price, alcoholContent,
+                                        productionDate, dueDate, availability,
+                                        millilitersQuantity, whiskeyAging, special)
+                    VALUES (@idSupplier, @idPresentation, @idCurrency,
+                            @idWhiskeyType, @brand, @price , @alcoholContent,
+                            @productionDate, @dueDate, @availability,
+                            @millilitersQuantity, @whiskeyAging, @special)
+                    INSERT INTO Ireland_db.dbo.Whiskey(idSupplier, idPresentation, idCurrency,
+                                        idWhiskeyType, brand, price, alcoholContent,
+                                        productionDate, dueDate, availability,
+                                        millilitersQuantity, whiskeyAging, special)
+                    VALUES (@idSupplier, @idPresentation, @idCurrency,
+                            @idWhiskeyType, @brand, @price , @alcoholContent,
+                            @productionDate, @dueDate, @availability,
+                            @millilitersQuantity, @whiskeyAging, @special)
                     PRINT('Whiskey inserted.')
                     COMMIT TRANSACTION
                 END TRY
@@ -52,9 +76,7 @@ BEGIN
         END
         ELSE
         BEGIN
-            RAISERROR('The ids must exist, the brand name cannot be repeated,' +
-                      ' the quantity arguments must be greater than 0 and the' +
-                      ' due date must be before the production date.', 11, 1)
+            RAISERROR('The ids must exist, the brand name cannot be repeated, the quantity arguments must be greater than 0 and the due date must be before the production date.', 11, 1)
         END
     END
     ELSE

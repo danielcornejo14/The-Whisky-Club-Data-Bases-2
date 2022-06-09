@@ -13,6 +13,15 @@ BEGIN
                     UPDATE Presentation
                     SET description = @description
                     WHERE idPresentation = @idPresentation
+                    UPDATE UnitedStates_db.dbo.Presentation
+                    SET description = @description
+                    WHERE idPresentation = @idPresentation
+                    UPDATE Scotland_db.dbo.Presentation
+                    SET description = @description
+                    WHERE idPresentation = @idPresentation
+                    UPDATE Ireland_db.dbo.Presentation
+                    SET description = @description
+                    WHERE idPresentation = @idPresentation
                     PRINT('Presentation updated.')
                     COMMIT TRANSACTION
                 END TRY

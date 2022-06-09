@@ -11,6 +11,12 @@ BEGIN
                 BEGIN TRY
                     INSERT INTO Image(idWhiskey, image)
                     VALUES (@idWhiskey , @image)
+                    INSERT INTO UnitedStates_db.dbo.Image(idWhiskey, image)
+                    VALUES (@idWhiskey , @image)
+                    INSERT INTO Ireland_db.dbo.Image(idWhiskey, image)
+                    VALUES (@idWhiskey , @image)
+                    INSERT INTO Scotland_db.dbo.Image(idWhiskey, image)
+                    VALUES (@idWhiskey , @image)
                     PRINT('Image inserted.')
                     COMMIT TRANSACTION
                 END TRY
