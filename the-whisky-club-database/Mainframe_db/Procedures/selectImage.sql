@@ -5,7 +5,11 @@ BEGIN
 
 	IF((select count(idImage) from Image where idWhiskey = @idWhiskey) > 0)
 	BEGIN
-		SELECT idImage, idWhiskey, image FROM Image WHERE idWhiskey = @idWhiskey AND status = 1
+		SELECT idImage, idWhiskey, image, status FROM OPENJSON(
+			(SELECT idImage, idWhiskey, image, status
+			FROM Image
+			FOR json auto)
+		)WITH(idImage int, idWhiskey int, image varchar(max), status bit)WHERE idWhiskey = @idWhiskey AND status = 1 
 	END
 
 	ELSE
