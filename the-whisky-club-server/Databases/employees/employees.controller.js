@@ -13,6 +13,8 @@ router.get('/selectEmployeeType', selectEmployeeType)
 
 module.exports = router
 
+//TODO #5 send employee data to front end
+
 function testdb(req, res){
     console.log(employeeService.testdb())
 }

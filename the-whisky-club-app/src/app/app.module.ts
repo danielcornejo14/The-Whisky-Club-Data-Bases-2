@@ -18,6 +18,8 @@ import { AdminDashboardComponent } from './dashboard/admin-dashboard/admin-dashb
 import { CatalogComponent } from './dashboard/admin-dashboard/catalog/catalog.component';
 import { CatalogUpdateComponent } from './dashboard/admin-dashboard/catalog/catalog-update/catalog-update.component';
 import { CatalogCreateComponent } from './dashboard/admin-dashboard/catalog/catalog-create/catalog-create.component';
+import { CustomerDashboardComponent } from './dashboard/customer-dashboard/customer-dashboard.component';
+import { EmployeeDashboardComponent } from './dashboard/employee-dashboard/employee-dashboard.component';
 
 
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
@@ -39,7 +41,6 @@ import {MatIconModule} from '@angular/material/icon';
 import { EmployeesComponent } from './dashboard/admin-dashboard/employees/employees.component';
 import {MatCardModule} from '@angular/material/card';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -53,6 +54,8 @@ import {MatCardModule} from '@angular/material/card';
     CatalogUpdateComponent,
     CatalogCreateComponent,
     EmployeesComponent,
+    CustomerDashboardComponent,
+    EmployeeDashboardComponent,
 
   ],
   imports: [

@@ -12,6 +12,8 @@ import {SupplierResolver} from "./_resolvers/dashboard/catalog/supplier.resolver
 import {PresentationResolver} from "./_resolvers/dashboard/catalog/presentation.resolver";
 import {CurrencyResolver} from "./_resolvers/dashboard/catalog/currency.resolver";
 import { EmployeesComponent } from './dashboard/admin-dashboard/employees/employees.component';
+import { EmployeeDashboardComponent } from './dashboard/employee-dashboard/employee-dashboard.component';
+import { CustomerDashboardComponent } from './dashboard/customer-dashboard/customer-dashboard.component';
 
 const routes: Routes = [
   //logIn
@@ -38,7 +40,9 @@ const routes: Routes = [
       },
       {path: 'employees', component: EmployeesComponent}
     ]
-  }
+  },
+  {path: 'employee-dashboard', component: EmployeeDashboardComponent},
+  {path: 'customer-dashboard', component: CustomerDashboardComponent},
 
 ];
 
