@@ -1,4 +1,4 @@
-CREATE PROCEDURE updateCustomer @idSubscription int,
+CREATE OR ALTER PROCEDURE updateCustomer @idSubscription int,
                                 @emailAddress varchar(64), @name varchar(64),
                                 @lastName1 varchar(64), @lastName2 varchar(64),
                                 @location geometry, @userName varchar(64),
