@@ -5,11 +5,11 @@ AS
 BEGIN
 	--Gather all the whiskey sales and properties in a CTE
     WITH WhiskeyCatalogCTE (
-		idWhiskeyXShop, idShop, idWhiskey, currentStock, totalUnitsSold, status	
+		idWhiskeyXShop, idShop, idWhiskey, currentStock, quantity, status	
 	)
 	AS
 	(
-		SELECT idWhiskeyXShop, WxS.idShop, WxS.idWhiskey, currentStock, SUM(quantity), WxS.status
+		SELECT idWhiskeyXShop, WxS.idShop, WxS.idWhiskey, currentStock, quantity, WxS.status
 		FROM Ireland_db.dbo.WhiskeyXShop WxS
 		INNER JOIN Ireland_db.dbo.WhiskeyXCustomer WxC ON WxS.idWhiskey = WxC.idWhiskey
 		INNER JOIN Ireland_db.dbo.Shop S ON S.idShop = WxC.idShop
@@ -18,7 +18,7 @@ BEGIN
 			(@beforeDate IS NULL OR @beforeDate < WxC.date) AND
 			(@afterDate IS NULL OR WxC.date > @afterDate)
 		UNION
-		SELECT idWhiskeyXShop, WxS.idShop, WxS.idWhiskey, currentStock, SUM(quantity), WxS.status
+		SELECT idWhiskeyXShop, WxS.idShop, WxS.idWhiskey, currentStock, quantity, WxS.status
 		FROM Scotland_db.dbo.WhiskeyXShop WxS
 		INNER JOIN Ireland_db.dbo.WhiskeyXCustomer WxC ON WxS.idWhiskey = WxC.idWhiskey
 		INNER JOIN Ireland_db.dbo.Shop S ON S.idShop = WxC.idShop
@@ -27,7 +27,7 @@ BEGIN
 			(@beforeDate IS NULL OR @beforeDate < WxC.date) AND
 			(@afterDate IS NULL OR WxC.date > @afterDate)
 		UNION
-		SELECT idWhiskeyXShop, WxS.idShop, WxS.idWhiskey, currentStock, SUM(quantity), WxS.status
+		SELECT idWhiskeyXShop, WxS.idShop, WxS.idWhiskey, currentStock, quantity, WxS.status
 		FROM UnitedStates_db.dbo.WhiskeyXShop WxS
 		INNER JOIN Ireland_db.dbo.WhiskeyXCustomer WxC ON WxS.idWhiskey = WxC.idWhiskey
 		INNER JOIN Ireland_db.dbo.Shop S ON S.idShop = WxC.idShop
@@ -37,7 +37,7 @@ BEGIN
 			(@afterDate IS NULL OR WxC.date > @afterDate)
 	)
 	--Select Query information
-	SELECT WC.idWhiskey, idWhiskeyType, WC.status
+	SELECT WC.idWhiskey, idWhiskeyType, WC.status, SUM(quantity) OVER(PARTITION BY WC.idWhiskey)
     FROM WhiskeyCatalogCTE WC
 	INNER JOIN Whiskey W ON W.idWhiskey = WC.idWhiskey
 	--Filter by whiskey type

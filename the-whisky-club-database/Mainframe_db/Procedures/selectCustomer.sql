@@ -15,7 +15,7 @@ BEGIN
 			(@beforeDate IS NULL OR @beforeDate < WxC.date) AND
 			(@afterDate IS NULL OR WxC.date > @afterDate)
 		UNION
-		SELECT idCustomer, total, shippingCost, date, idShop
+		SELECT idCustomer, total, shippingCost, date, WxC.idShop
 		FROM Scotland_db.dbo.WhiskeyXCustomer WxC
 		INNER JOIN Scotland_db.dbo.Shop S on WxC.idShop = S.idShop
 		WHERE
@@ -23,7 +23,7 @@ BEGIN
 			(@beforeDate IS NULL OR @beforeDate < WxC.date) AND
 			(@afterDate IS NULL OR WxC.date > @afterDate)
 		UNION
-		SELECT idCustomer, total, shippingCost, date, idShop
+		SELECT idCustomer, total, shippingCost, date, WxC.idShop
 		FROM UnitedStates_db.dbo.WhiskeyXCustomer WxC
 		INNER JOIN UnitedStates_db.dbo.Shop S on WxC.idShop = S.idShop
 		WHERE
