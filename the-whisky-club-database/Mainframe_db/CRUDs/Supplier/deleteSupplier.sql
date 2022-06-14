@@ -9,12 +9,37 @@ BEGIN
         BEGIN
             BEGIN TRANSACTION
                 BEGIN TRY
-                    UPDATE Whiskey
-                    SET status = 0
-                    WHERE idSupplier = @idSupplier
+                    --Delete whiskey cursor
+                    DECLARE @idWhiskeyCursor int, @idSupplierCursor int
+                    DECLARE whiskeyCursor CURSOR FOR SELECT
+                    idWhiskey, idSupplier FROM Whiskey
+                    OPEN whiskeyCursor
+                    FETCH NEXT FROM whiskeyCursor INTO @idWhiskeyCursor, @idSupplierCursor
+                    WHILE @@FETCH_STATUS = 0
+                    BEGIN
+                        IF @idSupplierCursor = @idSupplier
+                            EXEC deleteWhiskey @idWhiskey = @idWhiskeyCursor
+                        FETCH NEXT FROM whiskeyCursor INTO @idWhiskeyCursor, @idSupplierCursor
+                    END
+                    CLOSE whiskeyCursor
+                    DEALLOCATE whiskeyCursor
+                    -----------------------------
+                    --Delete supplier in Mainframe
                     UPDATE Supplier
                     SET status = 0
                     WHERE idSupplier = @idSupplier
+                    -----------------------------
+                    --Delete supplier replication in countries
+                    UPDATE UnitedStates_db.dbo.Supplier
+                    SET status = 0
+                    WHERE idSupplier = @idSupplier
+                    UPDATE Ireland_db.dbo.Supplier
+                    SET status = 0
+                    WHERE idSupplier = @idSupplier
+                    UPDATE Scotland_db.dbo.Supplier
+                    SET status = 0
+                    WHERE idSupplier = @idSupplier
+                    -----------------------------
                     PRINT('Supplier deleted.')
                     COMMIT TRANSACTION
                 END TRY

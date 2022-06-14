@@ -11,20 +11,26 @@ CREATE PROCEDURE replicateUpdateCustomer (
     IN pPassword varchar(64)
 )
 BEGIN
-    DECLARE pLocation geometry;
-    SET pLocation = ST_GeomFromText(pPoint);
-    START TRANSACTION;
-    UPDATE customer
-    SET idSubscription = pIdSubscription,
-        emailAddress = pEmailAddress,
-        name = pName,
-        lastName1 = pLastName1,
-        lastName2 = pLastName2,
-        location = pLocation,
-        userName = pUserName,
-        password = SHA2(pPassword, 256)
-    WHERE idCustomer = pIdCustomer;
-    SELECT 'Customer updated.';
-    COMMIT;
+    IF pIdSubscription IS NOT NULL AND pEmailAddress IS NOT NULL
+        AND pName IS NOT NULL AND pLastName1 IS NOT NULL
+        AND pLastName2 IS NOT NULL AND pPoint IS NOT NULL
+        AND pUserName IS NOT NULL AND pPassword IS NOT NULL
+    THEN
+        START TRANSACTION;
+        UPDATE customer
+        SET idSubscription = pIdSubscription,
+            emailAddress = pEmailAddress,
+            name = pName,
+            lastName1 = pLastName1,
+            lastName2 = pLastName2,
+            location = ST_GeomFromText(pPoint),
+            userName = pUserName,
+            password = SHA2(pPassword, 256)
+        WHERE idCustomer = pIdCustomer;
+        SELECT 'Customer updated.';
+        COMMIT;
+    ELSE
+        SELECT 'Null data is not allowed.';
+    END IF;
 END //
 DELIMITER ;

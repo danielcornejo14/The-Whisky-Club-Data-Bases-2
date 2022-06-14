@@ -9,15 +9,43 @@ BEGIN
         BEGIN
             BEGIN TRANSACTION
                 BEGIN TRY
-                    --EXEC deleteShop
-                    UPDATE UnitedStates_db.dbo.Shop
-                    SET
-
+                    --Delete shop cursor
+                    DECLARE @idShopCursor int, @idCountryCursor int
+                    DECLARE shopCursor CURSOR FOR SELECT
+                    idShop, idCountry FROM Shop
+                    OPEN shopCursor
+                    FETCH NEXT FROM shopCursor INTO @idShopCursor, @idCountryCursor
+                    WHILE @@FETCH_STATUS = 0
+                    BEGIN
+                        IF @idCountryCursor = @idCountry
+                            EXEC deleteShop @idShop = @idShopCursor
+                        FETCH NEXT FROM shopCursor INTO @idShopCursor, @idCountryCursor
+                    END
+                    CLOSE shopCursor
+                    DEALLOCATE shopCursor
+                    ----------------------------
+                    --Delete country in Mainframe
                     UPDATE Country
                     SET status = 0
                     WHERE idCountry = @idCountry
-                    PRINT('Country deleted.')
+                    ----------------------------
+                    --Delete country replication in Countries
+                    UPDATE UnitedStates_db.dbo.Country
+                    SET status = 0
+                    WHERE idCountry = @idCountry
+                    UPDATE Scotland_db.dbo.Country
+                    SET status = 0
+                    WHERE idCountry = @idCountry
+                    UPDATE Ireland_db.dbo.Country
+                    SET status = 0
+                    WHERE idCountry = @idCountry
+                    ---------------------------
                     COMMIT TRANSACTION
+                    --Delete country in employees db
+                    DECLARE @idCountryString varchar(5)
+                    SET @idCountryString = CAST(@idCountry as varchar(5))
+                    EXEC('CALL replicateDeleteCountry(' + @idCountryString + ')') AT MYSQL_SERVER
+                    PRINT('Country deleted.')
                 END TRY
                 BEGIN CATCH
                     ROLLBACK TRANSACTION

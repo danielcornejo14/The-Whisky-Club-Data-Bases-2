@@ -1,17 +1,17 @@
-CREATE PROCEDURE deleteWhiskeyXCustomer @idWhiskeyXCustomer int
+CREATE PROCEDURE deleteWhiskeyXCustomerByIdPaymentMethod @idPaymentMethod int
 WITH ENCRYPTION
 AS
 BEGIN
-    IF @idWhiskeyXCustomer IS NOT NULL
+    IF @idPaymentMethod IS NOT NULL
     BEGIN
-        IF (SELECT COUNT(idWhiskeyXCustomer) FROM WhiskeyXCustomer WHERE idWhiskeyXCustomer = @idWhiskeyXCustomer
+        IF (SELECT COUNT(idPaymentMethod) FROM WhiskeyXCustomer WHERE idPaymentMethod = @idPaymentMethod
             AND status = 1) > 0
         BEGIN
             BEGIN TRANSACTION
                 BEGIN TRY
                     UPDATE WhiskeyXCustomer
                     SET status = 0
-                    WHERE idWhiskeyXCustomer = @idWhiskeyXCustomer
+                    WHERE idPaymentMethod = @idPaymentMethod
                     PRINT('WhiskeyXCustomer deleted.')
                     COMMIT TRANSACTION
                 END TRY
@@ -22,7 +22,7 @@ BEGIN
         END
         ELSE
         BEGIN
-            RAISERROR('The WhiskeyXCustomer id must exist.', 11, 1)
+            RAISERROR('The PaymentMethod id must exist.', 11, 1)
         END
     END
     ELSE

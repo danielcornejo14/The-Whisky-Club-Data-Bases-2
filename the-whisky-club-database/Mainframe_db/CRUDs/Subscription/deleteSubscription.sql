@@ -17,16 +17,33 @@ BEGIN
                     WHILE @@FETCH_STATUS = 0
                     BEGIN
                         IF @idSubscriptionCursor = @idSubscription
-                            EXEC deleteCustomer @idCustomer = @idCustomerCursor
+                            EXEC deleteCustomer @pIdCustomer = @idCustomerCursor
                         FETCH NEXT FROM customerCursor INTO @idCustomerCursor, @idSubscriptionCursor
                     END
                     CLOSE customerCursor
                     DEALLOCATE customerCursor
+                    --Delete subscription in Mainframe
                     UPDATE Subscription
                     SET status = 0
                     WHERE idSubscription = @idSubscription
-                    PRINT('Subscription deleted.')
+                    ---------------------------------
+                    --Delete subscription replication in countries
+                    UPDATE UnitedStates_db.dbo.Subscription
+                    SET status = 0
+                    WHERE idSubscription = @idSubscription
+                    UPDATE Scotland_db.dbo.Subscription
+                    SET status = 0
+                    WHERE idSubscription = @idSubscription
+                    UPDATE Ireland_db.dbo.Subscription
+                    SET status = 0
+                    WHERE idSubscription = @idSubscription
+                    ---------------------------------
                     COMMIT TRANSACTION
+                    --Delete Subscription in employees db
+                    DECLARE @idSubscriptionString varchar(5)
+                    SET @idSubscriptionString = CAST(@idSubscription as varchar(5))
+                    EXEC('CALL replicateDeleteSubscription(' + @idSubscriptionString + ')') AT MYSQL_SERVER
+                    PRINT('Subscription deleted.')
                 END TRY
                 BEGIN CATCH
                     ROLLBACK TRANSACTION

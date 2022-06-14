@@ -10,16 +10,22 @@ CREATE PROCEDURE replicateInsertCustomer (
     IN pPassword varchar(64)
 )
 BEGIN
-    DECLARE pLocation geometry;
-    SET pLocation = ST_GeomFromText(pPoint);
-    START TRANSACTION;
-    INSERT INTO customer(idSubscription, emailAddress,
-                         name, lastName1, lastName2,
-                         location, userName, password)
-    VALUES(pIdSubscription, pEmailAddress,
-           pName, pLastName1, pLastName2,
-           pLocation, pUserName, SHA2(pPassword, 256));
-    SELECT 'Customer inserted.';
-    COMMIT;
+    IF pIdSubscription IS NOT NULL AND pEmailAddress IS NOT NULL
+        AND pName IS NOT NULL AND pLastName1 IS NOT NULL
+        AND pLastName2 IS NOT NULL AND pPoint IS NOT NULL
+        AND pUserName IS NOT NULL AND pPassword IS NOT NULL
+    THEN
+        START TRANSACTION;
+        INSERT INTO customer(idSubscription, emailAddress,
+                             name, lastName1, lastName2,
+                             location, userName, password)
+        VALUES(pIdSubscription, pEmailAddress,
+               pName, pLastName1, pLastName2,
+               ST_GeomFromText(pPoint), pUserName, SHA2(pPassword, 256));
+        SELECT 'Customer inserted.';
+        COMMIT;
+    ELSE
+        SELECT 'Null data is not allowed.';
+    END IF;
 END //
 DELIMITER ;

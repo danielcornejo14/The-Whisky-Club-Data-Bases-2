@@ -9,12 +9,37 @@ BEGIN
         BEGIN
             BEGIN TRANSACTION
                 BEGIN TRY
-                    UPDATE Whiskey
-                    SET status = 0
-                    WHERE idPresentation = @idPresentation
+                    --Delete whiskey cursor
+                    DECLARE @idWhiskeyCursor int, @idPresentationCursor int
+                    DECLARE whiskeyCursor CURSOR FOR SELECT
+                    idWhiskey, idPresentation FROM Whiskey
+                    OPEN whiskeyCursor
+                    FETCH NEXT FROM whiskeyCursor INTO @idWhiskeyCursor, @idPresentationCursor
+                    WHILE @@FETCH_STATUS = 0
+                    BEGIN
+                        IF @idPresentationCursor = @idPresentation
+                            EXEC deleteWhiskey @idWhiskey = @idWhiskeyCursor
+                        FETCH NEXT FROM whiskeyCursor INTO @idWhiskeyCursor, @idPresentationCursor
+                    END
+                    CLOSE whiskeyCursor
+                    DEALLOCATE whiskeyCursor
+                    ----------------------------------
+                    --Delete presentation in Mainframe
                     UPDATE Presentation
                     SET status = 0
                     WHERE idPresentation = @idPresentation
+                    ----------------------------------
+                    --Delete presentation replication in countries
+                    UPDATE UnitedStates_db.dbo.Presentation
+                    SET status = 0
+                    WHERE idPresentation = @idPresentation
+                    UPDATE Scotland_db.dbo.Presentation
+                    SET status = 0
+                    WHERE idPresentation = @idPresentation
+                    UPDATE Ireland_db.dbo.Presentation
+                    SET status = 0
+                    WHERE idPresentation = @idPresentation
+                    ---------------------------------
                     PRINT('Presentation deleted.')
                     COMMIT TRANSACTION
                 END TRY

@@ -7,7 +7,7 @@ BEGIN
         IF (SELECT COUNT(idShop) FROM Shop WHERE idShop = @idShop
             AND status = 1) > 0
         BEGIN
-            SELECT idShop, idCountry, name, phone, location, status
+            SELECT idShop, idCountry, name, phone, location.STAsText(), status
             FROM Shop
             WHERE idShop = @idShop
         END

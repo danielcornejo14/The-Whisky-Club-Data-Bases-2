@@ -9,9 +9,22 @@ BEGIN
         BEGIN
             BEGIN TRANSACTION
                 BEGIN TRY
+                    --Delete image in Mainframe
                     UPDATE Image
                     SET status = 0
                     WHERE idImage = @idImage
+                    ------------------------
+                    --Delete image replication in countries
+                    UPDATE UnitedStates_db.dbo.Image
+                    SET status = 0
+                    WHERE idImage = @idImage
+                    UPDATE Scotland_db.dbo.Image
+                    SET status = 0
+                    WHERE idImage = @idImage
+                    UPDATE Ireland_db.dbo.Image
+                    SET status = 0
+                    WHERE idImage = @idImage
+                    ------------------------
                     PRINT('Image deleted.')
                     COMMIT TRANSACTION
                 END TRY

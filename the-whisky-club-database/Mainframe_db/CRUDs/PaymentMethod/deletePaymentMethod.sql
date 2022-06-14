@@ -1,17 +1,39 @@
-CREATE PROCEDURE deletePaymentMethod @idPaymentMethod int
+CREATE PROCEDURE deletePaymentMethod @pIdPaymentMethod int
 WITH ENCRYPTION
 AS
 BEGIN
-    IF @idPaymentMethod IS NOT NULL
+    IF @pIdPaymentMethod IS NOT NULL
     BEGIN
-        IF (SELECT COUNT(idPaymentMethod) FROM PaymentMethod WHERE idPaymentMethod = @idPaymentMethod
+        IF (SELECT COUNT(idPaymentMethod) FROM PaymentMethod WHERE idPaymentMethod = @pIdPaymentMethod
             AND status = 1) > 0
         BEGIN
             BEGIN TRANSACTION
                 BEGIN TRY
+                    --Delete whiskey x customer in USA
+                    EXEC [UnitedStates_db].[dbo].[deleteWhiskeyXCustomerByIdPaymentMethod] @idPaymentMethod = @pIdPaymentMethod
+                    ---------------------------------------
+                    --Delete whiskey x customer in Ireland
+                    EXEC [Ireland_db].[dbo].[deleteWhiskeyXCustomerByIdPaymentMethod] @idPaymentMethod = @pIdPaymentMethod
+                    ---------------------------------------
+                    --Delete whiskey x customer in Scotland
+                    EXEC [Scotland_db].[dbo].[deleteWhiskeyXCustomerByIdPaymentMethod] @idPaymentMethod = @pIdPaymentMethod
+                    ---------------------------------------
+                    --Delete payment method in mainframe
                     UPDATE PaymentMethod
                     SET status = 0
-                    WHERE idPaymentMethod = @idPaymentMethod
+                    WHERE idPaymentMethod = @pIdPaymentMethod
+                    ---------------------------------
+                    --Delete payment method replication in countries
+                    UPDATE UnitedStates_db.dbo.PaymentMethod
+                    SET status = 0
+                    WHERE idPaymentMethod = @pIdPaymentMethod
+                    UPDATE Scotland_db.dbo.PaymentMethod
+                    SET status = 0
+                    WHERE idPaymentMethod = @pIdPaymentMethod
+                    UPDATE Ireland_db.dbo.PaymentMethod
+                    SET status = 0
+                    WHERE idPaymentMethod = @pIdPaymentMethod
+                    ---------------------------------
                     PRINT('PaymentMethod deleted.')
                     COMMIT TRANSACTION
                 END TRY

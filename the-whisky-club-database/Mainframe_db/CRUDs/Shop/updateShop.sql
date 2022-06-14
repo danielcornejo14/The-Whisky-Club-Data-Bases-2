@@ -1,5 +1,5 @@
-CREATE PROCEDURE updateShopScotland @idCountry int, @name varchar(64),
-                                    @phone varchar(8), @location geometry, @idShop int
+CREATE PROCEDURE updateShop @idCountry int, @name varchar(64),
+                            @phone varchar(8), @location geometry, @idShop int
 WITH ENCRYPTION
 AS
 BEGIN
@@ -17,24 +17,43 @@ BEGIN
                 BEGIN
                     BEGIN TRANSACTION
                         BEGIN TRY
+                            --Update shop in mainframe
                             UPDATE Shop
                             SET idCountry = @idCountry,
                                 name = @name,
                                 phone = @phone,
                                 location = @location
                             WHERE idShop = @idShop
-                            UPDATE UnitedStates_db.dbo.Shop
-                            SET idCountry = @idCountry,
-                                name = @name,
-                                phone = @phone,
-                                location = @location
-                            WHERE idShop = @idShop
-                            UPDATE Ireland_db.dbo.Shop
-                            SET idCountry = @idCountry,
-                                name = @name,
-                                phone = @phone,
-                                location = @location
-                            WHERE idShop = @idShop
+                            --------------------------------
+                            --Update shop in the other countries
+                            IF @idCountry = 1 --1 is for USA.
+                            BEGIN
+                                UPDATE UnitedStates_db.dbo.Shop
+                                SET idCountry = @idCountry,
+                                    name = @name,
+                                    phone = @phone,
+                                    location = @location
+                                WHERE idShop = @idShop
+                            END
+                            ELSE IF @idCountry = 2 --2 is for Ireland
+                            BEGIN
+                                UPDATE Ireland_db.dbo.Shop
+                                SET idCountry = @idCountry,
+                                    name = @name,
+                                    phone = @phone,
+                                    location = @location
+                                WHERE idShop = @idShop
+                            END
+                            ELSE IF @idCountry = 3 --3 is for Scotland
+                            BEGIN
+                                UPDATE Scotland_db.dbo.Shop
+                                SET idCountry = @idCountry,
+                                    name = @name,
+                                    phone = @phone,
+                                    location = @location
+                                WHERE idShop = @idShop
+                            END
+                            --------------------------------
                             COMMIT TRANSACTION
                             --The updated shop is replicated in the Employees_db.
                             DECLARE @point varchar(64)

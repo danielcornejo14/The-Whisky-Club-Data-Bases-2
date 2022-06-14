@@ -8,7 +8,7 @@ BEGIN
              status = 1) > 0
         BEGIN
             SELECT idCustomer, idSubscription, emailAddress,
-                   name, lastName1, lastName2, location,
+                   name, lastName1, lastName2, location.STAsText(),
                    userName, password, status
             FROM Customer
             WHERE idCustomer = @idCustomer

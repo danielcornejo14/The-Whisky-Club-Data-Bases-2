@@ -9,9 +9,22 @@ BEGIN
         BEGIN
             BEGIN TRANSACTION
                 BEGIN TRY
+                    --Delete whiskey review in Mainframe
                     UPDATE WhiskeyReview
                     SET status = 0
                     WHERE idWhiskeyReview = @idWhiskeyReview
+                    ----------------------------
+                    --Delete whiskey review replication in countries
+                    UPDATE UnitedStates_db.dbo.WhiskeyReview
+                    SET status = 0
+                    WHERE idWhiskeyReview = @idWhiskeyReview
+                    UPDATE Ireland_db.dbo.WhiskeyReview
+                    SET status = 0
+                    WHERE idWhiskeyReview = @idWhiskeyReview
+                    UPDATE Scotland_db.dbo.WhiskeyReview
+                    SET status = 0
+                    WHERE idWhiskeyReview = @idWhiskeyReview
+                    ----------------------------
                     PRINT('WhiskeyReview deleted.')
                     COMMIT TRANSACTION
                 END TRY

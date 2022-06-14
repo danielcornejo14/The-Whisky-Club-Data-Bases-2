@@ -97,3 +97,11 @@ CREATE TABLE WhiskeyReview(
     date date,
     status bit NOT NULL DEFAULT 1
 )
+CREATE TABLE Shop(
+    idShop int PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    idCountry int NOT NULL FOREIGN KEY REFERENCES Country(idCountry),
+    name varchar(64) NOT NULL,
+    phone varchar(8) NOT NULL,
+    location geometry NOT NULL,
+    status bit NOT NULL DEFAULT 1
+)

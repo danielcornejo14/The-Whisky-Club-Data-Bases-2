@@ -9,6 +9,7 @@ BEGIN
         BEGIN
             BEGIN TRANSACTION
                 BEGIN TRY
+                    --Delete whiskey cursor
                     DECLARE @idWhiskeyCursor int, @idCurrencyCursor int
                     DECLARE whiskeyCursor CURSOR FOR SELECT
                     idWhiskey, idCurrency FROM Whiskey
@@ -22,12 +23,43 @@ BEGIN
                     END
                     CLOSE whiskeyCursor
                     DEALLOCATE whiskeyCursor
-                    --CURSOR CON EXEC deleteCountry
+                    --Delete country cursor
+                    DECLARE @idCountryCursor int
+                    DECLARE countryCursor CURSOR FOR SELECT
+                    idCountry, idCurrency FROM Country
+                    OPEN countryCursor
+                    FETCH NEXT FROM countryCursor INTO @idCountryCursor, @idCurrencyCursor
+                    WHILE @@FETCH_STATUS = 0
+                    BEGIN
+                        IF @idCurrencyCursor = @idCurrency
+                            EXEC deleteCountry @idCountry = @idCountryCursor
+                        FETCH NEXT FROM countryCursor INTO @idCountryCursor, @idCurrencyCursor
+                    END
+                    CLOSE countryCursor
+                    DEALLOCATE countryCursor
+                    --------------------------
+                    --Delete currency in mainframe
                     UPDATE Currency
                     SET status = 0
                     WHERE idCurrency = @idCurrency
-                    PRINT('Currency deleted.')
+                    --------------------------
+                    --Delete currency replication in countries
+                    UPDATE Ireland_db.dbo.Currency
+                    SET status = 0
+                    WHERE idCurrency = @idCurrency
+                    UPDATE UnitedStates_db.dbo.Currency
+                    SET status = 0
+                    WHERE idCurrency = @idCurrency
+                    UPDATE Scotland_db.dbo.Currency
+                    SET status = 0
+                    WHERE idCurrency = @idCurrency
+                    --------------------------
                     COMMIT TRANSACTION
+                    --Delete currency in employees db
+                    DECLARE @idCurrencyString varchar(5)
+                    SET @idCurrencyString = CAST(@idCurrency as varchar(5))
+                    EXEC('CALL replicateDeleteCurrency(' + @idCurrencyString + ')') AT MYSQL_SERVER
+                    PRINT('Currency deleted.')
                 END TRY
                 BEGIN CATCH
                     ROLLBACK TRANSACTION

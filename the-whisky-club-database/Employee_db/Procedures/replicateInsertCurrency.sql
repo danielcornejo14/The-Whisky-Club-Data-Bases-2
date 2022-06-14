@@ -3,10 +3,20 @@ CREATE PROCEDURE replicateInsertCurrency (
      IN pName varchar(64)
 )
 BEGIN
-    START TRANSACTION;
-    INSERT INTO currency(name)
-    VALUES(pName);
-    SELECT 'Currency inserted.';
-    COMMIT;
+    IF pName IS NOT NULL
+    THEN
+        IF (SELECT COUNT(name) FROM currency WHERE name = pName) = 0
+        THEN
+            START TRANSACTION;
+            INSERT INTO currency(name)
+            VALUES(pName);
+            SELECT 'Currency inserted.';
+            COMMIT;
+        ELSE
+            SELECT 'The name cannot be repeated.';
+        END IF;
+    ELSE
+        SELECT 'Null data is not allowed.';
+    END IF;
 END //
 DELIMITER ;

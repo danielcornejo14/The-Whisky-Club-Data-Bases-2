@@ -5,11 +5,10 @@ CREATE PROCEDURE updateWhiskeyXCustomer @idWhiskey int, @idShop int, @idPaymentM
 WITH ENCRYPTION
 AS
 BEGIN
+    EXEC syncEmployeeTypeReplication
     EXEC syncDepartmentReplication
     EXEC syncEmployeeReplication
     EXEC syncEmployeeReviewReplication
-    EXEC syncEmployeeTypeReplication
-
     IF @idWhiskey IS NOT NULL AND @idShop IS NOT NULL
         AND @idPaymentMethod IS NOT NULL AND @idCashier IS NOT NULL
         AND @idCourier IS NOT NULL AND @idDeliveryReviewType IS NOT NULL

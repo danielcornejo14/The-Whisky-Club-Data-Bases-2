@@ -9,18 +9,75 @@ BEGIN
         BEGIN
             BEGIN TRANSACTION
                 BEGIN TRY
+                    --Delete WhiskeyXShop in Countries
                     UPDATE UnitedStates_db.dbo.WhiskeyXShop
                     SET status = 0
                     WHERE idWhiskey = @idWhiskey
+                    UPDATE Scotland_db.dbo.WhiskeyXShop
+                    SET status = 0
+                    WHERE idWhiskey = @idWhiskey
+                    UPDATE Ireland_db.dbo.WhiskeyXShop
+                    SET status = 0
+                    WHERE idWhiskey = @idWhiskey
+                    ----------------------------
+                    --Delete whiskeyXCustomer in Countries
+                    UPDATE UnitedStates_db.dbo.WhiskeyXCustomer
+                    SET status = 0
+                    WHERE idWhiskey = @idWhiskey
+                    UPDATE Scotland_db.dbo.WhiskeyXCustomer
+                    SET status = 0
+                    WHERE idWhiskey = @idWhiskey
+                    UPDATE Ireland_db.dbo.WhiskeyXCustomer
+                    SET status = 0
+                    WHERE idWhiskey = @idWhiskey
+                    ----------------------------
+                    --Delete whiskeyXReview in Mainframe
                     UPDATE WhiskeyReview
                     SET status = 0
                     WHERE idWhiskey = @idWhiskey
+                    --Delete whiskeyXReview replication in countries
+                    UPDATE UnitedStates_db.dbo.WhiskeyReview
+                    SET status = 0
+                    WHERE idWhiskey = @idWhiskey
+                    UPDATE Ireland_db.dbo.WhiskeyReview
+                    SET status = 0
+                    WHERE idWhiskey = @idWhiskey
+                    UPDATE Scotland_db.dbo.WhiskeyReview
+                    SET status = 0
+                    WHERE idWhiskey = @idWhiskey
+                    ---------------------------
+                    --Delete image in Mainframe
                     UPDATE Image
                     SET status = 0
                     WHERE idWhiskey = @idWhiskey
+                    ----------------------------
+                    --Delete image replication in countries
+                    UPDATE UnitedStates_db.dbo.Image
+                    SET status = 0
+                    WHERE idWhiskey = @idWhiskey
+                    UPDATE Scotland_db.dbo.Image
+                    SET status = 0
+                    WHERE idWhiskey = @idWhiskey
+                    UPDATE Ireland_db.dbo.Image
+                    SET status = 0
+                    WHERE idWhiskey = @idWhiskey
+                    ----------------------------
+                    --Delete whiskey in Mainframe
                     UPDATE Whiskey
                     SET status = 0
                     WHERE idWhiskey = @idWhiskey
+                    ----------------------------
+                    --Delete whiskey replication in Countries
+                    UPDATE Scotland_db.dbo.Whiskey
+                    SET status = 0
+                    WHERE idWhiskey = @idWhiskey
+                    UPDATE Ireland_db.dbo.Whiskey
+                    SET status = 0
+                    WHERE idWhiskey = @idWhiskey
+                    UPDATE UnitedStates_db.dbo.Whiskey
+                    SET status = 0
+                    WHERE idWhiskey = @idWhiskey
+                    ----------------------------
                     PRINT('Whiskey deleted.')
                     COMMIT TRANSACTION
                 END TRY
