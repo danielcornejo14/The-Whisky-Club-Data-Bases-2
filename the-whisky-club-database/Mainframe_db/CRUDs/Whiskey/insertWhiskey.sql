@@ -1,4 +1,4 @@
-CREATE PROCEDURE insertWhiskey  @idSupplier int, @idPresentation int,
+CREATE OR ALTER PROCEDURE insertWhiskey  @idSupplier int, @idPresentation int,
                                 @idCurrency int, @idWhiskeyType int,
                                 @brand varchar(64), @price money,
                                 @alcoholContent float, @productionDate date,
@@ -67,20 +67,24 @@ BEGIN
                             @productionDate, @dueDate, @availability,
                             @millilitersQuantity, @whiskeyAging, @special)
                     PRINT('Whiskey inserted.')
+					SELECT '00' AS CODE, 'Whiskey inserted.' AS MESSAGE
                     COMMIT TRANSACTION
                 END TRY
                 BEGIN CATCH
                     ROLLBACK TRANSACTION
+					SELECT '01' AS CODE, 'An error has occurred in the database.' AS MESSAGE
                     RAISERROR('An error has occurred in the database.', 11, 1)
                 END CATCH
         END
         ELSE
         BEGIN
+			SELECT '02' AS CODE, 'The ids must exist, the brand name cannot be repeated, the quantity arguments must be greater than 0 and the due date must be before the production date.' AS MESSAGE
             RAISERROR('The ids must exist, the brand name cannot be repeated, the quantity arguments must be greater than 0 and the due date must be before the production date.', 11, 1)
         END
     END
     ELSE
     BEGIN
+		SELECT '03' AS CODE, 'Null data is not allowed.' AS MESSAGE
         RAISERROR('Null data is not allowed.', 11, 1)
     END
 END
