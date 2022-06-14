@@ -2,16 +2,24 @@ CREATE PROCEDURE syncEmployeeReplication
 WITH ENCRYPTION
 AS
 BEGIN
-    INSERT INTO dbo.Employee(idDepartment, idEmployeeType,
-                             name, lastName1, lastName2,
-                             localSalary, dollarSalary,
-                             userName, password, status)
-    SELECT A.idDepartment, A.idEmployeeType,
-           A.name, A.lastName1, A.lastName2, A.localSalary,
-           A.dollarSalary, A.userName, A.password,
-           A.status
-    FROM mysql_server...employee A
-    LEFT JOIN dbo.Employee B
-    ON A.idEmployee = B.idEmployee
-    WHERE B.idEmployee IS NULL
+    BEGIN TRANSACTION
+        BEGIN TRY
+            DELETE FROM Employee
+            DBCC CHECKIDENT ('Employee', RESEED, 0)
+            INSERT INTO Employee (idDepartment, idEmployeeType,
+                                  name, lastName1, lastName2,
+                                  localSalary, dollarSalary,
+                                  userName, password, status)
+            SELECT idDepartment, idEmployeeType,
+                   name, lastName1, lastName2,
+                   localSalary, dollarSalary,
+                   userName, password, status
+            FROM mysql_server...employee --principal
+            COMMIT TRANSACTION
+        END TRY
+        BEGIN CATCH
+            ROLLBACK TRANSACTION
+            RAISERROR('An error has occurred in the database.', 11, 1)
+        END CATCH
 END;
+GO

@@ -4,10 +4,24 @@ CREATE PROCEDURE insertWhiskeyXCustomer @pIdWhiskey int, @pIdShop int, @pIdPayme
 WITH ENCRYPTION
 AS
 BEGIN
-    EXEC syncEmployeeTypeReplication
-    EXEC syncDepartmentReplication
-    EXEC syncEmployeeReplication
-    EXEC syncEmployeeReviewReplication
+    IF (SELECT COUNT(*)
+        FROM (SELECT idEmployee, idDepartment,
+                     idEmployeeType, name, lastName1,
+                     lastName2, localSalary, dollarSalary,
+                     userName, password, status
+              FROM mysql_server...employee
+              EXCEPT
+              SELECT idEmployee, idDepartment,
+                     idEmployeeType, name, lastName1,
+                     lastName2, localSalary, dollarSalary,
+                     userName, password, status
+              FROM Employee) as t) > 0 --There is a difference between the tables, so the sync is necessary.
+    BEGIN
+        EXEC syncEmployeeTypeReplication
+        EXEC syncDepartmentReplication
+        EXEC syncEmployeeReplication
+        EXEC syncEmployeeReviewReplication
+    END
 
     IF @pIdWhiskey IS NOT NULL AND @pIdShop IS NOT NULL
         AND @pIdPaymentMethod IS NOT NULL AND @pIdCashier IS NOT NULL
