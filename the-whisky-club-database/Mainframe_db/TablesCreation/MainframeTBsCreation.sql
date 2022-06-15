@@ -105,3 +105,17 @@ CREATE TABLE Shop(
     location geometry NOT NULL,
     status bit NOT NULL DEFAULT 1
 )
+--Vertical fragmentation of Customer
+CREATE TABLE CustomerAccount(
+    idCustomer int PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    userName varchar(64) NOT NULL,
+    password binary(64) NOT NULL,
+    status bit NOT NULL DEFAULT 1
+)
+--Vertical fragmentation of administrator
+CREATE TABLE AdministratorAccount(
+    idAdministrator int PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    userName varchar(64) NOT NULL,
+    password binary(64) NOT NULL,
+    status bit NOT NULL DEFAULT 1
+)

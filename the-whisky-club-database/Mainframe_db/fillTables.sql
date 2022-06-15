@@ -31,7 +31,7 @@ EXEC insertSubscription @name = 'Tier Master Distiller', @shoppingDiscount = 0.3
 EXEC insertSubscription @name = 'Tier Short Glass', @shoppingDiscount = 0.05, @shippingDiscount = 0
 
 --Insert customer in Customer Table.
-DBCC CHECKIDENT ('Image', RESEED, 0)
+DBCC CHECKIDENT ('Administrator', RESEED, 0)
 DECLARE @point geometry;
 SET @point = geometry::STPointFromText('POINT (100 100)', 0);
 EXEC insertCustomer @emailAddress = 'diego@gmail.com', @name = 'Diego', @lastName1 = 'Cornejo',
@@ -41,3 +41,4 @@ EXEC insertCustomer @emailAddress = 'diego@gmail.com', @name = 'Diego', @lastNam
 EXEC insertAdministrator @emailAddress = 'correo@fakemail.com', @name = 'Alejandro',
                          @userName = 'alecor14', @password = 'Password124!',
                          @lastName1 = 'Cornejo', @lastName2 = 'Granados'
+exec validateAdministrator @userName = 'alecor14', @password = 'Password124!'

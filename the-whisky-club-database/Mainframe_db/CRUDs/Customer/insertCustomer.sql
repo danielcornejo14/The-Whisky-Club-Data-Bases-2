@@ -36,6 +36,7 @@ BEGIN
                         BEGIN
                             BEGIN TRANSACTION
                                 BEGIN TRY
+                                    --By default, the subscription is 1 when the customer is inserted.
                                     INSERT INTO Customer(idSubscription, emailAddress,
                                                          name, lastName1, lastName2, location,
                                                          userName, password)
@@ -79,6 +80,9 @@ BEGIN
                                         ''', ' + '''' + @lastName2 + ''', ' +
                                         '''' + @locationPoint + '''' + ', ''' +
                                         @userName + '''' + ', ''' + @password + '''' + ')') AT MYSQL_SERVER
+                                    --Vertical fragmentation with customer account
+                                    INSERT INTO CustomerAccount(userName, password)
+                                    VALUES(@userName, @passwordEncrypted)
                                     PRINT('Customer inserted.')
 									SELECT '00' AS CODE, 'Customer inserted.' AS MESSAGE
                                 END TRY
@@ -99,9 +103,7 @@ BEGIN
                         SELECT '03' AS CODE, 'The password must have a special character,' +
                                              ' a capital letter, a number, and the minimum' +
                                              ' length is 8 and maximum length is 64.' AS MESSAGE --This is the code error when the password format is invalid.
-                        RAISERROR('The password must have a special character,' +
-                                  ' a capital letter, a number, and the minimum' +
-                                  ' length is 8 and maximum length is 64.', 11, 1)
+                        RAISERROR('The password must have a special character, a capital letter, a number, and the minimum length is 8 and maximum length is 64.', 11, 1)
                     END
                 END
                 ELSE
@@ -118,10 +120,8 @@ BEGIN
         END
         ELSE
         BEGIN
-			SELECT '06' AS CODE, 'The customer userName, the location' +
-			                     ' and the customer name cannot be repeated.' AS MESSAGE
-            RAISERROR('The customer userName, the location and the' +
-                      ' customer name cannot be repeated.', 11, 1)
+			SELECT '06' AS CODE, 'The customer userName, the location and the customer name cannot be repeated.' AS MESSAGE
+            RAISERROR('The customer userName, the location and the customer name cannot be repeated.', 11, 1)
         END
     END
     ELSE

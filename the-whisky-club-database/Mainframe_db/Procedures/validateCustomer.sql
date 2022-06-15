@@ -1,10 +1,10 @@
-CREATE PROCEDURE validateAdministrator
+CREATE PROCEDURE validateCustomer
     @userName varchar(64),
     @password varchar(64)
 WITH ENCRYPTION
 AS
 BEGIN
-    IF (SELECT COUNT(idAdministrator) FROM AdministratorAccount WHERE userName = @userName
+    IF (SELECT COUNT(idCustomer) FROM CustomerAccount WHERE userName = @userName
         AND status = 1 AND password = HASHBYTES('SHA2_256', @password)) > 0
     BEGIN
         select '00' as message --The idAdmin or password are correct.

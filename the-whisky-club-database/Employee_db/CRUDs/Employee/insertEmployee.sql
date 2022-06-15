@@ -19,8 +19,6 @@ BEGIN
      THEN
         IF ((SELECT COUNT(idDepartment) FROM department WHERE idDepartment = pIdDepartment AND status = 1) > 0
             AND (SELECT COUNT(idEmployeeType) FROM employeetype WHERE idEmployeeType = pIdEmployeeType AND status = 1) > 0
-            AND (SELECT COUNT(name) FROM employee WHERE name = pName
-                AND lastName1 = pLastName1 AND lastName2 = pLastName2) = 0
             AND pLocalSalary > 0
             AND pDollarSalary > 0
             AND (SELECT COUNT(userName) FROM employee WHERE userName = pUserName) = 0)
@@ -43,6 +41,9 @@ BEGIN
                         pName, pLastName1, pLastName2,
                         pLocalSalary, pDollarSalary,
                         pUserName, SHA2(pPassword, 256));
+                #Vertical fragmentation with employee account
+                INSERT INTO EmployeeAccount(userName, password)
+                VALUES(pUserName, SHA2(pPassword, 256));
                 SELECT 'Employee inserted.';
                 COMMIT;
             END IF;

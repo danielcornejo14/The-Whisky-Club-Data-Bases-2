@@ -34,6 +34,9 @@ BEGIN
                                 BEGIN TRY
                                     INSERT INTO Administrator(emailAddress, name, userName, password, lastName1, lastName2)
                                     VALUES (@emailAddress, @name, @userName, @passwordEncrypted, @lastName1, @lastName2)
+                                    --Vertical fragmentation with administrator account
+                                    INSERT INTO AdministratorAccount(userName, password)
+                                    VALUES(@userName, @passwordEncrypted)
                                     PRINT('Administrator inserted.')
                                     COMMIT TRANSACTION
                                 END TRY

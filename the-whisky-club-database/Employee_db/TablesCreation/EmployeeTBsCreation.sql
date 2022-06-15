@@ -78,3 +78,9 @@ CREATE TABLE EmployeeReview(
     FOREIGN KEY (idCustomer) REFERENCES Customer(idCustomer),
     FOREIGN KEY (idEmployee) REFERENCES Employee(idEmployee)
 );
+CREATE TABLE EmployeeAccount(
+    idEmployee int PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    userName varchar(64) NOT NULL,
+    password binary(64) NOT NULL,
+    status bit NOT NULL DEFAULT 1
+);

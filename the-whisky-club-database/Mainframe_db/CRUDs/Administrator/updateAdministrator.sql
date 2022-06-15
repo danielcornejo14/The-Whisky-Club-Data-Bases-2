@@ -44,6 +44,11 @@ BEGIN
                                         lastName1 = @lastName1,
                                         lastName2 = @lastName2
                                     WHERE idAdministrator = @idAdministrator
+                                    --Vertical fragmentation with administrator account
+                                    UPDATE AdministratorAccount
+                                    SET userName = @userName,
+                                        password = @passwordEncrypted
+                                    WHERE idAdministrator = @idAdministrator
                                     PRINT('Administrator updated.')
                                     COMMIT TRANSACTION
                                 END TRY
