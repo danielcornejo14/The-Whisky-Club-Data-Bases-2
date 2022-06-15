@@ -40,6 +40,7 @@ import {MatNativeDateModule} from '@angular/material/core';
 import {MatIconModule} from '@angular/material/icon';
 import { EmployeesComponent } from './dashboard/admin-dashboard/employees/employees.component';
 import {MatCardModule} from '@angular/material/card';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -80,7 +81,8 @@ import {MatCardModule} from '@angular/material/card';
     MatIconModule,
     GoogleMapsModule,
     HttpClientJsonpModule,
-    MatCardModule
+    MatCardModule,
+    NgbModule
 
   ],
   providers: [authInterceptorProviders],

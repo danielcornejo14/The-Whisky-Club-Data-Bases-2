@@ -5,7 +5,6 @@ export interface Employee{
     name: string,
     lastName1: string,
     lastName2: string,
-    dollarSalary: number,
-    username: string,
-    password: string
+    localSalary: number,
+    dollarSalary: number
 }

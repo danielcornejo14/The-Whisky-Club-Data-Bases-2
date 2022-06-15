@@ -17,8 +17,8 @@ module.exports = {
 const config = {
     user: process.env.MSSQL_USER,
     password: process.env.MSSQL_PASSWORD,
-    database: 'Mainframe_db',
-    server: process.env.MSSQL_HOST,
+    database: process.env.MSSQL_DB_MAINFRAME,
+    server: process.env.HOST,
     options: {
         encrypt: true, // for azure
         trustServerCertificate: true // change to true for local dev / self-signed certs
@@ -27,7 +27,7 @@ const config = {
 
 
 async function testdb(){
-    await mssql.connect(config)
+    await mssql.connect(config) 
     const result = await mssql.query(`select * from Customer`)
     return result.recordset
 }
@@ -82,15 +82,15 @@ async function verifyAdmin(username, password){
     const result = await mssql.query(`exec validateAdministrator '${username}', '${password}'`)
 
     if(result.recordset[0].message === '00'){
-        return false
+        return true
     }
     else if(result.recordset[0].message ===  '01'){
-        return true
+        return false
     }
 }
 
 async function  selectWhisky(){
-    await  mssql.connect(config)
+    await mssql.connect(config)
     const result = await mssql.query(`exec selectWhiskey`)
 
     for(let i = 0; i < result.recordset.length; i++){

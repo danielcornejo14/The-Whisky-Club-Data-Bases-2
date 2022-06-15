@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 
 import {MainframeService} from "../../../_services/mainframe-db/mainframe.service";
@@ -42,8 +42,6 @@ export class CatalogComponent implements OnInit {
     this.SupplierList = this.route.snapshot.data['supplier']
     this.PresentationList = this.route.snapshot.data['presentation']
     this.CurrencyList = this.route.snapshot.data['currency']
-
-    console.log(this.WhiskyList[0])
   
   }
 

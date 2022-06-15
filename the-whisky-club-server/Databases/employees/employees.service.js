@@ -1,7 +1,8 @@
 const mysql = require('mysql');
 
 module.exports = {
-  testdb
+  testdb,
+  selectEmployees
 }
 
 const config = {
@@ -14,11 +15,18 @@ const config = {
 const employeedb = mysql.createConnection(config);
 
 
-function testdb(){
-  employeedb.connect()
-   let result = employeedb.query(`select 1 + 1 as solution`, (err, res, fields)=>{
+function testdb(res){
+
+  employeedb.query(`select 1 + 1 as solution`, (err, result, fields)=>{
     if(err) throw err;
-    return res[0].solution
+    res.send(result[0].solution)
   })
-  return result
+}
+
+function selectEmployees(res){
+
+  employeedb.query(`call employees_db.selectAllEmployees();`, (err, recordset, fields)=>{
+    if(err){ console.log(err)}
+    res.send(recordset[0])
+  })
 }

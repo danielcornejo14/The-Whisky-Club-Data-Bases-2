@@ -73,5 +73,4 @@ async function updateWhiskey(req, res){
 async function deleteWhiskey(req, res){
    const data = req.body
    await mainframeService.deleteWhiskey(data.id) 
-   res.json({message:"tomelo"})
 }

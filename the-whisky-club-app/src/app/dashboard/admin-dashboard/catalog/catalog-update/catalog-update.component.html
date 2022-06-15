@@ -54,12 +54,18 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Production Date</mat-label>
-      <input matInput type="datetime-local" formControlName="productionDate">
+      <input matInput [matDatepicker]="productionDatepicker" formControlName="productionDate">
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matSuffix [for]="productionDatepicker"></mat-datepicker-toggle>
+      <mat-datepicker #productionDatepicker></mat-datepicker>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Due Date</mat-label>
-      <input matInput type="datetime-local" formControlName="dueDate">
+      <input matInput [matDatepicker]="dueDatepicker" formControlName="dueDate">
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matSuffix [for]="dueDatepicker"></mat-datepicker-toggle>
+      <mat-datepicker #dueDatepicker></mat-datepicker>
     </mat-form-field>
 
     <mat-form-field appearance="outline">

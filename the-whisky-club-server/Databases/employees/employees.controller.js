@@ -16,21 +16,22 @@ module.exports = router
 //TODO #5 send employee data to front end
 
 function testdb(req, res){
-    console.log(employeeService.testdb())
+    employeeService.testdb(res)
 }
 
 function selectDepartment(req, res){
-
+    employeeService.selectDepartment(res)
 }
 
 function selectEmployees(req, res){
+    employeeService.selectEmployees(res)
 
 }
 
 function selectEmployeeReview(req, res){
-
+    employeeService.selectEmployeeReview(res)
 }
 
 function selectEmployeeType(req, res){
-
+    employeeService.selectEmployeeType(res)
 }

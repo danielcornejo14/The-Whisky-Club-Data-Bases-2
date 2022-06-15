@@ -5,6 +5,8 @@
   align-items: center;
   max-height: 80%;
   height: 90vh;
+  overflow: scroll;
+  overflow-x: hidden;
 }
 .product{
   display: flex;
@@ -20,10 +22,16 @@
   border-bottom-style: solid;
   border-bottom-color: gray;
 
-  img{
+  ngb-carousel{
     width: 250px;
     height: 250px;
+    img{
+      width: 225px;
+      height: 225px;
+    }
   }
+
+
 
   div{
     padding-top: 5px;

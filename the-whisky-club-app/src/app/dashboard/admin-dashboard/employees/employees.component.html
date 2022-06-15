@@ -1,1 +1,39 @@
-<p>employees works!</p>
+<button mat-button>Add</button>
+
+<div class="employeeContainer">
+  <div class="employee">
+    <div>ID</div>
+    <div>Department</div>
+    <div>Type</div>
+    <div>Name</div>
+    <div>Last Name 1</div>
+    <div>Last Name 2</div>
+    <div>Local Salary</div>
+    <div>Dollar Salary</div>
+    <div style="color: white">placeholder-----</div>
+  </div>
+
+  <div *ngFor="let employee of employees" class="employee">
+
+    <div>{{employee.idEmployee}}</div>
+    <!-- <div>{{findDepartment(employee.idDepartment)}}</div>
+    <div>{{findType(employee.idEmployeeType)}}</div> -->
+    <div>Name: {{employee.name}}</div>
+    <div>Last Name 1: {{employee.lastName1}}</div>
+    <div>Last Name 2: {{employee.lastName2}}</div>
+    <div>Local Salary: {{employee.localSalary}}</div>
+    <div>Dollar Salary: {{employee.dollarSalary}}</div>
+
+
+
+    <div class="employeeControl">
+      <button mat-raised-button type="button" color="primary" >Edit</button>
+      <button mat-mini-fab color="primary" >
+        <mat-icon>reviews</mat-icon>
+      </button>
+    </div>
+
+  </div>
+
+</div>
+

@@ -3,9 +3,14 @@
 <div class="catalogContainer">
   <div *ngFor="let item of this.WhiskyList" class="product">
 
-    <div>
-      <img [src]="buildImage(item.images[0])" alt="">
-    </div>
+    <ngb-carousel *ngIf="item.images" [interval]="-1">
+      <ng-template *ngFor="let image of item.images" ngbSlide>
+          <div class="picsum-img-wrapper">
+            <img [src]="buildImage(image)" alt="">
+          </div>
+      </ng-template>
+    </ngb-carousel>
+
 
     <div class="productInformation">
       <div>Item ID: {{item.idWhiskey}}</div>
