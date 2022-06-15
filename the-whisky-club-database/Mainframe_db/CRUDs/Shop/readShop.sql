@@ -7,9 +7,26 @@ BEGIN
         IF (SELECT COUNT(idShop) FROM Shop WHERE idShop = @idShop
             AND status = 1) > 0
         BEGIN
-            SELECT idShop, idCountry, name, phone, location.STAsText(), status
-            FROM Shop
-            WHERE idShop = @idShop
+            DECLARE @idCountry int
+            SET @idCountry = (SELECT(idCountry) FROM Shop WHERE idShop = @idShop)
+            IF @idCountry = 1 --1 is for USA.
+            BEGIN
+                SELECT idShop, idCountry, name, phone, location.STAsText(), status
+                FROM Shop
+                WHERE idShop = @idShop
+            END
+            ELSE IF @idCountry = 2 --2 is for Ireland
+            BEGIN
+                SELECT idShop, idCountry, name, phone, location.STAsText(), status
+                FROM Shop
+                WHERE idShop = @idShop
+            END
+            ELSE IF @idCountry = 3 --3 is for Scotland
+            BEGIN
+                SELECT idShop, idCountry, name, phone, location.STAsText(), status
+                FROM Shop
+                WHERE idShop = @idShop
+            END
         END
         ELSE
         BEGIN
