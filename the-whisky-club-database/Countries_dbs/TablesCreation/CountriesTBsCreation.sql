@@ -11,7 +11,7 @@ CREATE TABLE Country(
     status bit NOT NULL DEFAULT 1--1 active and 0 inactive (deleted)
 )
 CREATE TABLE Shop(
-    idShop int PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    idShop int PRIMARY KEY NOT NULL,
     idCountry int NOT NULL FOREIGN KEY REFERENCES Country(idCountry),
     name varchar(64) NOT NULL,
     phone varchar(8) NOT NULL,

@@ -21,21 +21,23 @@ BEGIN
                             INSERT INTO Shop(idCountry, name, phone, location)
                             VALUES (@idCountry, @name, @phone, @location)
                             -----------------------------------------------------
-                            --The inserted shop is replicated in its respective country db.
+                            DECLARE @idShop int
+                            SET @idShop = SCOPE_IDENTITY()
+                            --The inserted shop is inserted in its respective country db (horizontal fragmentation).
                             IF @idCountry = 1 --1 is for USA.
                             BEGIN
-                                INSERT INTO UnitedStates_db.dbo.Shop(idCountry, name, phone, location)
-                                VALUES(@idCountry, @name, @phone, @location)
+                                INSERT INTO UnitedStates_db.dbo.Shop(idShop, idCountry, name, phone, location)
+                                VALUES(@idShop, @idCountry, @name, @phone, @location)
                             END
                             ELSE IF @idCountry = 2 --2 is for Ireland
                             BEGIN
-                                INSERT INTO Ireland_db.dbo.Shop(idCountry, name, phone, location)
-                                VALUES(@idCountry, @name, @phone, @location)
+                                INSERT INTO Ireland_db.dbo.Shop(idShop, idCountry, name, phone, location)
+                                VALUES(@idShop, @idCountry, @name, @phone, @location)
                             END
                             ELSE IF @idCountry = 3 --3 is for Scotland
                             BEGIN
-                                INSERT INTO Scotland_db.dbo.Shop(idCountry, name, phone, location)
-                                VALUES(@idCountry, @name, @phone, @location)
+                                INSERT INTO Scotland_db.dbo.Shop(idShop, idCountry, name, phone, location)
+                                VALUES(@idShop, @idCountry, @name, @phone, @location)
                             END
                             -----------------------------------------------------
                             COMMIT TRANSACTION

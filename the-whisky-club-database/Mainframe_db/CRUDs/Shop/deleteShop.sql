@@ -80,7 +80,7 @@ BEGIN
                         SET status = 0
                         WHERE idShop = @idShop
                         --------------------------
-                        --Delete shop in the Ireland db
+                        --Delete shop in the Scotland db
                         UPDATE Scotland_db.dbo.Shop
                         SET status = 0
                         WHERE idShop = @idShop
