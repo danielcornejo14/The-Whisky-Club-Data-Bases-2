@@ -12,19 +12,19 @@ BEGIN
             IF @idCountry = 1 --1 is for USA.
             BEGIN
                 SELECT idShop, idCountry, name, phone, location.STAsText(), status
-                FROM Shop
+                FROM UnitedStates_db.dbo.Shop
                 WHERE idShop = @idShop
             END
             ELSE IF @idCountry = 2 --2 is for Ireland
             BEGIN
                 SELECT idShop, idCountry, name, phone, location.STAsText(), status
-                FROM Shop
+                FROM Ireland_db.dbo.Shop
                 WHERE idShop = @idShop
             END
             ELSE IF @idCountry = 3 --3 is for Scotland
             BEGIN
                 SELECT idShop, idCountry, name, phone, location.STAsText(), status
-                FROM Shop
+                FROM Scotland_db.dbo.Shop
                 WHERE idShop = @idShop
             END
         END
