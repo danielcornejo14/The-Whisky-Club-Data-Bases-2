@@ -1,42 +1,40 @@
-CREATE PROCEDURE updateWhiskeyXShop @idWhiskey int, @idShop int, @currentStock int,
-                                    @idWhiskeyXShop int
-WITH ENCRYPTION
-AS
+DELIMITER //
+CREATE PROCEDURE updateEmployeeReview (
+     IN pIdEmployeeReview int,
+     IN pIdCustomer int,
+     IN pIdEmployee int,
+     IN pComment varchar(64),
+     IN pEvaluation int
+)
 BEGIN
-    IF @idWhiskey IS NOT NULL AND @idShop IS NOT NULL
-        AND @currentStock IS NOT NULL AND @idWhiskeyXShop IS NOT NULL
-    BEGIN
-        IF ((SELECT COUNT(idWhiskey) FROM Whiskey WHERE idWhiskey = @idWhiskey
+    IF pIdCustomer IS NOT NULL AND pIdEmployee IS NOT NULL
+        AND pComment IS NOT NULL AND pEvaluation IS NOT NULL
+        AND pIdEmployeeReview IS NOT NULL
+    THEN
+        IF ((SELECT COUNT(idEmployee) FROM employee WHERE idEmployee = pIdEmployee
                 AND status = 1) > 0
-            AND (SELECT COUNT(idShop) FROM Shop WHERE idShop = @idShop
+            AND (SELECT COUNT(idCustomer) FROM customer WHERE idCustomer = pIdCustomer
                 AND status = 1) > 0
-            AND (SELECT COUNT(idWhiskeyXShop) FROM WhiskeyXShop WHERE idWhiskeyXShop = @idWhiskeyXShop
+            AND (SELECT COUNT(idEmployeeReview) FROM employeereview WHERE idEmployeeReview = pIdEmployeeReview
                 AND status = 1) > 0
-            AND @currentStock > 0)
-        BEGIN
-            BEGIN TRANSACTION
-                BEGIN TRY
-                    UPDATE WhiskeyXShop
-                    SET idShop = @idShop,
-                        idWhiskey = @idWhiskey,
-                        currentStock = @currentStock
-                    WHERE idWhiskeyXShop = @idWhiskeyXShop
-                    PRINT('WhiskeyXShop updated.')
-                    COMMIT TRANSACTION
-                END TRY
-                BEGIN CATCH
-                    ROLLBACK TRANSACTION
-                    RAISERROR('An error has occurred in the database.', 11, 1)
-                END CATCH
-        END
+            AND pEvaluation BETWEEN 1 AND 5
+            AND (SELECT COUNT(comment) FROM employeereview WHERE comment = pComment) = 0)
+        THEN
+            START TRANSACTION;
+            UPDATE employeereview
+            SET idCustomer = pIdCustomer,
+                idEmployee = pIdEmployee,
+                comment = pComment,
+                evaluation = pEvaluation,
+                date = (SELECT CURDATE())
+            WHERE idEmployeeReview = pIdEmployeeReview;
+            SELECT 'Employee review updated.';
+            COMMIT;
         ELSE
-        BEGIN
-            RAISERROR('The ids must exist and the current stock must be greater than 0.', 11, 1)
-        END
-    END
+            SELECT 'The ids must exist and the evaluation must be a number between 1 and 5.';
+        END IF;
     ELSE
-    BEGIN
-        RAISERROR('Null data is not allowed.', 11, 1)
-    END
-END
-GO
+        SELECT 'Null data is not allowed.';
+    END IF;
+END //
+DELIMITER ;

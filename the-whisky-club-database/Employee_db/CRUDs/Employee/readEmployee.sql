@@ -1,24 +1,22 @@
-CREATE PROCEDURE readShop @idShop int
-WITH ENCRYPTION
-AS
+DELIMITER //
+CREATE PROCEDURE readEmployee (
+     IN pIdEmployee int
+)
 BEGIN
-    IF @idShop IS NOT NULL
-    BEGIN
-        IF (SELECT COUNT(idShop) FROM Shop WHERE idShop = @idShop
+    IF pIdEmployee IS NOT NULL
+    THEN
+        IF (SELECT COUNT(idEmployee) FROM Employee WHERE idEmployee = pIdEmployee
             AND status = 1) > 0
-        BEGIN
-            SELECT idShop, idCountry, idAddress, name, phone, location, status
-            FROM Shop
-            WHERE idShop = @idShop
-        END
+        THEN
+            SELECT idEmployee, idDepartment, idEmployeeType,
+                   name, lastName1, lastName2, localSalary,
+                   dollarSalary, userName, password, status
+            FROM Employee;
         ELSE
-        BEGIN
-            RAISERROR('The Shop id must exist.', 11, 1)
-        END
-    END
+            SELECT 'The id must exist.';
+        END IF;
     ELSE
-    BEGIN
-        RAISERROR('Null data is not allowed.', 11, 1)
-    END
-END
-GO
+        SELECT 'Null data is not allowed.';
+    END IF;
+END //
+DELIMITER ;

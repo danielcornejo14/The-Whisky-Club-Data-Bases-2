@@ -1,36 +1,31 @@
-CREATE PROCEDURE insertWhiskeyXShop @idWhiskey int, @idShop int, @currentStock int
-WITH ENCRYPTION
-AS
+DELIMITER //
+CREATE PROCEDURE insertEmployeeReview (
+     IN pIdCustomer int,
+     IN pIdEmployee int,
+     IN pComment varchar(64),
+     IN pEvaluation int
+)
 BEGIN
-    IF @idWhiskey IS NOT NULL AND @idShop IS NOT NULL
-        AND @currentStock IS NOT NULL
-    BEGIN
-        IF ((SELECT COUNT(idWhiskey) FROM Whiskey WHERE idWhiskey = @idWhiskey
+    IF pIdCustomer IS NOT NULL AND pIdEmployee IS NOT NULL
+        AND pComment IS NOT NULL AND pEvaluation IS NOT NULL
+    THEN
+        IF ((SELECT COUNT(idEmployee) FROM employee WHERE idEmployee = pIdEmployee
                 AND status = 1) > 0
-            AND (SELECT COUNT(idShop) FROM Shop WHERE idShop = @idShop
+            AND (SELECT COUNT(idCustomer) FROM customer WHERE idCustomer = pIdCustomer
                 AND status = 1) > 0
-            AND @currentStock > 0)
-        BEGIN
-            BEGIN TRANSACTION
-                BEGIN TRY
-                    INSERT INTO WhiskeyXShop(idShop, idWhiskey, currentStock)
-                    VALUES (@idShop, @idWhiskey, @currentStock)
-                    PRINT('WhiskeyXShop inserted.')
-                    COMMIT TRANSACTION
-                END TRY
-                BEGIN CATCH
-                    ROLLBACK TRANSACTION
-                    RAISERROR('An error has occurred in the database.', 11, 1)
-                END CATCH
-        END
+            AND pEvaluation BETWEEN 1 AND 5
+            AND (SELECT COUNT(comment) FROM employeereview WHERE comment = pComment) = 0)
+        THEN
+            START TRANSACTION;
+            INSERT INTO employeereview(idCustomer, idEmployee, comment, evaluation, date)
+            VALUES (pIdCustomer, pIdEmployee, pComment, pEvaluation, (SELECT CURDATE()));
+            SELECT 'Employee review updated.';
+            COMMIT;
         ELSE
-        BEGIN
-            RAISERROR('The ids must exist and the current stock must be greater than 0.', 11, 1)
-        END
-    END
+            SELECT 'The ids must exist, the comment cannot be repeated and the evaluation must be a number between 1 and 5.';
+        END IF;
     ELSE
-    BEGIN
-        RAISERROR('Null data is not allowed.', 11, 1)
-    END
-END
-GO
+        SELECT 'Null data is not allowed.';
+    END IF;
+END //
+DELIMITER ;

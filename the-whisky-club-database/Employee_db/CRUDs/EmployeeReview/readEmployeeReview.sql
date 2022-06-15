@@ -1,24 +1,21 @@
-CREATE PROCEDURE readWhiskeyXShop @idWhiskeyXShop int
-WITH ENCRYPTION
-AS
+DELIMITER //
+CREATE PROCEDURE readEmployeeReview (
+     IN pIdEmployeeReview int
+)
 BEGIN
-    IF @idWhiskeyXShop IS NOT NULL
-    BEGIN
-        IF (SELECT COUNT(idWhiskeyXShop) FROM WhiskeyXShop WHERE idWhiskeyXShop = @idWhiskeyXShop
+    IF pIdEmployeeReview IS NOT NULL
+    THEN
+        IF (SELECT COUNT(idEmployeeReview) FROM EmployeeReview WHERE idEmployeeReview = pIdEmployeeReview
             AND status = 1) > 0
-        BEGIN
-            SELECT idWhiskeyXShop, idShop, idWhiskey, currentStock, status
-            FROM WhiskeyXShop
-            WHERE idWhiskeyXShop = @idWhiskeyXShop
-        END
+        THEN
+            SELECT idEmployeeReview, idCustomer, idEmployee,
+                   comment, evaluation, date, status
+            FROM EmployeeReview;
         ELSE
-        BEGIN
-            RAISERROR('The WhiskeyXShop id must exist.', 11, 1)
-        END
-    END
+            SELECT 'The id must exist.';
+        END IF;
     ELSE
-    BEGIN
-        RAISERROR('Null data is not allowed.', 11, 1)
-    END
-END
-GO
+        SELECT 'Null data is not allowed.';
+    END IF;
+END //
+DELIMITER ;
