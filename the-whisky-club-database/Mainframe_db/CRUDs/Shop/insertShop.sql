@@ -48,7 +48,7 @@ BEGIN
                             SET @idCountryString = CAST(@idCountry as varchar(5))
                             DECLARE @phoneString varchar(8)
                             SET @phoneString = CAST(@phone as varchar(8))
-                            EXEC('CALL replicateInsertShop(' + '100' + ', ''' + 'a' + ''', ' + '11111111' + ', '''  + 'POINT(1 1)' + ''')') AT MYSQL_SERVER
+                            EXEC('CALL replicateInsertShop(' + @idCountryString + ', ''' + @name + ''', ' + @phoneString + ', '''  + @point + ''')') AT MYSQL_SERVER
                             PRINT('Shop inserted.')
                         END TRY
                         BEGIN CATCH
