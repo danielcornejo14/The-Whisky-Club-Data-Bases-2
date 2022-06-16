@@ -10,6 +10,7 @@ router.get('/selectWhiskeyType', selectWhiskeyType)
 router.get('/selectPresentation', selectPresentation)
 router.get('/selectSupplier', selectSupplier)
 router.get('/selectCurrency', selectCurrency)
+router.get('/selectPaymentMethod', selectPaymentMethod)
 
 router.post('/updateWhiskey', updateWhiskey)
 router.post('/insertWhiskey', insertWhiskey)
@@ -59,6 +60,11 @@ async function selectSupplier(req,res){
 
 async function selectCurrency(req, res){
     const recordset = await  mainframeService.selectCurrency()
+    res.send(recordset)
+}
+
+async function selectPaymentMethod(req, res){
+    const recordset = await mainframeService.selectPaymentMethod()
     res.send(recordset)
 }
 

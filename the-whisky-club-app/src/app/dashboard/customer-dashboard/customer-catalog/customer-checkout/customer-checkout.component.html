@@ -1,0 +1,83 @@
+<mat-stepper [linear]="true" >
+    <mat-step>
+        <ng-template matStepLabel>Cart</ng-template>
+        <div class="container">
+            <div *ngFor="let item of this.cartService.cartList" class="product">
+    
+                <ngb-carousel *ngIf="item.images" [interval]="-1">
+                  <ng-template *ngFor="let image of item.images" ngbSlide>
+                      <div class="picsum-img-wrapper">
+                        <img [src]="buildImage(image)" alt="">
+                      </div>
+                  </ng-template>
+                </ngb-carousel>
+            
+                <div class="productInformation">
+                  <div>Brand: {{item.brand}}</div>
+                </div>
+                <div class="productCharacteristics">
+                  <div>Price: {{item.price}}</div>
+                  <div>Alcohol Content: {{item.alcoholContent}}</div>
+                  <div>Production Date:{{item.productionDate}}</div>
+                  <div>Due Date: {{item.dueDate}}</div>
+                  <div>Milliliters: {{item.millilitersQuantity}}</div>
+                  <div>Aging: {{item.whiskeyAging}}</div>
+                </div>
+            
+              </div>
+        </div>
+    
+        <div>
+            <button mat-button (click)="clearCart()">Clear Cart</button>
+            <button mat-button matStepperNext>Next</button>
+        </div>
+
+    </mat-step>
+
+    <mat-step>
+        <ng-template matStepLabel>Location</ng-template>
+        <div class="wrapper">
+            <div *ngIf="apiLoaded | async">
+                <google-map 
+                (mapClick)="addMarker($event)"
+                [center]="center"
+                [zoom]="zoom">
+                    <map-marker *ngIf="this.markerPosition !== undefined"
+                    [position]="markerPosition"
+                    [options]="markerOptions"></map-marker>
+                </google-map>
+            </div>
+    
+            <div>
+                <button mat-button (click)="saveLocation()">Save Location</button>
+                <button mat-button matStepperNext (click)="getTotal()">Next</button>
+            </div>
+        </div>
+    </mat-step>
+
+    <mat-step>
+        <ng-template matStepLabel>Done</ng-template>
+        <div class="wrapper">
+
+            <div class="info">
+                <span>price</span>
+                <span>price</span>
+                <span>price</span>
+            </div>
+        
+
+            <div class="controls">
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Payment Method</mat-label>
+                    <mat-select [(value)]="selectedMethod">
+                        <mat-option *ngFor="let method of this.paymentMethods" [value]="method.idPaymentMethod" >{{method.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <button mat-raised-button color="primary" (click)="checkOut()">Buy</button>
+            </div>
+    
+        </div>
+    </mat-step>
+</mat-stepper>

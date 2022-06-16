@@ -21,6 +21,14 @@ export class EmployeesdbService {
 
 
   // =================
+  // ==== Update =====
+  // =================
+
+    updateEmployee(employee: Employee){
+      return this.http.post(DB_URL+'/updateEmployee', employee)
+    }
+
+  // =================
   // ==== Select =====
   // =================
   getDepartment(){

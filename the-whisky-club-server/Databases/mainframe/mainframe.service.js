@@ -11,7 +11,9 @@ module.exports = {
     updateWhiskey,
     insertWhiskey,
     insertCustomer,
-    deleteWhiskey
+    deleteWhiskey,
+    verifyCustomer,
+    selectPaymentMethod
 }
 
 const config = {
@@ -80,7 +82,19 @@ async function insertCustomer(customer){
 async function verifyAdmin(username, password){
     await mssql.connect(config)
     const result = await mssql.query(`exec validateAdministrator '${username}', '${password}'`)
+    console.log(result.recordset)
 
+    if(result.recordset[0].message === '00'){
+        return true
+    }
+    else if(result.recordset[0].message ===  '01'){
+        return false
+    }
+}
+
+async function verifyCustomer(username, password){
+    await mssql.connect(config)
+    const result = await mssql.query(`exec validateCustomer '${username}', '${password}'`)
     if(result.recordset[0].message === '00'){
         return true
     }
@@ -133,6 +147,13 @@ async function selectCurrency(){
     await mssql.connect(config)
     const result = await mssql.query(`exec selectCurrency`)
 
+    return result.recordset
+}
+
+async function selectPaymentMethod(){
+    await mssql.connect(config)
+    const result = await mssql.query(`exec selectAllPaymentMethods`)
+    console.log(result.recordset)
     return result.recordset
 }
 

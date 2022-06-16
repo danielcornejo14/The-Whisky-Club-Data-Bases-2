@@ -14,6 +14,8 @@ import {CurrencyResolver} from "./_resolvers/dashboard/catalog/currency.resolver
 import { EmployeesComponent } from './dashboard/admin-dashboard/employees/employees.component';
 import { EmployeeDashboardComponent } from './dashboard/employee-dashboard/employee-dashboard.component';
 import { CustomerDashboardComponent } from './dashboard/customer-dashboard/customer-dashboard.component';
+import { CustomerCatalogComponent } from './dashboard/customer-dashboard/customer-catalog/customer-catalog.component';
+import { CustomerOrdersComponent } from './dashboard/customer-dashboard/customer-orders/customer-orders.component';
 
 const routes: Routes = [
   //logIn
@@ -42,7 +44,18 @@ const routes: Routes = [
     ]
   },
   {path: 'employee-dashboard', component: EmployeeDashboardComponent},
-  {path: 'customer-dashboard', component: CustomerDashboardComponent},
+  {path: 'customer-dashboard', component: CustomerDashboardComponent, children:[
+    {path: 'catalog', component: CustomerCatalogComponent, resolve:
+    {
+      whiskey: WhiskeyResolver,
+      whiskeyType: WhiskeyTypeResolver,
+      supplier: SupplierResolver,
+      presentation: PresentationResolver,
+      currency: CurrencyResolver
+    }},
+    {path: 'orders', component: CustomerOrdersComponent}
+
+  ]},
 
 ];
 

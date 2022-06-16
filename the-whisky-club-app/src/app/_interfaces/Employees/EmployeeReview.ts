@@ -2,7 +2,7 @@ export interface EmployeeReview{
     idEmployeeReview: number,
     idCustomer: number,
     idEmployee: number,
-    coment: string,
+    comment: string,
     evaluation: string,
     date: string,
 }

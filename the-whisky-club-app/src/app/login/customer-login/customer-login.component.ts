@@ -35,9 +35,10 @@ export class CustomerLoginComponent implements OnInit {
       password: this.customerLogInForm.get('password')?.value
     }
 
-    this.auth.adminLogin(user.username, user.password).subscribe(res => {
+    this.auth.customerLogin(user.username, user.password).subscribe(res => {
       this.storage.saveToken(res.token)
-      this.router.navigate(['/admin-dashboard'])
+      this.storage.saveUser(user.username)
+      this.router.navigate(['/customer-dashboard'])
       console.log(this.storage.getToken())
       console.log(res.token)
       }

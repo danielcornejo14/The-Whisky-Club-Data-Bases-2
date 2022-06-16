@@ -1,0 +1,13 @@
+<form [formGroup]="updateItem">
+    <mat-form-field appearance="outline">
+        <mat-label>Employee Type</mat-label>
+        <mat-select formControlName="idEmployeeType">
+          <mat-option *ngFor="let type of data.types" [value]="type.idEmployeeType">{{type.name}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+</form>
+
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button [mat-dialog-close]="updateItem.value" cdkFocusInitial>Ok</button>
+</div>

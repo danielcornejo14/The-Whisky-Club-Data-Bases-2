@@ -1,0 +1,52 @@
+<button mat-raised-button color="primary" (click)="checkOut()">Check Out</button>
+
+<div class="container">
+    <div class="catalogContainer">
+        <div *ngFor="let item of this.WhiskyList" class="product">
+      
+          <ngb-carousel *ngIf="item.images" [interval]="-1">
+            <ng-template *ngFor="let image of item.images" ngbSlide>
+                <div class="picsum-img-wrapper">
+                  <img [src]="buildImage(image)" alt="">
+                </div>
+            </ng-template>
+          </ngb-carousel>
+      
+      
+          <div class="productInformation">
+            <div>Item ID: {{item.idWhiskey}}</div>
+            <div>Supplier: {{findSupplier(item.idSupplier).name}}</div>
+            <div>Currency: {{findCurrency(item.idCurrency).name}}</div>
+            <div>Brand: {{item.brand}}</div>
+          </div>
+          <div class="productCharacteristics">
+            <div>Price: {{item.price}}</div>
+            <div>Presentation: {{findPresentation(item.idPresentation).description}}</div>
+            <div>Type: {{findWhiskeyType(item.idWhiskeyType).name}}</div>
+            <div>Alcohol Content: {{item.alcoholContent}}</div>
+            <div>Production Date:{{item.productionDate}}</div>
+            <div>Due Date: {{item.dueDate}}</div>
+            <div>Milliliters: {{item.millilitersQuantity}}</div>
+            <div>Aging: {{item.whiskeyAging}}</div>
+            <div>Special: {{item.special}}</div>
+          </div>
+      
+          <div class="productControl">
+            <button mat-raised-button type="button" color="primary" (click)="addToCart(item)">Buy</button>
+          </div>
+      
+        </div>
+      
+      </div>
+      
+      <div class="filters">
+          <mat-form-field appearance="outline">
+              <mat-label>Buy from</mat-label>
+              <mat-select [(value)]="countrySelected">
+                  <mat-option *ngFor="let item of country"[value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+          </mat-form-field>
+      </div>
+      
+</div>
+

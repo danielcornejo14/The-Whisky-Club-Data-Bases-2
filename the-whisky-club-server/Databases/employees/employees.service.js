@@ -2,7 +2,11 @@ const mysql = require('mysql');
 
 module.exports = {
   testdb,
-  selectEmployees
+  selectEmployees,
+  selectDepartment,
+  selectEmployeeReview,
+  selectEmployeeType,
+  updateEmployee
 }
 
 const config = {
@@ -27,6 +31,34 @@ function selectEmployees(res){
 
   employeedb.query(`call employees_db.selectAllEmployees();`, (err, recordset, fields)=>{
     if(err){ console.log(err)}
+    res.send(recordset[0])
+  })
+}
+
+function selectDepartment(res){
+  employeedb.query(`call employees_db.selectAllDepartments();`, (err,recordset,fields)=>{
+    if(err){console.log(err)}
+    res.send(recordset[0]) 
+  })
+}
+
+function selectEmployeeType(res){
+  employeedb.query(`call employees_db.selectAllEmployeeTypes();`, (err,recordset,fields)=>{
+    if(err){console.log(err)}
+    res.send(recordset[0])
+  })
+}
+
+function selectEmployeeReview(res){
+  employeedb.query(`call employees_db.selectAllEmployeeReviews();`, (err,recordset,fields)=>{
+    if(err){console.log(err)}
+    res.send(recordset[0])
+  })
+}
+
+function updateEmployee(data, res){
+  employeedb.query(`call employees_db.updateEmployee(${data.idEmployee}, ${data.idDepartment},${data.idEmployeeType}, '${data.name}', '${data.lastName1}','${data.lastName2}', ${data.localSalary}, ${data.dollarSalary})`, (err, recordset, fields) =>{
+    if(err)console.log(err)
     res.send(recordset[0])
   })
 }

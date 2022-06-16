@@ -7,6 +7,7 @@ import {WhiskyType} from "../../_interfaces/Whiskey/WhiskyType";
 import {Supplier} from "../../_interfaces/Whiskey/Supplier";
 import {Currency} from "../../_interfaces/Whiskey/Currency";
 import { Customer } from 'src/app/_interfaces/Customer/Customer';
+import { PaymentMethod } from 'src/app/_interfaces/Customer/PaymentMethod';
 
 const DB_URL = environment.apiUrl+'/main-db'
 
@@ -49,6 +50,9 @@ export class MainframeService {
   }
   getCurrency(){
     return this.http.get<Currency[]>(DB_URL+'/selectCurrency')
+  }
+  getPaymentMethods(){
+    return this.http.get<PaymentMethod[]>(DB_URL+'/selectPaymentMethod')
   }
 
   // =================

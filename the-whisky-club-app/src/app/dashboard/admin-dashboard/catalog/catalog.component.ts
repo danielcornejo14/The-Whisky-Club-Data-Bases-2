@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 
 import {MainframeService} from "../../../_services/mainframe-db/mainframe.service";
@@ -72,7 +72,7 @@ export class CatalogComponent implements OnInit {
     })
     updateWindow.afterClosed().subscribe((result: Whisky) => {
       if(result !== undefined){
-        this.mainframe.createWhiskey(result).subscribe(res => console.log(res))
+        this.mainframe.updateWhiskey(result).subscribe(res => console.log(res))
         window.location.reload()
       }
     })

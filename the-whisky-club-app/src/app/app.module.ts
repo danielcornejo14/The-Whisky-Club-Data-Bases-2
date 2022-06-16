@@ -41,6 +41,12 @@ import {MatIconModule} from '@angular/material/icon';
 import { EmployeesComponent } from './dashboard/admin-dashboard/employees/employees.component';
 import {MatCardModule} from '@angular/material/card';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { EmployeeUpdateComponent } from './dashboard/admin-dashboard/employees/employee-update/employee-update.component';
+import { EmployeeReviewComponent } from './dashboard/admin-dashboard/employees/employee-review/employee-review.component';
+import { CustomerCatalogComponent } from './dashboard/customer-dashboard/customer-catalog/customer-catalog.component';
+import { CustomerOrdersComponent } from './dashboard/customer-dashboard/customer-orders/customer-orders.component';
+import { CustomerCheckoutComponent } from './dashboard/customer-dashboard/customer-catalog/customer-checkout/customer-checkout.component';
+import {MatStepperModule} from '@angular/material/stepper';
 
 @NgModule({
   declarations: [
@@ -57,7 +63,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     EmployeesComponent,
     CustomerDashboardComponent,
     EmployeeDashboardComponent,
-
+    EmployeeUpdateComponent,
+    EmployeeReviewComponent,
+    CustomerCatalogComponent,
+    CustomerOrdersComponent,
+    CustomerCheckoutComponent,
   ],
   imports: [
     BrowserModule,
@@ -82,7 +92,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     GoogleMapsModule,
     HttpClientJsonpModule,
     MatCardModule,
-    NgbModule
+    NgbModule,
+    MatStepperModule
 
   ],
   providers: [authInterceptorProviders],

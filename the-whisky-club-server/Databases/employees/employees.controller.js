@@ -11,6 +11,8 @@ router.get('/selectEmployees', selectEmployees)
 router.get('/selectEmployeeReview', selectEmployeeReview)
 router.get('/selectEmployeeType', selectEmployeeType)
 
+router.post('/updateEmployee', updateEmployee)
+
 module.exports = router
 
 //TODO #5 send employee data to front end
@@ -34,4 +36,11 @@ function selectEmployeeReview(req, res){
 
 function selectEmployeeType(req, res){
     employeeService.selectEmployeeType(res)
+}
+
+function updateEmployee(req, res){
+    const data = req.body
+    console.log(data)
+    employeeService.updateEmployee(data, res)
+    
 }
