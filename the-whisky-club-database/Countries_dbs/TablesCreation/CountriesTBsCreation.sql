@@ -64,11 +64,6 @@ CREATE TABLE WhiskeyXShop (
     currentStock int NOT NULL,
     status bit NOT NULL DEFAULT 1
 )
-CREATE TABLE DeliveryReviewType(
-    idDeliveryReviewType int PRIMARY KEY IDENTITY(1,1),
-    name varchar(64) NOT NULL,
-    status bit NOT NULL DEFAULT 1
-)
 CREATE TABLE PaymentMethod(
     idPaymentMethod int PRIMARY KEY IDENTITY(1,1),
     name varchar(64) NOT NULL,
@@ -146,12 +141,18 @@ CREATE TABLE WhiskeyXCustomer(
     idPaymentMethod int NOT NULL FOREIGN KEY REFERENCES PaymentMethod(idPaymentMethod),
     idCashier int NOT NULL FOREIGN KEY REFERENCES Employee(idEmployee),
     idCourier int NOT NULL FOREIGN KEY REFERENCES Employee(idEmployee),
-    idDeliveryReviewType int NOT NULL FOREIGN KEY REFERENCES DeliveryReviewType(idDeliveryReviewType),
     idShop int NOT NULL FOREIGN KEY REFERENCES Shop(idShop),
     idCustomer int NOT NULL FOREIGN KEY REFERENCES Customer(idCustomer),
     shippingCost money NOT NULL,
     quantity int NOT NULL,
     total money NOT NULL,
+    date date NOT NULL,
+    status bit NOT NULL DEFAULT 1
+)
+CREATE TABLE PurchaseReview (
+    idPurchaseReview int PRIMARY KEY IDENTITY (1,1),
+    idWhiskeyXCustomer int NOT NULL FOREIGN KEY REFERENCES WhiskeyXCustomer(idWhiskeyXCustomer),
+    comment varchar(64) NOT NULL,
     date date NOT NULL,
     status bit NOT NULL DEFAULT 1
 )

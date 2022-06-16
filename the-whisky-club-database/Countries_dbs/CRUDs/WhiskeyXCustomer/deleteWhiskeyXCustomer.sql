@@ -9,9 +9,17 @@ BEGIN
         BEGIN
             BEGIN TRANSACTION
                 BEGIN TRY
+                    ---------------------------------------------
+                    --Delete purchase review
+                    UPDATE PurchaseReview
+                    SET status = 0
+                    WHERE idWhiskeyXCustomer = @idWhiskeyXCustomer
+                    ----------------------------------------------
+                    --Delete whiskey x customer
                     UPDATE WhiskeyXCustomer
                     SET status = 0
                     WHERE idWhiskeyXCustomer = @idWhiskeyXCustomer
+                    ----------------------------------------------
                     PRINT('WhiskeyXCustomer deleted.')
                     COMMIT TRANSACTION
                 END TRY
