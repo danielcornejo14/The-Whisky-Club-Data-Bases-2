@@ -78,11 +78,6 @@ CREATE TABLE Image(
     image VARBINARY(MAX) NOT NULL,
     status bit NOT NULL DEFAULT 1
 )
-CREATE TABLE DeliveryReviewType (
-    idDeliveryReviewType int PRIMARY KEY IDENTITY (1,1),
-    name varchar(64) NOT NULL,
-    status bit NOT NULL DEFAULT 1
-)
 CREATE TABLE PaymentMethod(
     idPaymentMethod int PRIMARY KEY IDENTITY (1,1),
     name varchar(64) NOT NULL,
