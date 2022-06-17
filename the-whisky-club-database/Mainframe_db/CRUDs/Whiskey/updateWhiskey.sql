@@ -1,10 +1,10 @@
-CREATE OR ALTER PROCEDURE updateWhiskey  @idSupplier int, @idPresentation int,
-                                @idCurrency int, @idWhiskeyType int,
-                                @brand varchar(64), @price money,
-                                @alcoholContent float, @productionDate date,
-                                @dueDate date, @availability bit,
-                                @millilitersQuantity float, @whiskeyAging int,
-                                @special bit, @idWhiskey int
+CREATE OR ALTER PROCEDURE updateWhiskey @idSupplier int, @idPresentation int,
+                                        @idCurrency int, @idWhiskeyType int,
+                                        @brand varchar(64), @price money,
+                                        @alcoholContent float, @productionDate date,
+                                        @dueDate date, @availability bit,
+                                        @millilitersQuantity float, @whiskeyAging int,
+                                        @special bit, @idWhiskey int
 WITH ENCRYPTION
 AS
 BEGIN
@@ -24,7 +24,6 @@ BEGIN
             AND status = 1) > 0
             AND (SELECT COUNT(idWhiskeyType) FROM WhiskeyType WHERE idWhiskeyType = @idWhiskeyType
             AND status = 1) > 0
-            AND (SELECT COUNT(brand) FROM Whiskey WHERE brand = @brand) = 0
             AND (SELECT COUNT(idWhiskey) FROM Whiskey WHERE idWhiskey = @idWhiskey
             AND status = 1) > 0
             AND @price > 0
