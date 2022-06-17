@@ -20,14 +20,14 @@ BEGIN
                     SET status = 0
                     WHERE idWhiskey = @idWhiskey
                     ----------------------------
-                    --Delete whiskeyXCustomer in Countries
-                    UPDATE UnitedStates_db.dbo.WhiskeyXCustomer
+                    --Delete WhiskeyXSale in Countries
+                    UPDATE UnitedStates_db.dbo.WhiskeyXSale
                     SET status = 0
                     WHERE idWhiskey = @idWhiskey
-                    UPDATE Scotland_db.dbo.WhiskeyXCustomer
+                    UPDATE Scotland_db.dbo.WhiskeyXSale
                     SET status = 0
                     WHERE idWhiskey = @idWhiskey
-                    UPDATE Ireland_db.dbo.WhiskeyXCustomer
+                    UPDATE Ireland_db.dbo.WhiskeyXSale
                     SET status = 0
                     WHERE idWhiskey = @idWhiskey
                     ----------------------------

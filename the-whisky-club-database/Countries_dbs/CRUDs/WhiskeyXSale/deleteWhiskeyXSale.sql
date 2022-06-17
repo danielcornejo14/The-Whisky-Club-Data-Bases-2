@@ -1,18 +1,18 @@
-CREATE PROCEDURE deleteWhiskeyXCustomerByIdDeliveryReview @idDeliveryReviewType int
+CREATE PROCEDURE deleteWhiskeyXSale @idWhiskeyXSale int
 WITH ENCRYPTION
 AS
 BEGIN
-    IF @idDeliveryReviewType IS NOT NULL
+    IF @idWhiskeyXSale IS NOT NULL
     BEGIN
-        IF (SELECT COUNT(idDeliveryReviewType) FROM WhiskeyXCustomer WHERE idDeliveryReviewType = @idDeliveryReviewType
+        IF (SELECT COUNT(idWhiskeyXSale) FROM WhiskeyXSale WHERE idWhiskeyXSale = @idWhiskeyXSale
             AND status = 1) > 0
         BEGIN
             BEGIN TRANSACTION
                 BEGIN TRY
-                    UPDATE WhiskeyXCustomer
+                    UPDATE WhiskeyXSale
                     SET status = 0
-                    WHERE idDeliveryReviewType = @idDeliveryReviewType
-                    PRINT('WhiskeyXCustomer deleted.')
+                    WHERE idWhiskeyXSale = @idWhiskeyXSale
+                    PRINT('WhiskeyXSale deleted.')
                     COMMIT TRANSACTION
                 END TRY
                 BEGIN CATCH
@@ -22,7 +22,7 @@ BEGIN
         END
         ELSE
         BEGIN
-            RAISERROR('The DeliveryReviewType id must exist.', 11, 1)
+            RAISERROR('The WhiskeyXSale id must exist.', 11, 1)
         END
     END
     ELSE

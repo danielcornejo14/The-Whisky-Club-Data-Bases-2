@@ -1,16 +1,15 @@
-CREATE PROCEDURE insertPurchaseReview @idWhiskeyXCustomer int, @comment varchar(64)
+CREATE PROCEDURE insertPurchaseReview @idSale int, @comment varchar(64)
 WITH ENCRYPTION
 AS
 BEGIN
-    IF @idWhiskeyXCustomer IS NOT NULL AND @comment IS NOT NULL
+    IF @idSale IS NOT NULL AND @comment IS NOT NULL
     BEGIN
-        IF ((SELECT COUNT(comment) FROM PurchaseReview WHERE comment = @comment) = 0
-            AND (SELECT COUNT(idWhiskeyXCustomer) FROM WhiskeyXCustomer WHERE idWhiskeyXCustomer = @idWhiskeyXCustomer) > 0)
+        IF (SELECT COUNT(idSale) FROM Sale WHERE idSale = @idSale) > 0
         BEGIN
             BEGIN TRANSACTION
                 BEGIN TRY
-                    INSERT INTO PurchaseReview(idWhiskeyXCustomer, comment, date)
-                    VALUES (@idWhiskeyXCustomer , @comment, GETDATE())
+                    INSERT INTO PurchaseReview(idSale, comment, date)
+                    VALUES (@idSale , @comment, GETDATE())
                     PRINT('PurchaseReview inserted.')
                     COMMIT TRANSACTION
                 END TRY
@@ -21,7 +20,7 @@ BEGIN
         END
         ELSE
         BEGIN
-            RAISERROR('The comment cannot be repeated and the id must exist.', 11, 1)
+            RAISERROR('The id must exist.', 11, 1)
         END
     END
     ELSE

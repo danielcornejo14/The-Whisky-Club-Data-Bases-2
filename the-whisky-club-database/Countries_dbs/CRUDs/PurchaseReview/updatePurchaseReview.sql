@@ -1,19 +1,18 @@
-CREATE PROCEDURE updatePurchaseReview @idPurchaseReview int, @idWhiskeyXCustomer int,
+CREATE PROCEDURE updatePurchaseReview @idPurchaseReview int, @idSale int,
                                       @comment varchar(64)
 WITH ENCRYPTION
 AS
 BEGIN
     IF @idPurchaseReview IS NOT NULL AND
-       @idWhiskeyXCustomer IS NOT NULL AND @comment IS NOT NULL
+       @idSale IS NOT NULL AND @comment IS NOT NULL
     BEGIN
-        IF ((SELECT COUNT(comment) FROM PurchaseReview WHERE comment = @comment) = 0
-            AND (SELECT COUNT(idWhiskeyXCustomer) FROM WhiskeyXCustomer WHERE idWhiskeyXCustomer = @idWhiskeyXCustomer) > 0
+        IF ((SELECT COUNT(idSale) FROM Sale WHERE idSale = @idSale) > 0
             AND (SELECT COUNT(idPurchaseReview) FROM PurchaseReview WHERE idPurchaseReview = @idPurchaseReview) > 0)
         BEGIN
             BEGIN TRANSACTION
                 BEGIN TRY
                     UPDATE PurchaseReview
-                    SET idWhiskeyXCustomer = @idWhiskeyXCustomer,
+                    SET idSale = @idSale,
                         comment = @comment,
                         date = GETDATE()
                     WHERE idPurchaseReview = @idPurchaseReview
@@ -27,7 +26,7 @@ BEGIN
         END
         ELSE
         BEGIN
-            RAISERROR('The comment cannot be repeated and the ids must exist.', 11, 1)
+            RAISERROR('The ids must exist.', 11, 1)
         END
     END
     ELSE

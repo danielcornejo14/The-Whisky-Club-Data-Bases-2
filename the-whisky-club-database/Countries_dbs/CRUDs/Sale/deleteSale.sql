@@ -1,26 +1,31 @@
-CREATE PROCEDURE deleteWhiskeyXCustomer @idWhiskeyXCustomer int
+CREATE PROCEDURE deleteSale @idSale int
 WITH ENCRYPTION
 AS
 BEGIN
-    IF @idWhiskeyXCustomer IS NOT NULL
+    IF @idSale IS NOT NULL
     BEGIN
-        IF (SELECT COUNT(idWhiskeyXCustomer) FROM WhiskeyXCustomer WHERE idWhiskeyXCustomer = @idWhiskeyXCustomer
+        IF (SELECT COUNT(idSale) FROM Sale WHERE idSale = @idSale
             AND status = 1) > 0
         BEGIN
             BEGIN TRANSACTION
                 BEGIN TRY
                     ---------------------------------------------
+                    --Delete whiskey x sale
+                    UPDATE WhiskeyXSale
+                    SET status = 0
+                    WHERE idSale = @idSale
+                    ---------------------------------------------
                     --Delete purchase review
                     UPDATE PurchaseReview
                     SET status = 0
-                    WHERE idWhiskeyXCustomer = @idWhiskeyXCustomer
+                    WHERE idSale = @idSale
                     ----------------------------------------------
                     --Delete whiskey x customer
-                    UPDATE WhiskeyXCustomer
+                    UPDATE Sale
                     SET status = 0
-                    WHERE idWhiskeyXCustomer = @idWhiskeyXCustomer
+                    WHERE idSale = @idSale
                     ----------------------------------------------
-                    PRINT('WhiskeyXCustomer deleted.')
+                    PRINT('Sale deleted.')
                     COMMIT TRANSACTION
                 END TRY
                 BEGIN CATCH
@@ -30,7 +35,7 @@ BEGIN
         END
         ELSE
         BEGIN
-            RAISERROR('The WhiskeyXCustomer id must exist.', 11, 1)
+            RAISERROR('The Sale id must exist.', 11, 1)
         END
     END
     ELSE

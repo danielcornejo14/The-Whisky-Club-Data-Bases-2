@@ -9,19 +9,15 @@ BEGIN
         BEGIN
             BEGIN TRANSACTION
                 BEGIN TRY
-                    --Delete employee review in employees
-                    DECLARE @idCustomerString varchar(5)
-                    SET @idCustomerString = CAST(@pIdCustomer as varchar(5))
-                    EXEC('CALL deleteEmployeeReviewByIdCustomer(' + @idCustomerString + ')') AT MYSQL_SERVER
                     -----------------------------
-                    --Delete whiskey x customer in USA
-                    EXEC [UnitedStates_db].[dbo].[deleteWhiskeyXCustomerByIdCustomer] @idCustomer = @pIdCustomer
+                    --Delete sale in USA
+                    EXEC [UnitedStates_db].[dbo].[deleteSaleByIdCustomer] @idCustomer = @pIdCustomer
                     ------------------------------
-                    --Delete whiskey x customer in Ireland
-                    EXEC [Ireland_db].[dbo].[deleteWhiskeyXCustomerByIdCustomer] @idCustomer = @pIdCustomer
+                    --Delete sale in Ireland
+                    EXEC [Ireland_db].[dbo].[deleteSaleByIdCustomer] @idCustomer = @pIdCustomer
                     ------------------------------
-                    --Delete whiskey x customer in Scotland
-                    EXEC [Scotland_db].[dbo].[deleteWhiskeyXCustomerByIdCustomer] @idCustomer = @pIdCustomer
+                    --Delete sale in Scotland
+                    EXEC [Scotland_db].[dbo].[deleteSaleByIdCustomer] @idCustomer = @pIdCustomer
                     ------------------------------
                     --Delete whiskey review in mainframe
                     UPDATE WhiskeyReview
@@ -57,6 +53,7 @@ BEGIN
                     ------------------------------
                     COMMIT TRANSACTION
                     --Delete customer in employees db
+                    DECLARE @idCustomerString varchar(5)
                     SET @idCustomerString = CAST(@pIdCustomer as varchar(5))
                     EXEC('CALL replicateDeleteCustomer(' + @idCustomerString + ')') AT MYSQL_SERVER
                     PRINT('Currency deleted.')

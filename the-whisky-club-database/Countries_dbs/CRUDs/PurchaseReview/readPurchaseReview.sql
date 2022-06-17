@@ -7,7 +7,7 @@ BEGIN
         IF (SELECT COUNT(idPurchaseReview) FROM PurchaseReview WHERE idPurchaseReview = @idPurchaseReview
              AND status = 1) > 0
         BEGIN
-            SELECT idPurchaseReview, idWhiskeyXCustomer, comment, date, status
+            SELECT idPurchaseReview, idSale, comment, date, status
             FROM PurchaseReview
             WHERE idPurchaseReview = @idPurchaseReview
         END

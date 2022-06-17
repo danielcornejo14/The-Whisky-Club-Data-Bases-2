@@ -135,24 +135,31 @@ CREATE TABLE EmployeeReview(
     FOREIGN KEY (idCustomer) REFERENCES Customer(idCustomer),
     FOREIGN KEY (idEmployee) REFERENCES Employee(idEmployee)
 )
-CREATE TABLE WhiskeyXCustomer(
-    idWhiskeyXCustomer int PRIMARY KEY IDENTITY(1,1) NOT NULL,
-    idWhiskey int NOT NULL FOREIGN KEY REFERENCES Whiskey(idWhiskey),
+CREATE TABLE Sale(
+    idSale int PRIMARY KEY IDENTITY(1,1) NOT NULL,
     idPaymentMethod int NOT NULL FOREIGN KEY REFERENCES PaymentMethod(idPaymentMethod),
     idCashier int NOT NULL FOREIGN KEY REFERENCES Employee(idEmployee),
     idCourier int NOT NULL FOREIGN KEY REFERENCES Employee(idEmployee),
     idShop int NOT NULL FOREIGN KEY REFERENCES Shop(idShop),
     idCustomer int NOT NULL FOREIGN KEY REFERENCES Customer(idCustomer),
     shippingCost money NOT NULL,
-    quantity int NOT NULL,
+    saleDiscount money NOT NULL,
+    subTotal money NOT NULL,
     total money NOT NULL,
     date date NOT NULL,
     status bit NOT NULL DEFAULT 1
 )
 CREATE TABLE PurchaseReview (
     idPurchaseReview int PRIMARY KEY IDENTITY (1,1),
-    idWhiskeyXCustomer int NOT NULL FOREIGN KEY REFERENCES WhiskeyXCustomer(idWhiskeyXCustomer),
+    idSale int NOT NULL FOREIGN KEY REFERENCES Sale(idSale),
     comment varchar(64) NOT NULL,
     date date NOT NULL,
+    status bit NOT NULL DEFAULT 1
+)
+CREATE TABLE WhiskeyXSale(
+    idWhiskeyXSale int PRIMARY KEY IDENTITY (1,1),
+    idSale int NOT NULL FOREIGN KEY REFERENCES Sale(idSale),
+    idWhiskey int NOT NULL FOREIGN KEY REFERENCES Whiskey(idWhiskey),
+    quantity int NOT NULL,
     status bit NOT NULL DEFAULT 1
 )

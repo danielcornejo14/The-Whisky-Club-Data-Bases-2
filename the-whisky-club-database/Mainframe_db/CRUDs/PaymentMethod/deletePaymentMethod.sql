@@ -9,14 +9,14 @@ BEGIN
         BEGIN
             BEGIN TRANSACTION
                 BEGIN TRY
-                    --Delete whiskey x customer in USA
-                    EXEC [UnitedStates_db].[dbo].[deleteWhiskeyXCustomerByIdPaymentMethod] @idPaymentMethod = @pIdPaymentMethod
+                    --Delete sale in USA
+                    EXEC [UnitedStates_db].[dbo].[deleteSaleByIdPaymentMethod] @idPaymentMethod = @pIdPaymentMethod
                     ---------------------------------------
-                    --Delete whiskey x customer in Ireland
-                    EXEC [Ireland_db].[dbo].[deleteWhiskeyXCustomerByIdPaymentMethod] @idPaymentMethod = @pIdPaymentMethod
+                    --Delete sale in Ireland
+                    EXEC [Ireland_db].[dbo].[deleteSaleByIdPaymentMethod] @idPaymentMethod = @pIdPaymentMethod
                     ---------------------------------------
-                    --Delete whiskey x customer in Scotland
-                    EXEC [Scotland_db].[dbo].[deleteWhiskeyXCustomerByIdPaymentMethod] @idPaymentMethod = @pIdPaymentMethod
+                    --Delete sale in Scotland
+                    EXEC [Scotland_db].[dbo].[deleteSaleByIdPaymentMethod] @idPaymentMethod = @pIdPaymentMethod
                     ---------------------------------------
                     --Delete payment method in mainframe
                     UPDATE PaymentMethod

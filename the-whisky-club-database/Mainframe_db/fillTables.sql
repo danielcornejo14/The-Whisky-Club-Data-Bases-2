@@ -50,6 +50,6 @@ EXEC insertPaymentMethod @name = 'Tranference';
 
 --Insert shop
 DECLARE @point geometry;
-SET @point = geometry::STPointFromText('POINT (8 5)', 0);
+SET @point = geometry::STPointFromText('POINT (1 1)', 0);
 --1) USA , 2)Ireland, 3) Scotland
-exec insertShop @idCountry = 2, @name = 'IrelandShop1', @phone = 35304758, @location = @point
+exec insertShop @idCountry = 2, @name = 'IrelandShop1', @phone = 11112222, @location = @point

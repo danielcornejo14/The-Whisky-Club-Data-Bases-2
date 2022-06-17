@@ -68,45 +68,74 @@ BEGIN
         DECLARE @idCustomer int
         SET @idCustomer = (SELECT idCustomer FROM Customer WHERE userName = @username)
         -------------------------------------------------------------------------------
+        DECLARE @whiskeyPrice money
+        SET @whiskeyPrice = (SELECT price FROM Whiskey WHERE idWhiskey = @pIdWhiskey)
+        DECLARE @shippingDiscount float
+        DECLARE @idSubscription int
+        SET @idSubscription = (SELECT idSubscription FROM Customer WHERE idCustomer = @idCustomer)
+        DECLARE @shoppingDiscount float
+        DECLARE @pShippingCostFinal money
+        DECLARE @subTotal money
+        DECLARE @total money
+        IF @idSubscription = 1 --Tier normal subscription
+        BEGIN
+            SET @shippingDiscount = 0
+            SET @shoppingDiscount = 0
+        END
+        ELSE IF @idSubscription = 2 --Tier short glass subscription
+        BEGIN
+            SET @shippingDiscount = 0
+            SET @shoppingDiscount = 0.05
+        END
+        ELSE IF @idSubscription = 3 --Tier gleincairn
+        BEGIN
+            SET @shippingDiscount = 0.2
+            SET @shoppingDiscount = 0.1
+        END
+        ELSE IF @idSubscription = 4 --Tier master distiller
+        BEGIN
+            SET @shippingDiscount = 1
+            SET @shoppingDiscount = 0.3
+        END
+        --Select customer location
+        DECLARE @length varchar(max)
+        SET @length = (SELECT lng
+                       FROM OPENJSON(@json)
+                       WITH (
+                        lng varchar(max) '$.location.lng'
+                      ))
+        DECLARE @latitude varchar(max)
+        SET @latitude = (SELECT lat
+                         FROM OPENJSON(@json)
+                         WITH (
+                         lat varchar(max) '$.location.lat'
+                        ))
+        DECLARE @customerLocation geometry
+        SET @customerLocation = geometry::STPointFromText('POINT (' + @length + ' ' + @latitude + ')', 0)
+        --------------------------------------
+        --SELECT the closest shop for the customer
+        DECLARE @idShop int
+        SET @idShop = ( SELECT TOP (1) idShop
+                        FROM Shop
+                        ORDER BY @customerLocation.STDistance(Shop.location))
+        --------------------------------------
+        --Select the distance between the customer and the closest shop.
+        DECLARE @distance float
+        SET @distance = (SELECT TOP (1) @customerLocation.STDistance(Shop.location)
+                         FROM Shop
+                         ORDER BY @customerLocation.STDistance(Shop.location))
+        --The shipping cost is $0.5 per Kilometer
+        DECLARE @pShippingCost money
+        SET @pShippingCost = (@distance * 0.5)
+        --------------------------------------
+        SET @pShippingCostFinal = (@pShippingCost - (@shippingDiscount * @pShippingCost))
+
+        --Meter el subtotal en un cursor
+
+        SET @subTotal = ((@whiskeyPrice * @pQuantity) + @pShippingCostFinal)
+        SET @total = (@subTotal - (@subTotal * @shoppingDiscount))
         BEGIN TRANSACTION
             BEGIN TRY
-                DECLARE @whiskeyPrice money
-                SET @whiskeyPrice = (SELECT price FROM Whiskey WHERE idWhiskey = @pIdWhiskey)
-                DECLARE @shippingDiscount float
-                DECLARE @idSubscription int
-                SET @idSubscription = (SELECT idSubscription FROM Customer WHERE idCustomer = @idCustomer)
-                DECLARE @shoppingDiscount float
-                DECLARE @pShippingCostFinal money
-                DECLARE @subTotal money
-                DECLARE @total money
-                IF @idSubscription = 1 --Tier normal subscription
-                BEGIN
-                    SET @shippingDiscount = 0
-                    SET @shoppingDiscount = 0
-                END
-                ELSE IF @idSubscription = 2 --Tier short glass subscription
-                BEGIN
-                    SET @shippingDiscount = 0
-                    SET @shoppingDiscount = 0.05
-                END
-                ELSE IF @idSubscription = 3 --Tier gleincairn
-                BEGIN
-                    SET @shippingDiscount = 0.2
-                    SET @shoppingDiscount = 0.1
-                END
-                ELSE IF @idSubscription = 4 --Tier master distiller
-                BEGIN
-                    SET @shippingDiscount = 1
-                    SET @shoppingDiscount = 0.3
-                END
-                --------------------------------------
-                --The shipping cost is $2 per Kilometer
-                DECLARE @pShippingCost float
-                SET @pShippingCost = ()
-                --------------------------------------
-                SET @pShippingCostFinal = (@pShippingCost - (@shippingDiscount * @pShippingCost))
-                SET @subTotal = ((@whiskeyPrice * @pQuantity) + @pShippingCostFinal)
-                SET @total = (@subTotal - (@subTotal * @shoppingDiscount))
                 INSERT INTO WhiskeyXCustomer(idWhiskey, idPaymentMethod,
                                              idCashier, idCourier, idDeliveryReviewType,
                                              idShop, idCustomer, shippingCost, quantity,
