@@ -1,4 +1,4 @@
-CREATE PROCEDURE processPurchase @json varchar(max)
+CREATE PROCEDURE processSale @json varchar(max)
 WITH ENCRYPTION
 AS
 BEGIN
@@ -33,26 +33,11 @@ BEGIN
         DECLARE @idCustomer int
         SET @idCustomer = (SELECT idCustomer FROM Customer WHERE userName = @username)
         -----------------------------------------------------------------------------
-        --The whiskeys selected ids are stored in a temporal table.
-        CREATE TABLE #WhiskeysSelected(
-            idWhiskey int
-        )
-        INSERT INTO #WhiskeysSelected
-        SELECT idWhiskey
-        FROM OPENJSON(@json)
-            WITH (
-                selectedWhiskeys nvarchar(MAX) '$.cart' AS JSON
-            )
-            CROSS APPLY OPENJSON(selectedWhiskeys)
-                WITH (
-                    idWhiskey int '$'
-                )
-        -------------------------------------------------------------------------------
-        --Select a random employee (Interval between >= 1 and <=10)
+        --Select a random cashier (Interval between >= 1 and <=10)
         DECLARE @idCashier int
         SET @idCashier = (SELECT FLOOR(RAND()*(10-1)+1))
         -------------------------------------------------------------------------------
-        --Select a random employee (Interval between >= 1 and <=10)
+        --Select a random courier (Interval between >= 1 and <=10)
         DECLARE @idCourier int
         SET @idCourier = (SELECT FLOOR(RAND()*(10-1)+1))
         -------------------------------------------------------------------------------
@@ -64,19 +49,10 @@ BEGIN
                                 idPaymentMethod int '$.method'
                               ))
         -------------------------------------------------------------------------------
-        --Get the customer id from the user name
-        DECLARE @idCustomer int
-        SET @idCustomer = (SELECT idCustomer FROM Customer WHERE userName = @username)
-        -------------------------------------------------------------------------------
-        DECLARE @whiskeyPrice money
-        SET @whiskeyPrice = (SELECT price FROM Whiskey WHERE idWhiskey = @pIdWhiskey)
-        DECLARE @shippingDiscount float
         DECLARE @idSubscription int
         SET @idSubscription = (SELECT idSubscription FROM Customer WHERE idCustomer = @idCustomer)
+        DECLARE @shippingDiscount float
         DECLARE @shoppingDiscount float
-        DECLARE @pShippingCostFinal money
-        DECLARE @subTotal money
-        DECLARE @total money
         IF @idSubscription = 1 --Tier normal subscription
         BEGIN
             SET @shippingDiscount = 0
@@ -111,7 +87,14 @@ BEGIN
                          lat varchar(max) '$.location.lat'
                         ))
         DECLARE @customerLocation geometry
-        SET @customerLocation = geometry::STPointFromText('POINT (' + @length + ' ' + @latitude + ')', 0)
+        IF @length IS NULL AND @latitude IS NULL
+        BEGIN
+            SET @customerLocation = (SELECT location FROM Customer WHERE idCustomer = @idCustomer)
+        END
+        ELSE
+        BEGIN
+            SET @customerLocation = geometry::STPointFromText('POINT (' + @length + ' ' + @latitude + ')', 0)
+        END
         --------------------------------------
         --SELECT the closest shop for the customer
         DECLARE @idShop int
@@ -124,29 +107,83 @@ BEGIN
         SET @distance = (SELECT TOP (1) @customerLocation.STDistance(Shop.location)
                          FROM Shop
                          ORDER BY @customerLocation.STDistance(Shop.location))
-        --The shipping cost is $0.5 per Kilometer
-        DECLARE @pShippingCost money
-        SET @pShippingCost = (@distance * 0.5)
         --------------------------------------
-        SET @pShippingCostFinal = (@pShippingCost - (@shippingDiscount * @pShippingCost))
-
-        --Meter el subtotal en un cursor
-
-        SET @subTotal = ((@whiskeyPrice * @pQuantity) + @pShippingCostFinal)
-        SET @total = (@subTotal - (@subTotal * @shoppingDiscount))
+        --The shipping cost is $0.5 per Kilometer
+        DECLARE @shippingCost money
+        SET @shippingCost = (@distance * 0.5)
+        --The shipping discount is applied in the shipping cost.
+        SET @shippingCost = (@shippingCost - (@shippingDiscount * @shippingCost))
+        --------------------------------------
+        --The whiskeys selected ids are stored in a temporal table.
+        CREATE TABLE #WhiskeysSelected(
+            idWhiskey int
+        )
+        INSERT INTO #WhiskeysSelected
+        SELECT idWhiskey
+        FROM OPENJSON(@json)
+            WITH (
+                selectedWhiskeys nvarchar(MAX) '$.cart' AS JSON
+            )
+            CROSS APPLY OPENJSON(selectedWhiskeys)
+                WITH (
+                    idWhiskey int '$'
+                )
+        --------------------------------------
+        --Calculate the subtotal from the whiskeys cost.
+        DECLARE @subTotal money --The subtotal is the sum of every whiskey price.
+        SET @subTotal = (SELECT SUM(price)
+                         FROM Whiskey
+                         WHERE idWhiskey
+                         IN (SELECT idWhiskey
+                             FROM #WhiskeysSelected)
+                         )
+        --------------------------------------
+        --The sale discount is calculated.
+        DECLARE @saleDiscount money
+        SET @saleDiscount = (@subTotal * @shoppingDiscount)
+        --------------------------------------
+        --The total is calculated.
+        DECLARE @total money
+        SET @total = (@subTotal - @saleDiscount + @shippingCost)
+        --------------------------------------
         BEGIN TRANSACTION
             BEGIN TRY
-                INSERT INTO WhiskeyXCustomer(idWhiskey, idPaymentMethod,
-                                             idCashier, idCourier, idDeliveryReviewType,
-                                             idShop, idCustomer, shippingCost, quantity,
-                                             total, date)
-                VALUES(@pIdWhiskey, @pIdPaymentMethod, @pIdCashier, @pIdCourier, @pIdDeliveryReviewType,
-                       @pIdShop, @pIdCustomer, @pShippingCost, @pQuantity, @total, GETDATE())
-                --Decrease whiskey current stock
-                UPDATE WhiskeyXShop
-                SET currentStock = currentStock - @pQuantity
-                WHERE idWhiskey = @pIdWhiskey
-                --------------------------------
+                --Insert the sale
+                INSERT INTO Sale(idPaymentMethod, idCashier, idCourier,
+                                 idShop, idCustomer, shippingCost,
+                                 saleDiscount, subTotal, total,
+                                 date)
+                VALUES(@paymentMethod, @idCashier, @idCourier,
+                       @idShop, @idCustomer, @shippingCost,
+                       @saleDiscount, @subTotal, @total,
+                       GETDATE())
+                --------------------------------------------------------------------------
+                --Select the id sale
+                DECLARE @idSale int
+                SET @idSale = SCOPE_IDENTITY()
+                --------------------------------------------------------------------------
+                --Cursor for sold whiskeys
+                DECLARE @currentIdWhiskey int
+                DECLARE whiskeysCursor CURSOR FOR SELECT
+                idWhiskey FROM #WhiskeysSelected
+                OPEN whiskeysCursor
+                FETCH NEXT FROM whiskeysCursor INTO @currentIdWhiskey
+                WHILE @@FETCH_STATUS = 0
+                BEGIN
+                    INSERT INTO WhiskeyXSale(idSale, idWhiskey, quantity)
+                    VALUES (@idSale, @currentIdWhiskey, 1)
+                    -----------------------------------------------------
+                    --Decrease whiskey current stock
+                    UPDATE WhiskeyXShop
+                    SET currentStock = currentStock - 1
+                    WHERE idWhiskey = @currentIdWhiskey AND
+                          idShop = @idShop
+                    -----------------------------------------------------
+                    FETCH NEXT FROM whiskeysCursor INTO @currentIdWhiskey
+                END
+                CLOSE whiskeysCursor
+                DEALLOCATE whiskeysCursor
+                ---------------------------------------------------------
                 DROP TABLE #WhiskeysSelected
                 PRINT('Purchase registered.')
                 COMMIT TRANSACTION
