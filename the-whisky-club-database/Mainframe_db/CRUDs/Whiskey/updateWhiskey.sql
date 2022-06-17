@@ -24,7 +24,6 @@ BEGIN
             AND status = 1) > 0
             AND (SELECT COUNT(idWhiskeyType) FROM WhiskeyType WHERE idWhiskeyType = @idWhiskeyType
             AND status = 1) > 0
-            AND (SELECT COUNT(brand) FROM Whiskey WHERE brand = @brand) = 0
             AND (SELECT COUNT(idWhiskey) FROM Whiskey WHERE idWhiskey = @idWhiskey
             AND status = 1) > 0
             AND @price > 0
