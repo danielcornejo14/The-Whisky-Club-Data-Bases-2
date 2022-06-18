@@ -1,0 +1,12 @@
+<form class="container" [formGroup]="createItem">
+
+    <h1>Create New Presentation</h1>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <input matInput type="text" formControlName="description">
+    </mat-form-field>
+
+    <button mat-raised-button [mat-dialog-close]="createItem.value" cdkFocusInitial>Ok</button>
+
+</form>

@@ -16,6 +16,11 @@ import { EmployeeDashboardComponent } from './dashboard/employee-dashboard/emplo
 import { CustomerDashboardComponent } from './dashboard/customer-dashboard/customer-dashboard.component';
 import { CustomerCatalogComponent } from './dashboard/customer-dashboard/customer-catalog/customer-catalog.component';
 import { CustomerOrdersComponent } from './dashboard/customer-dashboard/customer-orders/customer-orders.component';
+import { SubscriptionComponent } from './dashboard/admin-dashboard/subscription/subscription.component';
+import { WhiskeyTypesComponent } from './dashboard/admin-dashboard/whiskey-types/whiskey-types.component';
+import { PresentationsComponent } from './dashboard/admin-dashboard/presentations/presentations.component';
+import { CurrencyComponent } from './dashboard/admin-dashboard/currency/currency.component';
+import { ComplaintsComponent } from './dashboard/admin-dashboard/complaints/complaints.component';
 
 const routes: Routes = [
   //logIn
@@ -40,7 +45,12 @@ const routes: Routes = [
             currency: CurrencyResolver
           }
       },
-      {path: 'employees', component: EmployeesComponent}
+      {path: 'employees', component: EmployeesComponent},
+      {path: 'subscriptions', component: SubscriptionComponent},
+      {path: 'whiskeyTypes', component: WhiskeyTypesComponent},
+      {path: 'presentations', component: PresentationsComponent},
+      {path: 'currency', component: CurrencyComponent},
+      {path: 'complaints', component: ComplaintsComponent}
     ]
   },
   {path: 'employee-dashboard', component: EmployeeDashboardComponent},

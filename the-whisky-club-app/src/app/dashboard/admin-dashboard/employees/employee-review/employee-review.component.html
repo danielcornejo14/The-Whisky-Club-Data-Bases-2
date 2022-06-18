@@ -1,13 +1,20 @@
-<div *ngFor="let review of this.data.reviews" class="review">
-    <p>Customer id: {{review.idCustomer}}</p>
-    <p>Comment: {{review.comment}}</p>
-    <p>evaluation: {{review.evaluation}}</p>
-    <p>date: {{review.date}}</p>
-</div>
 
-<!-- idEmployeeReview: number,
-idCustomer: number,
-idEmployee: number,
-comment: string,
-evaluation: string,
-date: string, -->
+<div class="container">
+
+    <table>
+        <tr>
+            <th></th>
+            <th>Customer ID</th>
+            <th>Comment</th>
+            <th>Evaluation</th>
+            <th>Date</th>
+        </tr>
+        <tr *ngFor="let review of this.data.reviews">
+            <td>Customer id: {{review.idCustomer}}</td>
+            <td>Comment: {{review.comment}}</td>
+            <td>evaluation: {{review.evaluation}}</td>
+            <td>date: {{review.date}}</td>
+        </tr>
+    </table>
+  </div>
+

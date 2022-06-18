@@ -19,14 +19,14 @@ export class EmployeesdbService {
   ) { }
 
 
-
   // =================
-  // ==== Update =====
+  // ==== Insert =====
   // =================
 
-    updateEmployee(employee: Employee){
-      return this.http.post(DB_URL+'/updateEmployee', employee)
-    }
+  createEmployee(employee: Employee){
+    return this.http.post(DB_URL+'/insertEmployee', employee)
+  }
+
 
   // =================
   // ==== Select =====
@@ -45,6 +45,22 @@ export class EmployeesdbService {
 
   getEmployeeType(){
     return this.http.get<EmployeeType[]>(DB_URL+'/selectEmployeeType')
+  }
+
+  // =================
+  // ==== Update =====
+  // =================
+
+  updateEmployee(employee: Employee){
+    return this.http.post(DB_URL+'/updateEmployee', employee)
+  }
+
+  // =================
+  // ==== Delete =====
+  // =================
+
+  deleteEmployee(employeeId: number){
+    return this.http.post(DB_URL+'/deleteEmployee', {"id": employeeId})
   }
 
 }

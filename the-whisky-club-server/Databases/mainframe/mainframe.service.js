@@ -13,7 +13,20 @@ module.exports = {
     insertCustomer,
     deleteWhiskey,
     verifyCustomer,
-    selectPaymentMethod
+    selectPaymentMethod,
+    selectSubscription,
+    updateSubscription,
+    deleteSubscription,
+    insertSubscription,
+    insertWhiskeyType,
+    updateWhiskeyType,
+    deleteWhiskeyType,
+    insertCurrency,
+    updateCurrency,
+    deleteCurrency,
+    insertPresentation,
+    updatePresentation,
+    deletePresentation
 }
 
 const config = {
@@ -74,6 +87,31 @@ async function insertCustomer(customer){
 
     return result.recordset
 
+}
+
+async function insertSubscription(sub){
+    await mssql.connect(config)
+
+    const result = await mssql.query(`exec insertSubscription '${sub.name}', ${sub.shoppingDiscount}, ${sub.shippingDiscount}`).catch((err) => console.log(err))
+
+    return result.recordset
+}
+
+async function insertWhiskeyType(type){
+    await mssql.connect(config)
+    console.log(type)
+    const result = await mssql.query(`exec insertWhiskeyType '${type.name}'`)
+
+}
+
+async function insertPresentation(presentation){
+    await mssql.connect(config)
+    const result = await mssql.query(`exec insertPresentation '${presentation.description}'`).catch((err)=>console.log(err))
+}
+
+async function insertCurrency(currency){
+    await mssql.connect(config)
+    const result = await mssql.query(`exec insertCurrency '${currency.name}'`).catch((err)=>console.log(err))
 }
 
 //=============================SELECT==============================
@@ -153,7 +191,15 @@ async function selectCurrency(){
 async function selectPaymentMethod(){
     await mssql.connect(config)
     const result = await mssql.query(`exec selectAllPaymentMethods`)
-    console.log(result.recordset)
+
+    return result.recordset
+}
+
+async function selectSubscription(){
+    await mssql.connect(config)
+
+    const result = await mssql.query(`exec selectSubscription`)
+
     return result.recordset
 }
 
@@ -161,7 +207,7 @@ async function selectPaymentMethod(){
 
 async function updateWhiskey(whiskey){
 
-    console.log(whiskey.price)
+    console.log(whiskey)
 
     await mssql.connect(config)
     const result = await mssql.query(`exec updateWhiskey ${whiskey.idSupplier},
@@ -179,8 +225,39 @@ async function updateWhiskey(whiskey){
     ${whiskey.special},
     ${whiskey.idWhiskey}`).catch(err => console.log(err))
 
-    return result.recordset
 
+
+}
+
+async function updateSubscription(sub){
+    await mssql.connect(config)
+
+    const result = await mssql.query(`exec updateSubscription ${sub.idSubscription},
+        '${sub.name}',
+        ${sub.shoppingDiscount},
+        ${sub.shippingDiscount}`).catch((err) => console.log(err))
+
+}
+
+async function updateWhiskeyType(type){
+    await mssql.connect(config)
+    console.log(type)
+    const result = await mssql.query(`exec updateWhiskeyType ${type.idWhiskeyType},
+        '${type.name}'`).catch((err)=> console.log(err))
+}
+
+async function updatePresentation(presentation){
+    await mssql.connect(config)
+
+    const result = await mssql.query(`exec updatePresentation ${presentation.idPresentation},
+        '${presentation.description}'`).catch((err)=>console.log(err))
+}
+
+async function updateCurrency(currency){
+    await mssql.connect(config)
+
+    const result = await mssql.query(`exec updateCurrency ${currency.idCurrency},
+        '${currency.name}'`).catch((err)=>console.log(err))
 }
 
 //=============================DELETE==============================
@@ -189,5 +266,27 @@ async function deleteWhiskey(id){
     await mssql.connect(config)
     const result = await mssql.query(`exec deleteWhiskey ${id}`).catch(err => console.log(err))
     
-    return result.recordset
+}
+
+async function deleteSubscription(id){
+    await mssql.connect(config)
+    console.log(typeof(id))
+    const result = await mssql.query(`exec deleteSubscription ${id}`).catch(err => console.log(err))
+    
+}
+
+async function deleteWhiskeyType(id){
+    await mssql.connect(config)
+    console.log(id)
+    const result = await mssql.query(`exec deleteWhiskeyType ${id}`).catch(err=>console.log(err))
+}
+
+async function deletePresentation(id){
+    await mssql.connect(config)
+    const result = await mssql.query(`exec deletePresentation ${id}`).catch((err)=>console.log(err))
+}
+
+async function deleteCurrency(id){
+    await mssql.connect(config)
+    const result = await mssql.query(`exec deleteCurrency ${id}`).catch((err)=>console.log(err))
 }

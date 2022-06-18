@@ -12,6 +12,8 @@ router.get('/selectEmployeeReview', selectEmployeeReview)
 router.get('/selectEmployeeType', selectEmployeeType)
 
 router.post('/updateEmployee', updateEmployee)
+router.post('/insertEmployee', insertEmployee)
+router.post('/deleteEmployee', deleteEmployee)
 
 module.exports = router
 
@@ -20,6 +22,9 @@ module.exports = router
 function testdb(req, res){
     employeeService.testdb(res)
 }
+
+//================SELECT================
+
 
 function selectDepartment(req, res){
     employeeService.selectDepartment(res)
@@ -38,9 +43,25 @@ function selectEmployeeType(req, res){
     employeeService.selectEmployeeType(res)
 }
 
+//================UPDATE================
+
 function updateEmployee(req, res){
     const data = req.body
     console.log(data)
     employeeService.updateEmployee(data, res)
     
+}
+
+//================INSERT================
+
+function insertEmployee(req, res){
+    const data = req.body
+    employeeService.insertEmployee(data, res)
+}
+
+//================DELETE================
+
+function deleteEmployee(req, res){
+    const data = req.body
+    employeeService.deleteEmployee(data.id, res)
 }

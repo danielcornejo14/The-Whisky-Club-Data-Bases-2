@@ -47,6 +47,21 @@ import { CustomerCatalogComponent } from './dashboard/customer-dashboard/custome
 import { CustomerOrdersComponent } from './dashboard/customer-dashboard/customer-orders/customer-orders.component';
 import { CustomerCheckoutComponent } from './dashboard/customer-dashboard/customer-catalog/customer-checkout/customer-checkout.component';
 import {MatStepperModule} from '@angular/material/stepper';
+import {MatRadioModule} from '@angular/material/radio';
+import { SubscriptionComponent } from './dashboard/admin-dashboard/subscription/subscription.component';
+import { SubscriptionCreateComponent } from './dashboard/admin-dashboard/subscription/subscription-create/subscription-create.component';
+import { SubscriptionUpdateComponent } from './dashboard/admin-dashboard/subscription/subscription-update/subscription-update.component';
+import { WhiskeyTypesComponent } from './dashboard/admin-dashboard/whiskey-types/whiskey-types.component';
+import { PresentationsComponent } from './dashboard/admin-dashboard/presentations/presentations.component';
+import { CurrencyComponent } from './dashboard/admin-dashboard/currency/currency.component';
+import { ComplaintsComponent } from './dashboard/admin-dashboard/complaints/complaints.component';
+import { TypeUpdateComponent } from './dashboard/admin-dashboard/whiskey-types/type-update/type-update.component';
+import { TypeCreateComponent } from './dashboard/admin-dashboard/whiskey-types/type-create/type-create.component';
+import { PresentationCreateComponent } from './dashboard/admin-dashboard/presentations/presentation-create/presentation-create.component';
+import { PresentationUpdateComponent } from './dashboard/admin-dashboard/presentations/presentation-update/presentation-update.component';
+import { CurrencyUpdateComponent } from './dashboard/admin-dashboard/currency/currency-update/currency-update.component';
+import { CurrencyCreateComponent } from './dashboard/admin-dashboard/currency/currency-create/currency-create.component';
+import { EmployeeCreateComponent } from './dashboard/admin-dashboard/employees/employee-create/employee-create.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +83,20 @@ import {MatStepperModule} from '@angular/material/stepper';
     CustomerCatalogComponent,
     CustomerOrdersComponent,
     CustomerCheckoutComponent,
+    SubscriptionComponent,
+    SubscriptionCreateComponent,
+    SubscriptionUpdateComponent,
+    WhiskeyTypesComponent,
+    PresentationsComponent,
+    CurrencyComponent,
+    ComplaintsComponent,
+    TypeUpdateComponent,
+    TypeCreateComponent,
+    PresentationCreateComponent,
+    PresentationUpdateComponent,
+    CurrencyUpdateComponent,
+    CurrencyCreateComponent,
+    EmployeeCreateComponent,
   ],
   imports: [
     BrowserModule,
@@ -93,7 +122,8 @@ import {MatStepperModule} from '@angular/material/stepper';
     HttpClientJsonpModule,
     MatCardModule,
     NgbModule,
-    MatStepperModule
+    MatStepperModule,
+    MatRadioModule
 
   ],
   providers: [authInterceptorProviders],

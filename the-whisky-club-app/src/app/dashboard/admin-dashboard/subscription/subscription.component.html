@@ -1,0 +1,29 @@
+<button mat-raised-button (click)="addSub()">Add</button>
+<div class="container">
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Shopping Discount</th>
+            <th>Shipping Discount</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        <tr *ngFor="let sub of subList">
+            <td>{{sub.idSubscription}}</td>
+            <td>{{sub.name}}</td>
+            <td>{{sub.shoppingDiscount}}</td>
+            <td>{{sub.shippingDiscount}}</td>
+            <td>
+                <button mat-raised-button type="button" color="primary" (click)="updateSub(sub)">Edit</button>
+
+            </td>
+            <td>
+                <button mat-mini-fab color="primary" (click)="deleteSub(sub.idSubscription)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+            </td>
+        </tr>
+    </table>
+</div>

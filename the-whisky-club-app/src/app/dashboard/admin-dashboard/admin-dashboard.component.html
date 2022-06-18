@@ -2,7 +2,7 @@
     <mat-card class="mat-elevation-z8">
         <nav mat-tab-nav-bar [tabPanel]="tabPanel">
             <a mat-tab-link *ngFor="let link of links"
-            [routerLink]="activeLink"> {{link}} </a>
+            [routerLink]="link"> {{link}} </a>
         </nav>
         <mat-tab-nav-panel #tabPanel>
             <router-outlet></router-outlet>

@@ -14,6 +14,7 @@ import {Currency} from "../../../_interfaces/Whiskey/Currency";
 import { DomSanitizer } from '@angular/platform-browser';
 import { CartService } from 'src/app/_services/cart/cart.service';
 import { CustomerCheckoutComponent } from './customer-checkout/customer-checkout.component';
+import { FormBuilder } from '@angular/forms';
 
 
 @Component({
@@ -27,7 +28,8 @@ export class CustomerCatalogComponent implements OnInit {
     private route: ActivatedRoute,
     private dialog: MatDialog,
     private sanitizer: DomSanitizer,
-    private cartService: CartService
+    private cartService: CartService,
+    private formBuilder: FormBuilder
   ) { }
 
   WhiskyList: Whisky[] = []
@@ -37,7 +39,17 @@ export class CustomerCatalogComponent implements OnInit {
   CurrencyList: Currency[] = []
   
   country = [{id: 1,name: "United States"},{id: 2,name: "Ireland"},{id:3,name: "Scotland"}]
-  countrySelected = 1
+
+
+  filter = this.formBuilder.group({
+    country: 1, // 1: Us, 2: Ireland, 3:Scotland
+    whiskeyType: [''], //idWhiskeyType
+    name: [''], // Whiskey name
+    price: [''], // Whiskey price
+    existance: false, // Show only available products
+    distanceOrder: [''], // ascendent descendent distance order
+    popularity: false // Show only popular products
+  })
 
   ngOnInit(): void {
 
@@ -68,6 +80,10 @@ export class CustomerCatalogComponent implements OnInit {
   }
 
 
+  filteredSearch(){
+    console.log(this.filter.value)
+  }
+
   addToCart(item: Whisky): void{
     this.cartService.cartList.push(item)
   }
@@ -77,7 +93,7 @@ export class CustomerCatalogComponent implements OnInit {
       width: '60%',
       height: '80%',
       data:{
-        buyFrom: this.countrySelected,
+        buyFrom: this.filter.get('country')?.value,
       }
     })
   }
