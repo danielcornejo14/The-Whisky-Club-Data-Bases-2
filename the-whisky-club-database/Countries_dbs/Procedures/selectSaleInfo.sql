@@ -123,7 +123,7 @@ BEGIN
         INSERT INTO ##SaleInfo(shippingCost, saleDiscount, subTotal, total)
         VALUES (@shippingCost, @saleDiscount, @subTotal, @total)
         --------------------------------------
-        SELECT @subTotal, @saleDiscount, @shippingCost, @total
+        SELECT @subTotal as subTotal, @saleDiscount as saleDiscount, @shippingCost as shippingCost, @total as total
     END
     ELSE
     BEGIN
