@@ -35,11 +35,11 @@ BEGIN
         -----------------------------------------------------------------------------
         --Select a random cashier (Interval between >= 1 and <=10)
         DECLARE @idCashier int
-        SET @idCashier = (SELECT FLOOR(RAND()*(10-1)+1))
+        SET @idCashier = (SELECT TOP (1) idEmployee FROM Employee ORDER BY NEWID())
         -------------------------------------------------------------------------------
         --Select a random courier (Interval between >= 1 and <=10)
         DECLARE @idCourier int
-        SET @idCourier = (SELECT FLOOR(RAND()*(10-1)+1))
+        SET @idCourier = (SELECT TOP (1) idEmployee FROM Employee ORDER BY NEWID())
         -------------------------------------------------------------------------------
         --Get the payment method id
         DECLARE @paymentMethod int
@@ -48,31 +48,7 @@ BEGIN
                               WITH (
                                 idPaymentMethod int '$.method'
                               ))
-        -------------------------------------------------------------------------------
-        DECLARE @idSubscription int
-        SET @idSubscription = (SELECT idSubscription FROM Customer WHERE idCustomer = @idCustomer)
-        DECLARE @shippingDiscount float
-        DECLARE @shoppingDiscount float
-        IF @idSubscription = 1 --Tier normal subscription
-        BEGIN
-            SET @shippingDiscount = 0
-            SET @shoppingDiscount = 0
-        END
-        ELSE IF @idSubscription = 2 --Tier short glass subscription
-        BEGIN
-            SET @shippingDiscount = 0
-            SET @shoppingDiscount = 0.05
-        END
-        ELSE IF @idSubscription = 3 --Tier gleincairn
-        BEGIN
-            SET @shippingDiscount = 0.2
-            SET @shoppingDiscount = 0.1
-        END
-        ELSE IF @idSubscription = 4 --Tier master distiller
-        BEGIN
-            SET @shippingDiscount = 1
-            SET @shoppingDiscount = 0.3
-        END
+        ------------------------------------------------------------------------------
         --Select customer location
         DECLARE @length varchar(max)
         SET @length = (SELECT lng
@@ -102,17 +78,23 @@ BEGIN
                         FROM Shop
                         ORDER BY @customerLocation.STDistance(Shop.location))
         --------------------------------------
-        --Select the distance between the customer and the closest shop.
-        DECLARE @distance float
-        SET @distance = (SELECT TOP (1) @customerLocation.STDistance(Shop.location)
-                         FROM Shop
-                         ORDER BY @customerLocation.STDistance(Shop.location))
-        --------------------------------------
-        --The shipping cost is $0.5 per Kilometer
+        --Select shipping cost
         DECLARE @shippingCost money
-        SET @shippingCost = (@distance * 0.5)
-        --The shipping discount is applied in the shipping cost.
-        SET @shippingCost = (@shippingCost - (@shippingDiscount * @shippingCost))
+        SET @shippingCost = (SELECT shippingCost FROM ##SaleInfo)
+        --------------------------------------
+        --Select saleDiscount cost
+        DECLARE @saleDiscount money
+        SET @saleDiscount = (SELECT saleDiscount FROM ##SaleInfo)
+        --------------------------------------
+        --Select subTotal cost
+        DECLARE @subTotal money
+        SET @subTotal = (SELECT subTotal FROM ##SaleInfo)
+        --------------------------------------
+        --Select total cost
+        DECLARE @total money
+        SET @total = (SELECT total FROM ##SaleInfo)
+        --------------------------------------
+        DROP TABLE ##SaleInfo
         --------------------------------------
         --The whiskeys selected ids are stored in a temporal table.
         CREATE TABLE #WhiskeysSelected(
@@ -128,23 +110,6 @@ BEGIN
                 WITH (
                     idWhiskey int '$'
                 )
-        --------------------------------------
-        --Calculate the subtotal from the whiskeys cost.
-        DECLARE @subTotal money --The subtotal is the sum of every whiskey price.
-        SET @subTotal = (SELECT SUM(price)
-                         FROM Whiskey
-                         WHERE idWhiskey
-                         IN (SELECT idWhiskey
-                             FROM #WhiskeysSelected)
-                         )
-        --------------------------------------
-        --The sale discount is calculated.
-        DECLARE @saleDiscount money
-        SET @saleDiscount = (@subTotal * @shoppingDiscount)
-        --------------------------------------
-        --The total is calculated.
-        DECLARE @total money
-        SET @total = (@subTotal - @saleDiscount + @shippingCost)
         --------------------------------------
         BEGIN TRANSACTION
             BEGIN TRY
@@ -185,7 +150,7 @@ BEGIN
                 DEALLOCATE whiskeysCursor
                 ---------------------------------------------------------
                 DROP TABLE #WhiskeysSelected
-                PRINT('Purchase registered.')
+                PRINT('Sale registered.')
                 COMMIT TRANSACTION
         END TRY
         BEGIN CATCH

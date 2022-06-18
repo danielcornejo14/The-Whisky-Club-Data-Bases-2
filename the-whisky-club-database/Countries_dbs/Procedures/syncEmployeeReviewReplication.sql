@@ -5,14 +5,14 @@ BEGIN
     BEGIN TRANSACTION
         BEGIN TRY
             DELETE FROM EmployeeReview
-            DBCC CHECKIDENT ('EmployeeReview', RESEED, 0)
-            INSERT INTO EmployeeReview (idCustomer, idEmployee,
-                                        comment, evaluation,
-                                        date, status)
-            SELECT idCustomer, idEmployee,
-                    comment, evaluation,
-                    date, status
-            FROM mysql_server...employeereview --principal
+            INSERT INTO EmployeeReview (idEmployeeReview, idCustomer,
+                                        idEmployee, comment, evaluation,
+                                        date)
+            SELECT idEmployeeReview, idCustomer,
+                   idEmployee, comment, evaluation,
+                   date
+            FROM mysql_server...employeereview --main
+            WHERE idEmployee IN (SELECT idEmployee FROM Employee)
             COMMIT TRANSACTION
         END TRY
         BEGIN CATCH

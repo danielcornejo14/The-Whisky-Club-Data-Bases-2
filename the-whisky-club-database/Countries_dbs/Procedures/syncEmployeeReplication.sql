@@ -5,16 +5,16 @@ BEGIN
     BEGIN TRANSACTION
         BEGIN TRY
             DELETE FROM Employee
-            DBCC CHECKIDENT ('Employee', RESEED, 0)
-            INSERT INTO Employee (idDepartment, idEmployeeType,
-                                  name, lastName1, lastName2,
-                                  localSalary, dollarSalary,
+            INSERT INTO Employee (idEmployee, idDepartment,
+                                  idEmployeeType, name, lastName1,
+                                  lastName2, localSalary, dollarSalary,
                                   userName, password, status)
-            SELECT idDepartment, idEmployeeType,
-                   name, lastName1, lastName2,
-                   localSalary, dollarSalary,
+            SELECT idEmployee, idDepartment,
+                   idEmployeeType, name, lastName1,
+                   lastName2, localSalary, dollarSalary,
                    userName, password, status
-            FROM mysql_server...employee --principal
+            FROM mysql_server...employee --main
+            WHERE idDepartment IN (SELECT idDepartment FROM Department)
             COMMIT TRANSACTION
         END TRY
         BEGIN CATCH

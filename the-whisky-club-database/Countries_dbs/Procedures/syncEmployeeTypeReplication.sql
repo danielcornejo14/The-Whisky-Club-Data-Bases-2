@@ -8,7 +8,7 @@ BEGIN
             DBCC CHECKIDENT ('EmployeeType', RESEED, 0)
             INSERT INTO EmployeeType (name, status)
             SELECT name, status
-            FROM mysql_server...employeetype --principal
+            FROM mysql_server...employeetype --main
             COMMIT TRANSACTION
         END TRY
         BEGIN CATCH

@@ -97,20 +97,20 @@ CREATE TABLE WhiskeyReview(
     date date NOT NULL,
     status bit NOT NULL DEFAULT 1
 )
-CREATE TABLE Department (
-    idDepartment int PRIMARY KEY IDENTITY(1,1) NOT NULL,
-    idShop int NOT NULL,
-    name varchar(64) NOT NULL,
-    status bit NOT NULL DEFAULT 1,
-    FOREIGN KEY (idShop) REFERENCES Shop(idShop)
-)
 CREATE TABLE EmployeeType (
     idEmployeeType int PRIMARY KEY IDENTITY(1,1) NOT NULL,
     name varchar(64) NOT NULL,
     status bit NOT NULL DEFAULT 1
 )
+CREATE TABLE Department (
+    idDepartment int PRIMARY KEY NOT NULL,
+    idShop int NOT NULL,
+    name varchar(64) NOT NULL,
+    status bit NOT NULL DEFAULT 1,
+    FOREIGN KEY (idShop) REFERENCES Shop(idShop)
+)
 CREATE TABLE Employee(
-    idEmployee int PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    idEmployee int PRIMARY KEY NOT NULL,
     idDepartment int NOT NULL,
     idEmployeeType int NOT NULL,
     name varchar(64) NOT NULL,
@@ -125,7 +125,7 @@ CREATE TABLE Employee(
     FOREIGN KEY (idEmployeeType) REFERENCES EmployeeType(idEmployeeType)
 )
 CREATE TABLE EmployeeReview(
-    idEmployeeReview int PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    idEmployeeReview int PRIMARY KEY NOT NULL,
     idCustomer int NOT NULL,
     idEmployee int NOT NULL,
     comment varchar(64) NOT NULL,

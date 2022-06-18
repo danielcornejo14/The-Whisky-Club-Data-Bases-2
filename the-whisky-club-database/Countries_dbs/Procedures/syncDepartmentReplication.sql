@@ -5,10 +5,10 @@ BEGIN
     BEGIN TRANSACTION
         BEGIN TRY
             DELETE FROM Department
-            DBCC CHECKIDENT ('Department', RESEED, 0)
-            INSERT INTO Department (idShop, name, status)
-            SELECT idShop, name, status
-            FROM mysql_server...department --principal
+            INSERT INTO Department(idDepartment, idShop, name, status)
+            SELECT idDepartment, idShop, name, status
+            FROM mysql_server...department --main
+            WHERE idShop IN (SELECT idShop FROM Shop)
             COMMIT TRANSACTION
         END TRY
         BEGIN CATCH
