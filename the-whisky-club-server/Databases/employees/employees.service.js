@@ -6,7 +6,9 @@ module.exports = {
   selectDepartment,
   selectEmployeeReview,
   selectEmployeeType,
-  updateEmployee
+  updateEmployee,
+  deleteEmployee,
+  insertEmployee
 }
 
 const config = {
@@ -26,6 +28,9 @@ function testdb(res){
     res.send(result[0].solution)
   })
 }
+
+//=============SELECT==============================
+
 
 function selectEmployees(res){
 
@@ -56,9 +61,40 @@ function selectEmployeeReview(res){
   })
 }
 
+//=============UPDATE==============================
+
 function updateEmployee(data, res){
-  employeedb.query(`call employees_db.updateEmployee(${data.idEmployee}, ${data.idDepartment},${data.idEmployeeType}, '${data.name}', '${data.lastName1}','${data.lastName2}', ${data.localSalary}, ${data.dollarSalary})`, (err, recordset, fields) =>{
+  employeedb.query(`call employees_db.updateEmployee(${data.idEmployee}, 
+    ${data.idDepartment},
+    ${data.idEmployeeType}, 
+    '${data.name}', 
+    '${data.lastName1}',
+    '${data.lastName2}', 
+    ${data.localSalary}, 
+    ${data.dollarSalary})`, (err, recordset, fields) =>{
     if(err)console.log(err)
-    res.send(recordset[0])
+  })
+}
+
+//=============INSERT==============================
+function insertEmployee(data, res){
+  employeedb.query(`call employees_db.insertEmployee(${data.idDepartment},
+    ${data.idEmployeeType},
+    '${data.name}',
+    '${data.lastName1}',
+    '${data.lastName2}',
+    ${data.localSalary},
+    ${data.dollarSalary},
+    '${data.username}',
+    '${data.password}')`, (err, result, fields)=>{
+      if(err)console.log(err)
+    })
+}
+
+//=============DELETE==============================
+
+function deleteEmployee(id, res){
+  employeedb.query(`call  employees_db.deleteEmployee(${id})`, (err, result, fields)=>{
+    if(err) console.log(err)
   })
 }

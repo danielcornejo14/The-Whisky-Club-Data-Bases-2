@@ -1,0 +1,12 @@
+<form class="container" [formGroup]="updateItem">
+
+    <h1>{{data.item.idCurrency}}</h1>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput type="text" formControlName="name">
+    </mat-form-field>
+
+    <button mat-raised-button [mat-dialog-close]="updateItem.value" cdkFocusInitial>Ok</button>
+
+</form>

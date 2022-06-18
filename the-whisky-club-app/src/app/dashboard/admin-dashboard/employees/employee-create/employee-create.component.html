@@ -1,0 +1,58 @@
+<form class="container" [formGroup]="createItem">
+
+    <h1>Create New Employee</h1>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Department</mat-label>
+        <mat-select formControlName="idDepartment">
+            <mat-option *ngFor="let department of data.departments" [value]="department.idDepartment">{{department.idShop}} {{department.name}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Type</mat-label>
+        <mat-select formControlName="idEmployeeType">
+            <mat-option *ngFor="let type of data.types" [value]="type.idEmployeeType">{{type.name}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput type="text" formControlName="name">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Last Name 1</mat-label>
+        <input matInput type="text" formControlName="lastName1">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Last Name 2</mat-label>
+        <input matInput type="text" formControlName="lastName2">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Local Salary</mat-label>
+        <input matInput type="number" formControlName="localSalary">
+    </mat-form-field>
+
+    
+    <mat-form-field appearance="outline">
+        <mat-label>Dollar Salary</mat-label>
+        <input matInput type="number" formControlName="dollarSalary">
+    </mat-form-field>
+
+    
+    <mat-form-field appearance="outline">
+        <mat-label>Username</mat-label>
+        <input matInput type="text" formControlName="username">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" formControlName="password">
+    </mat-form-field>
+
+    <button mat-raised-button [mat-dialog-close]="createItem.value" cdkFocusInitial>Ok</button>
+
+</form>

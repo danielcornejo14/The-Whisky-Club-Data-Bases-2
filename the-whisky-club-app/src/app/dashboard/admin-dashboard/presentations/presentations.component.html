@@ -1,0 +1,25 @@
+<button mat-raised-button (click)="addPresentation()">Add</button>
+<div class="container">
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Description</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        <tr *ngFor="let presentation of presentationList">
+            <td>{{presentation.idPresentation}}</td>
+            <td>{{presentation.description}}</td>
+            <td>
+                <button mat-raised-button type="button" color="primary" (click)="updatePresentation(presentation)">Edit</button>
+
+            </td>
+            <td>
+                <button mat-mini-fab color="primary" (click)="deletePresentation(presentation.idPresentation)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+            </td>
+        </tr>
+    </table>
+</div>

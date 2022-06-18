@@ -8,6 +8,7 @@ import {MatDialog} from "@angular/material/dialog";
 import { EmployeeUpdateComponent } from './employee-update/employee-update.component';
 import { EmployeeReview } from 'src/app/_interfaces/Employees/EmployeeReview';
 import { EmployeeReviewComponent } from './employee-review/employee-review.component';
+import { EmployeeCreateComponent } from './employee-create/employee-create.component';
 
 @Component({
   selector: 'app-employees',
@@ -47,12 +48,31 @@ export class EmployeesComponent implements OnInit {
     return filter
   }
 
+
+  addEmployee(){
+    const updateWindow = this.dialog.open(EmployeeCreateComponent, {
+      width: '35%',
+      data:{
+        departments: this.departments,
+        types: this.employeeTypes
+      }
+    })
+    updateWindow.afterClosed().subscribe((result: Employee) => {
+      if(result !== undefined){
+        this.employeeService.createEmployee(result).subscribe(res => console.log(res))
+        window.location.reload()
+      }
+    })
+  }
+
   updateEmployee(employee: Employee){
     const updateWindow = this.dialog.open(EmployeeUpdateComponent, {
       width: '35%',
       data: {
         item: employee,
-        types: this.employeeTypes
+        departments: this.departments,
+        types: this.employeeTypes,
+
       }
     })
     updateWindow.afterClosed().subscribe((result: Employee) => {
@@ -70,6 +90,11 @@ export class EmployeesComponent implements OnInit {
         reviews: this.filterReview(id)
       }
     })
+  }
+
+  deleteEmployee(employeeId: number){
+    this.employeeService.deleteEmployee(employeeId).subscribe(res => console.log(res))
+    window.location.reload()
   }
 
 }

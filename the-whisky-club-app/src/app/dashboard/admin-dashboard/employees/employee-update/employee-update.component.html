@@ -1,13 +1,48 @@
-<form [formGroup]="updateItem">
+<form class="container" [formGroup]="updateItem">
+
+    <h1>Create New Employee</h1>
+
     <mat-form-field appearance="outline">
-        <mat-label>Employee Type</mat-label>
-        <mat-select formControlName="idEmployeeType">
-          <mat-option *ngFor="let type of data.types" [value]="type.idEmployeeType">{{type.name}}</mat-option>
+        <mat-label>Department</mat-label>
+        <mat-select formControlName="idDepartment">
+            <mat-option *ngFor="let department of data.departments" [value]="department.idDepartment">{{department.idShop}} {{department.name}}</mat-option>
         </mat-select>
     </mat-form-field>
-</form>
 
-<div mat-dialog-actions>
-    <button mat-button (click)="onNoClick()">Cancel</button>
-    <button mat-button [mat-dialog-close]="updateItem.value" cdkFocusInitial>Ok</button>
-</div>
+    <mat-form-field appearance="outline">
+        <mat-label>Type</mat-label>
+        <mat-select formControlName="idEmployeeType">
+            <mat-option *ngFor="let type of data.types" [value]="type.idEmployeeType">{{type.name}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput type="text" formControlName="name">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Last Name 1</mat-label>
+        <input matInput type="text" formControlName="lastName1">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Last Name 2</mat-label>
+        <input matInput type="text" formControlName="lastName2">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Local Salary</mat-label>
+        <input matInput type="number" formControlName="localSalary">
+    </mat-form-field>
+
+    
+    <mat-form-field appearance="outline">
+        <mat-label>Dollar Salary</mat-label>
+        <input matInput type="number" formControlName="dollarSalary">
+    </mat-form-field>
+
+
+    <button mat-raised-button [mat-dialog-close]="updateItem.value" cdkFocusInitial>Ok</button>
+
+</form>

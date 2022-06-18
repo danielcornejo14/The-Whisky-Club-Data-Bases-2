@@ -1,39 +1,46 @@
-<button mat-button>Add</button>
+<button mat-raised-button (click)="addEmployee()">Add</button>
 
-<div class="employeeContainer">
-  <div class="employee">
-    <div>ID</div>
-    <div>Dptm </div>
-    <div>Type</div>
-    <div>Name</div>
-    <div>Last Name 1</div>
-    <div>Last Name 2</div>
-    <div>Local Salary</div>
-    <div>Dollar Salary</div>
-    <div style="color: white">placeholder-----</div>
-  </div>
+<div class="container">
 
-  <div *ngFor="let employee of employees" class="employee">
-
-    <div>{{employee.idEmployee}}</div>
-    <div>{{findDepartment(employee.idDepartment)?.name}}</div>
-    <div>{{findType(employee.idEmployeeType)?.name}}</div>
-    <div>Name: {{employee.name}}</div>
-    <div>Last Name 1: {{employee.lastName1}}</div>
-    <div>Last Name 2: {{employee.lastName2}}</div>
-    <div>Local Salary: {{employee.localSalary}}</div>
-    <div>Dollar Salary: {{employee.dollarSalary}}</div>
-
-
-
-    <div class="employeeControl">
-      <button mat-raised-button type="button" color="primary" (click)="updateEmployee(employee)">Edit</button>
-      <button mat-mini-fab color="primary" (click)="openReviews(employee.idEmployee)">
-        <mat-icon>reviews</mat-icon>
-      </button>
-    </div>
-
-  </div>
-
+  <table>
+      <tr>
+          <th></th>
+          <th>ID</th>
+          <th>Shop</th>
+          <th>Department</th>
+          <th>Type</th>
+          <th>Name</th>
+          <th>Last Names</th>
+          <th>Local Salary</th>
+          <th>Dollar Salary</th>
+          <th>Username</th>
+          <th>Edit</th>
+          <th>Reviews</th>
+      </tr>
+      <tr *ngFor="let employee of employees">
+          <td>
+            <button mat-icon-button color="primary" (click)="deleteEmployee(employee.idEmployee)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+          <td>{{employee.idEmployee}}</td>
+          <td>{{findDepartment(employee.idDepartment)?.idShop}}</td>
+          <td>{{findDepartment(employee.idDepartment)?.name}}</td>
+          <td>{{findType(employee.idEmployeeType)?.name}}</td>
+          <td>{{employee.name}}</td>
+          <td>{{employee.lastName1}} {{employee.lastName2}}</td>
+          <td>{{employee.localSalary}}</td>
+          <td>{{employee.dollarSalary}}</td>
+          <td>{{employee.username}}</td>
+          <td>
+            <button mat-raised-button type="button" color="primary" (click)="updateEmployee(employee)">Edit</button>
+          </td>
+          <td>
+            <button mat-mini-fab (click)="openReviews(employee.idEmployee)">
+              <mat-icon>reviews</mat-icon>
+            </button>
+          </td>
+          
+      </tr>
+  </table>
 </div>
-

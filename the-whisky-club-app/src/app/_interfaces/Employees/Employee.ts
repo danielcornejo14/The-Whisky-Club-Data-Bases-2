@@ -6,5 +6,7 @@ export interface Employee{
     lastName1: string,
     lastName2: string,
     localSalary: number,
-    dollarSalary: number
+    dollarSalary: number,
+    username: string,
+    password: string | undefined
 }
