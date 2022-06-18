@@ -42,6 +42,8 @@ BEGIN
                         BEGIN
                             BEGIN TRANSACTION
                                 BEGIN TRY
+                                    ----------------------------------------------
+                                    --The customer is updated in mainframe.
                                     UPDATE Customer
                                     SET idSubscription = @idSubscription,
                                         emailAddress = @emailAddress,
@@ -52,6 +54,8 @@ BEGIN
                                         userName = @userName,
                                         password = @passwordEncrypted
                                     WHERE idCustomer = @idCustomer
+                                    -----------------------------------------------
+                                    --The customer is updated in mainframe.
                                     UPDATE UnitedStates_db.dbo.Customer
                                     SET idSubscription = @idSubscription,
                                         emailAddress = @emailAddress,
@@ -82,6 +86,7 @@ BEGIN
                                         userName = @userName,
                                         password = @passwordEncrypted
                                     WHERE idCustomer = @idCustomer
+                                    -----------------------------------------------
                                     COMMIT TRANSACTION
                                     --Customer replication to Employees_db
                                     DECLARE @locationPoint varchar(64)

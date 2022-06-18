@@ -1,19 +1,20 @@
 CREATE PROCEDURE insertCustomer @emailAddress varchar(64), @name varchar(64),
                                 @lastName1 varchar(64), @lastName2 varchar(64),
                                 @location geometry, @userName varchar(64),
-                                @password varchar(64)
+                                @password varchar(64), @idSubscription int
 WITH ENCRYPTION
 AS
 BEGIN
     IF @emailAddress IS NOT NULL AND @name IS NOT NULL
         AND @lastName1 IS NOT NULL AND @lastName2 IS NOT NULL
         AND @location IS NOT NULL AND @userName IS NOT NULL
-        AND @password IS NOT NULL
+        AND @password IS NOT NULL AND @idSubscription IS NOT NULL
     BEGIN
         IF ((SELECT COUNT(userName) FROM Customer WHERE userName = @userName) = 0
             AND (SELECT COUNT(location) FROM Customer WHERE (location.STEquals(@location) = 1)) = 0
             AND (SELECT COUNT(*) FROM Customer WHERE name = @name AND lastName1 = @lastName1
-                AND lastName2 = @lastName2) = 0)
+                AND lastName2 = @lastName2) = 0
+            AND (SELECT COUNT(@idSubscription) FROM Subscription WHERE idSubscription = @idSubscription) > 0)
         BEGIN
             IF @emailAddress LIKE '%_@__%.__%'
             BEGIN
@@ -36,43 +37,47 @@ BEGIN
                         BEGIN
                             BEGIN TRANSACTION
                                 BEGIN TRY
-                                    --By default, the subscription is 1 when the customer is inserted.
+                                    -----------------------------------------------------------------
+                                    --The customer is inserted in the Mainframe.
                                     INSERT INTO Customer(idSubscription, emailAddress,
                                                          name, lastName1, lastName2, location,
                                                          userName, password)
-                                    VALUES (1 , @emailAddress,
+                                    VALUES (@idSubscription, @emailAddress,
                                             @name, @lastName1, @lastName2, @location,
                                             @userName, @passwordEncrypted)
+                                    -----------------------------------------------------------------
+                                    --The customer is inserted in the countries dbs.
                                     INSERT INTO UnitedStates_db.dbo.Customer(idSubscription,
                                                                              emailAddress, name,
                                                                              lastName1, lastName2,
                                                                              location, userName,
                                                                              password)
-                                    VALUES (1 , @emailAddress,
+                                    VALUES (@idSubscription, @emailAddress,
                                             @name, @lastName1, @lastName2, @location,
                                             @userName, @passwordEncrypted)
                                     INSERT INTO Scotland_db.dbo.Customer(idSubscription,
-                                         emailAddress, name,
-                                         lastName1, lastName2,
-                                         location, userName,
-                                         password)
-                                    VALUES (1 , @emailAddress,
+                                                                         emailAddress, name,
+                                                                         lastName1, lastName2,
+                                                                         location, userName,
+                                                                         password)
+                                    VALUES (@idSubscription, @emailAddress,
                                             @name, @lastName1, @lastName2, @location,
                                             @userName, @passwordEncrypted)
                                     INSERT INTO Ireland_db.dbo.Customer(idSubscription,
-                                         emailAddress, name,
-                                         lastName1, lastName2,
-                                         location, userName,
-                                         password)
-                                    VALUES (1 , @emailAddress,
+                                                                         emailAddress, name,
+                                                                         lastName1, lastName2,
+                                                                         location, userName,
+                                                                         password)
+                                    VALUES (@idSubscription, @emailAddress,
                                             @name, @lastName1, @lastName2, @location,
                                             @userName, @passwordEncrypted)
+                                    -----------------------------------------------------------------
                                     COMMIT TRANSACTION
                                     --Customer replication to Employees_db
                                     DECLARE @locationPoint varchar(64)
                                     SET @locationPoint = @location.STAsText()
                                     DECLARE @idSubscriptionString varchar(5)
-                                    SET @idSubscriptionString = CAST(1 as varchar(5))
+                                    SET @idSubscriptionString = CAST(@idSubscription as varchar(5))
                                     EXEC('CALL replicateInsertCustomer(' +
                                         @idSubscriptionString + ', ''' +
                                         @emailAddress + ''', ' + '''' +
@@ -121,7 +126,7 @@ BEGIN
         ELSE
         BEGIN
 			SELECT '06' AS CODE, 'The customer userName, the location and the customer name cannot be repeated.' AS MESSAGE
-            RAISERROR('The customer userName, the location and the customer name cannot be repeated.', 11, 1)
+            RAISERROR('The customer userName, the location and the customer name cannot be repeated and the id must exist.', 11, 1)
         END
     END
     ELSE
