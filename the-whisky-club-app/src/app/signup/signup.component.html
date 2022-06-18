@@ -28,6 +28,16 @@
             <ng-template matStepLabel>Suscription</ng-template>
             
             <!-- TODO Apply subscription  -->
+
+            <form [formGroup]="customerSignup">
+                <mat-form-field appearance="outline">
+
+                    <mat-select formControlName="subscription">
+                        <mat-option *ngFor="let sub of subList" [value]="sub.idSubscription">{{sub.name}}</mat-option>
+                    </mat-select>
+
+                </mat-form-field>
+            </form>
             
             <div>
                 <button mat-button matStepperNext>Next</button>
@@ -67,18 +77,12 @@
                     <mat-label>Password</mat-label>
                     <input matInput type="password" placeholder="New Password" formControlName="password" minlength="8" maxlength="64" (click)="openAlert()">
                 </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Email</mat-label>
+                    <input matInput type="email" placeholder="Ex: adan18@fakemail.com" formControlName="email">
+                </mat-form-field>
         
-                <div class="personalInfo">
-                    <mat-form-field appearance="outline">
-                        <mat-label>Email</mat-label>
-                        <input matInput type="email" placeholder="Ex: adan18@fakemail.com" formControlName="email">
-                    </mat-form-field>
-        
-                    <mat-form-field appearance="outline">
-                        <mat-label>Phone Number</mat-label>
-                        <input matInput type="number" placeholder="Ex: 876541234" minlength="8" maxlength="8" formControlName="phone">
-                    </mat-form-field>
-                </div>
                 
                 <button mat-raised-button type="submit" color="primary">Sign Up</button>
         

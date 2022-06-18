@@ -74,18 +74,17 @@ async function insertWhiskey(whiskey){
 
 async function insertCustomer(customer){
     await mssql.connect(config)
-
+    console.log(customer) 
     const result = await mssql.query(`declare @location geometry;
-    set @location = geometry::Point(${customer.location.lng}, ${customer.location.lat}, 0)
+    set @location = geometry::Point(${customer.location.lng}, ${customer.location.lat}, 0);
     exec insertCustomer '${customer.email}',
     '${customer.name}',
     '${customer.lastName1}',
     '${customer.lastName2}',
     @location,
     '${customer.username}',
-    '${customer.password}'`).catch(err => console.log(err))
-
-    return result.recordset
+    '${customer.password}',
+    ${customer.subscription}`).catch(err => console.log(err))
 
 }
 
@@ -190,7 +189,7 @@ async function selectCurrency(){
 
 async function selectPaymentMethod(){
     await mssql.connect(config)
-    const result = await mssql.query(`exec selectAllPaymentMethods`)
+    const result = await mssql.query(`exec selectPaymentMethod`)
 
     return result.recordset
 }
@@ -202,6 +201,11 @@ async function selectSubscription(){
 
     return result.recordset
 }
+
+// async function selectTotal(data){
+//     await mssql.connect(config)
+//     const result = 
+// }
 
 //=============================UPDATE==============================
 
