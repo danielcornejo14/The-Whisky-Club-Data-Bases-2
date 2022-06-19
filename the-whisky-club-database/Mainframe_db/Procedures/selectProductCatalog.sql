@@ -15,14 +15,11 @@ BEGIN
 			WxS.idShop,
 			WxS.idWhiskey,
 			WxS.status,
-			SUM(currentStock),
-			AVG(evaluation),
+			SUM(currentStock) AS totalStock,
+			evaluationAverage = (SELECT ISNULL(AVG(evaluation), 0) FROM WhiskeyReview WR WHERE WR.idWhiskey = WxS.idWhiskey),
 			@customerLocation.STDistance(S.location)
 		FROM Ireland_db.dbo.WhiskeyXShop WxS
 		INNER JOIN Ireland_db.dbo.Shop S ON S.idShop = WxS.idShop
-		INNER JOIN WhiskeyReview WR ON WR.idWhiskey = WxS.idWhiskey
-		WHERE 
-			(@countryId IS NULL OR @countryId = 0 OR S.idCountry = @countryId)
 		GROUP BY
 			idWhiskeyXShop,
 			WxS.idShop,
@@ -36,7 +33,7 @@ BEGIN
 			WxS.idWhiskey,
 			WxS.status,
 			SUM(currentStock),
-			AVG(evaluation),
+			evaluationAverage = (SELECT ISNULL(AVG(evaluation), 0) FROM WhiskeyReview WR WHERE WR.idWhiskey = WxS.idWhiskey),
 			@customerLocation.STDistance(S.location)
 		FROM Scotland_db.dbo.WhiskeyXShop WxS
 		INNER JOIN Scotland_db.dbo.Shop S ON S.idShop = WxS.idShop
@@ -56,7 +53,7 @@ BEGIN
 			WxS.idWhiskey,
 			WxS.status,
 			SUM(currentStock),
-			AVG(evaluation),
+			evaluationAverage = (SELECT ISNULL(AVG(evaluation), 0) FROM WhiskeyReview WR WHERE WR.idWhiskey = WxS.idWhiskey),
 			@customerLocation.STDistance(S.location)
 		FROM UnitedStates_db.dbo.WhiskeyXShop WxS
 		INNER JOIN UnitedStates_db.dbo.Shop S ON S.idShop = WxS.idShop
@@ -77,7 +74,7 @@ BEGIN
 		W.status,
 		totalStock = (SELECT ISNULL(SUM(totalStock), 0) FROM WhiskeyCatalogCTE WC WHERE WC.idWhiskey = W.idWhiskey),
 		whiskeyEvaluation = (SELECT ISNULL(AVG(averageEvaluation), 0) FROM WhiskeyCatalogCTE WC WHERE WC.idWhiskey = W.idWhiskey),
-		distance = (SELECT ISNULL(distance, 0) FROM WhiskeyCatalogCTE WC WHERE WC.idWhiskey = W.idWhiskey)
+		distance = (SELECT ISNULL(MIN(distance), 0) FROM WhiskeyCatalogCTE WC WHERE WC.idWhiskey = W.idWhiskey)
     FROM Whiskey W
 	--Filter by whiskey type
 	WHERE
@@ -92,3 +89,7 @@ END;
 GO
 
 EXEC productCatalogReport NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL;
+EXEC productCatalogReport 0, 0, NULL, 0, 0, 0, 0, 0;
+DECLARE @point20 geometry;
+SET @point20 = geometry::STPointFromText('POINT(9.852041 -83.937624)', 0);
+EXEC productCatalogReport NULL, NULL, @point20, NULL, NULL, NULL, NULL, NULL;
