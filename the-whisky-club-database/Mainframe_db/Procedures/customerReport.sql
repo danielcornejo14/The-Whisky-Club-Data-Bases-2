@@ -12,7 +12,7 @@ BEGIN
 		INNER JOIN Ireland_db.dbo.Shop S on WxC.idShop = S.idShop
 		WHERE
 			(@countryId IS NULL OR S.idCountry = @countryId) AND
-			(@beforeDate IS NULL OR @beforeDate < WxC.date) AND
+			(@beforeDate IS NULL OR @beforeDate > WxC.date) AND
 			(@afterDate IS NULL OR WxC.date > @afterDate)
 		GROUP BY idCustomer, date, WxC.idShop
 		UNION
@@ -21,7 +21,7 @@ BEGIN
 		INNER JOIN Scotland_db.dbo.Shop S on WxC.idShop = S.idShop
 		WHERE
 			(@countryId IS NULL OR S.idCountry = @countryId) AND
-			(@beforeDate IS NULL OR @beforeDate < WxC.date) AND
+			(@beforeDate IS NULL OR @beforeDate > WxC.date) AND
 			(@afterDate IS NULL OR WxC.date > @afterDate)
 		GROUP BY idCustomer, date, WxC.idShop
 		UNION
@@ -30,7 +30,7 @@ BEGIN
 		INNER JOIN UnitedStates_db.dbo.Shop S on WxC.idShop = S.idShop
 		WHERE
 			(@countryId IS NULL OR S.idCountry = @countryId) AND
-			(@beforeDate IS NULL OR @beforeDate < WxC.date) AND
+			(@beforeDate IS NULL OR @beforeDate > WxC.date) AND
 			(@afterDate IS NULL OR WxC.date > @afterDate)
 		GROUP BY idCustomer, date, WxC.idShop
 	)
@@ -57,3 +57,6 @@ GO
 exec customersReport null,null,null,null;
 exec customersReport NULL,null,null, 1;
 exec customersReport null,null,null, 2;
+exec customersReport null,null,null, 3;
+exec customersReport null,'2022-06-20',null, null;
+exec customersReport null,null,'2022-06-18', null;

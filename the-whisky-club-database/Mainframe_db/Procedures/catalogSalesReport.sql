@@ -13,7 +13,7 @@ BEGIN
 			idWhiskeyXShop,
 			WxSh.idShop,
 			WxSh.idWhiskey,
-			totalStock = (SELECT ISNULL(SUM(WxSh.currentStock), 0) FROM Ireland_db.dbo.Shop S WHERE S.idShop = WxSh.idShop AND (@countryId IS NULL OR S.idCountry = @countryId)),
+			totalStock = ISNULL((SELECT ISNULL(SUM(WxSh.currentStock), 0) FROM Ireland_db.dbo.Shop S WHERE S.idShop = WxSh.idShop AND (@countryId IS NULL OR S.idCountry = @countryId)),0),
 			totalSales = (
 				SELECT ISNULL(SUM(quantity), 0)
 				FROM Ireland_db.dbo.WhiskeyXSale WxSa
@@ -35,7 +35,7 @@ BEGIN
 			idWhiskeyXShop,
 			WxSh.idShop,
 			WxSh.idWhiskey,
-			totalStock = (SELECT ISNULL(SUM(WxSh.currentStock), 0) FROM Scotland_db.dbo.Shop S WHERE S.idShop = WxSh.idShop AND (@countryId IS NULL OR S.idCountry = @countryId)),
+			totalStock = ISNULL((SELECT ISNULL(SUM(WxSh.currentStock), 0) FROM Scotland_db.dbo.Shop S WHERE S.idShop = WxSh.idShop AND (@countryId IS NULL OR S.idCountry = @countryId)),0),
 			totalSales = (
 				SELECT ISNULL(SUM(quantity), 0)
 				FROM Scotland_db.dbo.WhiskeyXSale WxSa
@@ -57,7 +57,7 @@ BEGIN
 			idWhiskeyXShop,
 			WxSh.idShop,
 			WxSh.idWhiskey,
-			totalStock = (SELECT ISNULL(SUM(WxSh.currentStock), 0) FROM UnitedStates_db.dbo.Shop S WHERE S.idShop = WxSh.idShop AND (@countryId IS NULL OR S.idCountry = @countryId)),
+			totalStock = ISNULL((SELECT SUM(WxSh.currentStock) FROM UnitedStates_db.dbo.Shop S WHERE S.idShop = WxSh.idShop AND (@countryId IS NULL OR S.idCountry = @countryId)), 0),
 			totalSales = (
 				SELECT ISNULL(SUM(quantity), 0)
 				FROM UnitedStates_db.dbo.WhiskeyXSale WxSa
@@ -92,3 +92,10 @@ END;
 GO
 
 EXEC productCatalogSalesReport NULL, NULL, NULL, NULL;
+EXEC productCatalogSalesReport 2, NULL, NULL, NULL;
+EXEC productCatalogSalesReport NULL, 1, NULL, NULL;
+EXEC productCatalogSalesReport NULL, 2, NULL, NULL; --devuelve total stock as null en lugar de 0
+EXEC productCatalogSalesReport NULL, 3, NULL, NULL;
+EXEC productCatalogSalesReport NULL, NULL, '2022-06-18', NULL;
+EXEC productCatalogSalesReport NULL, NULL, '2022-06-19', NULL;
+EXEC productCatalogSalesReport NULL, NULL, NULL, '2022-06-20';

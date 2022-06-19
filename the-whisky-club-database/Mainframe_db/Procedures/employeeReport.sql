@@ -43,6 +43,7 @@ EXEC employeesReport 'Financial', NULL, NULL, NULL, NULL, NULL, NULL;
 EXEC employeesReport NULL, 1, 3, NULL, NULL, NULL, NULL;
 EXEC employeesReport NULL, NULL, 3, NULL, NULL, NULL, NULL;
 EXEC employeesReport NULL, NULL, 1, NULL, NULL, NULL, NULL;
+EXEC employeesReport NULL, 1, NULL, NULL, NULL, NULL, NULL;
 EXEC employeesReport NULL, NULL, NULL, 1000, 2000, NULL, NULL;
 EXEC employeesReport NULL, NULL, NULL, 1000, NULL, NULL, NULL;
 EXEC employeesReport NULL, NULL, NULL, NULL, 3000, NULL, NULL;
