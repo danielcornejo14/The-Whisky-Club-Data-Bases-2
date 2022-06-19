@@ -130,14 +130,14 @@ BEGIN
         END
         --------------------------------------
         --Create temporal table Sale info
-        CREATE TABLE ##SaleInfo(
+        CREATE TABLE #SaleInfo(
             shippingCost money,
             saleDiscount money,
             subTotal money,
             total money
         )
         --Insert values in Sale info
-        INSERT INTO ##SaleInfo(shippingCost, saleDiscount, subTotal, total)
+        INSERT INTO #SaleInfo(shippingCost, saleDiscount, subTotal, total)
         VALUES (@shippingCost, @saleDiscount, @subTotal, @total)
         --------------------------------------
         SELECT @subTotal as subTotal, @saleDiscount as saleDiscount, @shippingCost as shippingCost, @total as total
