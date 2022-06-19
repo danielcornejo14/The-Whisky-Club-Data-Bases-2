@@ -1,12 +1,12 @@
 --this will consult on the employees with the given filters
 CREATE OR ALTER PROCEDURE employeesReport
-	@departmentName varchar(50),
-	@minimumAverageScore int,
-	@maximumAverageScore int,
-	@minimumLocalSalary float,
-	@maximumLocalSalary float,
-	@minimumDollarSalary float,
-	@maximumDollarSalary float
+	@departmentName varchar(50) = NULL,
+	@minimumAverageScore int = NULL,
+	@maximumAverageScore int = NULL,
+	@minimumLocalSalary float = NULL,
+	@maximumLocalSalary float = NULL,
+	@minimumDollarSalary float = NULL,
+	@maximumDollarSalary float = NULL
 WITH ENCRYPTION
 AS
 BEGIN
