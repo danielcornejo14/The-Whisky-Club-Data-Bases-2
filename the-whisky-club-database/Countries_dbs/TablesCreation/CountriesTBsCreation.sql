@@ -38,7 +38,6 @@ CREATE TABLE Whiskey(
     idWhiskey int PRIMARY KEY IDENTITY (1,1),
     idSupplier int NOT NULL FOREIGN KEY REFERENCES Supplier(idSupplier),
     idPresentation int NOT NULL FOREIGN KEY REFERENCES Presentation(idPresentation),
-    idCurrency int NOT NULL FOREIGN KEY REFERENCES Currency(idCurrency),
     idWhiskeyType int NOT NULL FOREIGN KEY REFERENCES WhiskeyType(idWhiskeyType),
     brand varchar(64) NOT NULL,
     price money NOT NULL,
@@ -104,15 +103,14 @@ CREATE TABLE EmployeeType (
 )
 CREATE TABLE Department (
     idDepartment int PRIMARY KEY NOT NULL,
-    idShop int NOT NULL,
     name varchar(64) NOT NULL,
-    status bit NOT NULL DEFAULT 1,
-    FOREIGN KEY (idShop) REFERENCES Shop(idShop)
+    status bit NOT NULL DEFAULT 1
 )
 CREATE TABLE Employee(
     idEmployee int PRIMARY KEY NOT NULL,
     idDepartment int NOT NULL,
     idEmployeeType int NOT NULL,
+    idShop int NOT NULL,
     name varchar(64) NOT NULL,
     lastName1 varchar(64) NOT NULL,
     lastName2 varchar(64) NOT NULL,
@@ -122,7 +120,8 @@ CREATE TABLE Employee(
     password binary(64) NOT NULL,
     status bit NOT NULL DEFAULT 1,
     FOREIGN KEY (idDepartment) REFERENCES Department(idDepartment),
-    FOREIGN KEY (idEmployeeType) REFERENCES EmployeeType(idEmployeeType)
+    FOREIGN KEY (idEmployeeType) REFERENCES EmployeeType(idEmployeeType),
+    FOREIGN KEY (idShop) REFERENCES Shop(idShop)
 )
 CREATE TABLE EmployeeReview(
     idEmployeeReview int PRIMARY KEY NOT NULL,

@@ -1,7 +1,7 @@
-CREATE PROCEDURE insertSale @pIdShop int, @pIdPaymentMethod int,
-                            @pIdCashier int, @pIdCourier int,
-                            @pIdCustomer int, @pShippingCost money,
-                            @json varchar(max)
+CREATE OR ALTER PROCEDURE insertSale @pIdShop int, @pIdPaymentMethod int,
+                                     @pIdCashier int, @pIdCourier int,
+                                     @pIdCustomer int, @pShippingCost money,
+                                     @json varchar(max)
 WITH ENCRYPTION
 AS
 BEGIN
@@ -161,3 +161,6 @@ BEGIN
     END
 END
 GO
+
+EXEC insertSale @pIdShop = 1, @pIdPaymentMethod = 1, @pIdCashier = 1, @pIdCourier = 2,
+                @pIdCustomer = 1, @pShippingCost = 0.5, @json = N'{"cart": [1]}'

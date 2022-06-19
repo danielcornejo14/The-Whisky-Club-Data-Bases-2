@@ -1,5 +1,5 @@
 CREATE OR ALTER PROCEDURE updateWhiskey @idSupplier int, @idPresentation int,
-                                        @idCurrency int, @idWhiskeyType int,
+                                        @idWhiskeyType int,
                                         @brand varchar(64), @price money,
                                         @alcoholContent float, @productionDate date,
                                         @dueDate date, @availability bit,
@@ -12,15 +12,13 @@ BEGIN
         AND @brand IS NOT NULL AND @price IS NOT NULL
         AND @alcoholContent IS NOT NULL AND @millilitersQuantity IS NOT NULL
         AND @productionDate IS NOT NULL AND @dueDate IS NOT NULL
-        AND @availability IS NOT NULL AND @idCurrency IS NOT NULL
+        AND @availability IS NOT NULL
         AND @idWhiskeyType IS NOT NULL AND @whiskeyAging IS NOT NULL
         AND @special IS NOT NULL AND @idWhiskey IS NOT NULL
     BEGIN
         IF ((SELECT COUNT(idSupplier) FROM Supplier WHERE idSupplier = @idSupplier
             AND status = 1) > 0
             AND (SELECT COUNT(idPresentation) FROM Presentation WHERE idPresentation = @idPresentation
-            AND status = 1) > 0
-            AND (SELECT COUNT(idCurrency) FROM Currency WHERE idCurrency = @idCurrency
             AND status = 1) > 0
             AND (SELECT COUNT(idWhiskeyType) FROM WhiskeyType WHERE idWhiskeyType = @idWhiskeyType
             AND status = 1) > 0
@@ -38,7 +36,6 @@ BEGIN
                     UPDATE Whiskey
                     SET idSupplier = @idSupplier,
                         idPresentation = @idPresentation,
-                        idCurrency = @idCurrency,
                         idWhiskeyType = @idWhiskeyType,
                         brand = @brand,
                         price = @price,
@@ -53,7 +50,6 @@ BEGIN
                     UPDATE UnitedStates_db.dbo.Whiskey
                     SET idSupplier = @idSupplier,
                         idPresentation = @idPresentation,
-                        idCurrency = @idCurrency,
                         idWhiskeyType = @idWhiskeyType,
                         brand = @brand,
                         price = @price,
@@ -68,7 +64,6 @@ BEGIN
                     UPDATE Scotland_db.dbo.Whiskey
                     SET idSupplier = @idSupplier,
                         idPresentation = @idPresentation,
-                        idCurrency = @idCurrency,
                         idWhiskeyType = @idWhiskeyType,
                         brand = @brand,
                         price = @price,
@@ -83,7 +78,6 @@ BEGIN
                     UPDATE Ireland_db.dbo.Whiskey
                     SET idSupplier = @idSupplier,
                         idPresentation = @idPresentation,
-                        idCurrency = @idCurrency,
                         idWhiskeyType = @idWhiskeyType,
                         brand = @brand,
                         price = @price,

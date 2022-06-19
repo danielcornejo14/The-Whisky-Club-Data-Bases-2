@@ -1,4 +1,4 @@
-CREATE PROCEDURE processSale @json varchar(max)
+CREATE OR ALTER PROCEDURE processSale @json varchar(max)
 WITH ENCRYPTION
 AS
 BEGIN

@@ -8,7 +8,7 @@ BEGIN
         IF (SELECT COUNT(idDepartment) FROM department WHERE idDepartment = pIdDepartment
             AND status = 1) > 0
         THEN
-            SELECT idDepartment, idShop, name, status
+            SELECT idDepartment, name, status
             FROM department;
         ELSE
             SELECT 'The id must exist.';

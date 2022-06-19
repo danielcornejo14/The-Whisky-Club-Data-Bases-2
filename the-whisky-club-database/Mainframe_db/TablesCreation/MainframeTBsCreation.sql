@@ -59,7 +59,6 @@ CREATE TABLE Whiskey(
     idWhiskey int PRIMARY KEY IDENTITY (1,1),
     idSupplier int NOT NULL FOREIGN KEY REFERENCES Supplier(idSupplier),
     idPresentation int NOT NULL FOREIGN KEY REFERENCES Presentation(idPresentation),
-    idCurrency int NOT NULL FOREIGN KEY REFERENCES Currency(idCurrency),
     idWhiskeyType int NOT NULL FOREIGN KEY REFERENCES WhiskeyType(idWhiskeyType),
     brand varchar(64) NOT NULL,
     price money NOT NULL,

@@ -9,8 +9,9 @@ BEGIN
             AND status = 1) > 0
         THEN
             SELECT idEmployee, idDepartment, idEmployeeType,
-                   name, lastName1, lastName2, localSalary,
-                   dollarSalary, userName, password, status
+                   idShop, name, lastName1, lastName2,
+                   localSalary, dollarSalary, userName,
+                   password, status
             FROM Employee;
         ELSE
             SELECT 'The id must exist.';
