@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE syncEmployeeReplication
+CREATE PROCEDURE syncEmployeeReplication
 WITH ENCRYPTION
 AS
 BEGIN

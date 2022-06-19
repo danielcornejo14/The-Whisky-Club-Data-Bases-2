@@ -111,6 +111,25 @@ BEGIN
                     idWhiskey int '$'
                 )
         --------------------------------------
+        DECLARE @idCurrency int
+        SET @idCurrency = (SELECT TOP(1) Country.idCurrency
+                           FROM Shop
+                           INNER JOIN Country ON Shop.idCountry = Country.idCountry)
+        --------------------------------------------------------------------------
+        IF @idCurrency = 1--It is Euro
+        BEGIN
+            SET @shippingCost = 0.95 * @shippingCost
+            SET @saleDiscount = 0.95 * @saleDiscount
+            SET @subTotal = 0.95 * @subTotal
+            SET @total = 0.95 * @total
+        END
+        ELSE IF @idCurrency = 3 --It is pound
+        BEGIN
+            SET @shippingCost = 0.82 * @shippingCost
+            SET @saleDiscount = 0.82 * @saleDiscount
+            SET @subTotal = 0.82 * @subTotal
+            SET @total = 0.82 * @total
+        END
         BEGIN TRANSACTION
             BEGIN TRY
                 --Insert the sale

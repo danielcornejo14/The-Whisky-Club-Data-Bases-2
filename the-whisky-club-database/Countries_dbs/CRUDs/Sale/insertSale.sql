@@ -68,7 +68,37 @@ BEGIN
                 SET @shoppingDiscount = 0.3
             END
             --------------------------------------------------------------------------
-            --The final shopping cost is set.
+            --Select customer location
+            DECLARE @length varchar(max)
+            SET @length = (SELECT lng
+                           FROM OPENJSON(@json)
+                           WITH (
+                            lng varchar(max) '$.location.lng'
+                          ))
+            DECLARE @latitude varchar(max)
+            SET @latitude = (SELECT lat
+                             FROM OPENJSON(@json)
+                             WITH (
+                             lat varchar(max) '$.location.lat'
+                            ))
+            DECLARE @customerLocation geometry
+            IF @length IS NULL AND @latitude IS NULL
+            BEGIN
+                SET @customerLocation = (SELECT location FROM Customer WHERE idCustomer = @pIdCustomer)
+            END
+            ELSE
+            BEGIN
+                SET @customerLocation = geometry::STPointFromText('POINT (' + @length + ' ' + @latitude + ')', 0)
+            END
+            --------------------------------------
+            --Select the distance between the customer and the closest shop.
+            DECLARE @distance float
+            SET @distance = (SELECT location.STDistance(@customerLocation) FROM Shop WHERE idShop = @pIdShop)
+            --------------------------------------------------------------------------
+            --The shipping cost is $0.5 per Kilometer
+            SET @pShippingCost = (@distance * 0.5)
+            --------------------------------------------------------------------------
+            --The shipping discount is applied in the shipping cost.
             SET @pShippingCost = (@pShippingCost - (@shippingDiscount * @pShippingCost))
             --------------------------------------------------------------------------
             --The whiskeys ids are extracted from the json.
@@ -103,7 +133,26 @@ BEGIN
             DECLARE @total money
             SET @total = (@subTotal - @saleDiscount + @pShippingCost)
             --------------------------------------------------------------------------
-             BEGIN TRANSACTION
+            DECLARE @idCurrency int
+            SET @idCurrency = (SELECT TOP(1) Country.idCurrency
+                               FROM Shop
+                               INNER JOIN Country ON Shop.idCountry = Country.idCountry)
+            --------------------------------------------------------------------------
+            IF @idCurrency = 1--It is Euro
+            BEGIN
+                SET @pShippingCost = 0.95 * @pShippingCost
+                SET @saleDiscount = 0.95 * @saleDiscount
+                SET @subTotal = 0.95 * @subTotal
+                SET @total = 0.95 * @total
+            END
+            ELSE IF @idCurrency = 3 --It is pound
+            BEGIN
+                SET @pShippingCost = 0.82 * @pShippingCost
+                SET @saleDiscount = 0.82 * @saleDiscount
+                SET @subTotal = 0.82 * @subTotal
+                SET @total = 0.82 * @total
+            END
+            BEGIN TRANSACTION
                 BEGIN TRY
                     --Insert the sale
                     INSERT INTO Sale(idPaymentMethod, idCashier, idCourier,
@@ -162,5 +211,26 @@ BEGIN
 END
 GO
 
+EXEC insertSale @pIdShop = 7, @pIdPaymentMethod = 1, @pIdCashier = 130, @pIdCourier = 132,
+                @pIdCustomer = 1, @pShippingCost = 0.5, @json = N'{
+                                                                    "cart": [1],
+                                                                    "location": { "lng": -83.90977363897592, "lat": 9.855527734806278 }
+                                                                }
+                                                                '
 EXEC insertSale @pIdShop = 1, @pIdPaymentMethod = 1, @pIdCashier = 1, @pIdCourier = 2,
-                @pIdCustomer = 1, @pShippingCost = 0.5, @json = N'{"cart": [1]}'
+                @pIdCustomer = 1, @pShippingCost = 0.5, @json = N'{
+                                                                    "cart": [1],
+                                                                    "location": { "lng": -83.90977363897592, "lat": 9.855527734806278 }
+                                                                }
+
+                                                                '
+EXEC insertSale @pIdShop = 4, @pIdPaymentMethod = 1, @pIdCashier = 61, @pIdCourier = 62,
+                @pIdCustomer = 1, @pShippingCost = 0.5, @json = N'{
+                                                                    "cart": [1],
+                                                                    "location": { "lng": -83.90977363897592, "lat": 9.855527734806278 }
+                                                                }
+
+                                                                '
+DBCC CHECKIDENT ('Whiskey',RESEED ,10)
+DBCC CHECKIDENT ('Sale',RESEED ,0)
+DBCC CHECKIDENT ('WhiskeyXSale',RESEED ,0)

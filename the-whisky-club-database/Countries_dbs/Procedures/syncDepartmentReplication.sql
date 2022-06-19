@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE syncDepartmentReplication
+CREATE PROCEDURE syncDepartmentReplication
 WITH ENCRYPTION
 AS
 BEGIN
