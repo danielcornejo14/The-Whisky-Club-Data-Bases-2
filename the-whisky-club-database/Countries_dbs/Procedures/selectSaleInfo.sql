@@ -97,12 +97,9 @@ BEGIN
         --------------------------------------
         --Calculate the subtotal from the whiskeys cost.
         DECLARE @subTotal money --The subtotal is the sum of every whiskey price.
-        SET @subTotal = (SELECT SUM(price)
-                         FROM Whiskey
-                         WHERE idWhiskey
-                         IN (SELECT idWhiskey
-                             FROM #WhiskeysSelected)
-                         )
+        SET @subTotal =(SELECT sum(Whiskey.price)
+                        FROM #WhiskeysSelected
+						INNER JOIN Whiskey ON #WhiskeysSelected.idWhiskey = Whiskey.idWhiskey)
         --------------------------------------
         --The sale discount is calculated.
         DECLARE @saleDiscount money
