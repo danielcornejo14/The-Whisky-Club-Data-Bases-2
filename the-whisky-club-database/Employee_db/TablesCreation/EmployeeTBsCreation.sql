@@ -74,6 +74,8 @@ CREATE TABLE EmployeeReview(
     comment varchar(64) NOT NULL,
     evaluation int NOT NULL,
     date date NOT NULL,
+    resolved bit NOT NULL,
+    administratorComment varchar(200) NOT NULL,
     status bit NOT NULL DEFAULT 1,
     FOREIGN KEY (idCustomer) REFERENCES Customer(idCustomer),
     FOREIGN KEY (idEmployee) REFERENCES Employee(idEmployee)
