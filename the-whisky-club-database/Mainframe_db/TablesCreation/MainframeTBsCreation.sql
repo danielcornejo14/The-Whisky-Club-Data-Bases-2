@@ -65,7 +65,6 @@ CREATE TABLE Whiskey(
     alcoholContent float NOT NULL,
     productionDate date NOT NULL,
     dueDate date NOT NULL,
-    availability bit NOT NULL, --0 is not available and 1 is available.
     millilitersQuantity float NOT NULL,
     whiskeyAging int NOT NULL, --It is measured in years.
     special bit NOT NULL, --0 indicates that is not a special whiskey and 1 when it is.

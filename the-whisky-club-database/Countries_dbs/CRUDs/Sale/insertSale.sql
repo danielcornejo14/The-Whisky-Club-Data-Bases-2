@@ -185,6 +185,16 @@ BEGIN
                         WHERE idWhiskey = @currentIdWhiskey AND
                               idShop = @pIdShop
                         -----------------------------------------------------
+                        IF (SELECT currentStock
+                            FROM WhiskeyXShop
+                            WHERE idWhiskey = @currentIdWhiskey AND
+                                  idShop = @pIdShop) = 0
+                        BEGIN
+                            UPDATE WhiskeyXShop
+                            SET availability = 0
+                            WHERE idWhiskey = @currentIdWhiskey AND
+                                  idShop = @pIdShop
+                        END
                         FETCH NEXT FROM whiskeysCursor INTO @currentIdWhiskey
                     END
                     CLOSE whiskeysCursor
@@ -217,9 +227,9 @@ EXEC insertSale @pIdShop = 7, @pIdPaymentMethod = 1, @pIdCashier = 130, @pIdCour
                                                                     "location": { "lng": -83.90977363897592, "lat": 9.855527734806278 }
                                                                 }
                                                                 '
-EXEC insertSale @pIdShop = 1, @pIdPaymentMethod = 1, @pIdCashier = 1, @pIdCourier = 2,
+EXEC insertSale @pIdShop = 2, @pIdPaymentMethod = 1, @pIdCashier = 1, @pIdCourier = 2,
                 @pIdCustomer = 1, @pShippingCost = 0.5, @json = N'{
-                                                                    "cart": [1],
+                                                                    "cart": [2],
                                                                     "location": { "lng": -83.90977363897592, "lat": 9.855527734806278 }
                                                                 }
 

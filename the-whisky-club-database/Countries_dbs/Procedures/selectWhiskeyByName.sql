@@ -6,20 +6,15 @@ BEGIN
     BEGIN
         IF (SELECT COUNT(brand) FROM Whiskey WHERE brand = @brand) > 0
         BEGIN
-            SELECT Whiskey.idWhiskey, S.name AS Supplier,
-                   P.description AS Presentation,
-                   WT.name AS WhiskeyType, brand, price,
-                   alcoholContent, productionDate, dueDate,
-                   availability, millilitersQuantity,
-                   whiskeyAging, special, Whiskey.status
+            SELECT Whiskey.idWhiskey, Whiskey.idSupplier,
+                   Whiskey.idPresentation, Whiskey.idWhiskeyType,
+                   brand, price, alcoholContent,
+                   productionDate, dueDate,
+                   millilitersQuantity, whiskeyAging,
+                   special, Whiskey.status
             FROM Whiskey
             INNER JOIN WhiskeyXShop WXS ON Whiskey.idWhiskey = WXS.idWhiskey
-            INNER JOIN Supplier S ON Whiskey.idSupplier = S.idSupplier
-            INNER JOIN Presentation P ON P.idPresentation = Whiskey.idPresentation
-            INNER JOIN WhiskeyType WT ON Whiskey.idWhiskeyType = WT.idWhiskeyType
-            WHERE WXS.status = 1
-                  AND WXS.currentStock > 0
-                  AND Whiskey.brand = @brand
+            WHERE WXS.status = 1 AND Whiskey.brand = @brand AND WXS.currentStock > 0
         END
         ELSE
         BEGIN

@@ -2,7 +2,7 @@ CREATE OR ALTER PROCEDURE updateWhiskey @idSupplier int, @idPresentation int,
                                         @idWhiskeyType int,
                                         @brand varchar(64), @price money,
                                         @alcoholContent float, @productionDate date,
-                                        @dueDate date, @availability bit,
+                                        @dueDate date,
                                         @millilitersQuantity float, @whiskeyAging int,
                                         @special bit, @idWhiskey int
 WITH ENCRYPTION
@@ -12,7 +12,6 @@ BEGIN
         AND @brand IS NOT NULL AND @price IS NOT NULL
         AND @alcoholContent IS NOT NULL AND @millilitersQuantity IS NOT NULL
         AND @productionDate IS NOT NULL AND @dueDate IS NOT NULL
-        AND @availability IS NOT NULL
         AND @idWhiskeyType IS NOT NULL AND @whiskeyAging IS NOT NULL
         AND @special IS NOT NULL AND @idWhiskey IS NOT NULL
     BEGIN
@@ -42,7 +41,6 @@ BEGIN
                         alcoholContent = @alcoholContent,
                         productionDate = @productionDate,
                         dueDate = @dueDate,
-                        availability = @availability,
                         millilitersQuantity = @millilitersQuantity,
                         whiskeyAging = @whiskeyAging,
                         special = @special
@@ -56,7 +54,6 @@ BEGIN
                         alcoholContent = @alcoholContent,
                         productionDate = @productionDate,
                         dueDate = @dueDate,
-                        availability = @availability,
                         millilitersQuantity = @millilitersQuantity,
                         whiskeyAging = @whiskeyAging,
                         special = @special
@@ -70,7 +67,6 @@ BEGIN
                         alcoholContent = @alcoholContent,
                         productionDate = @productionDate,
                         dueDate = @dueDate,
-                        availability = @availability,
                         millilitersQuantity = @millilitersQuantity,
                         whiskeyAging = @whiskeyAging,
                         special = @special
@@ -84,7 +80,6 @@ BEGIN
                         alcoholContent = @alcoholContent,
                         productionDate = @productionDate,
                         dueDate = @dueDate,
-                        availability = @availability,
                         millilitersQuantity = @millilitersQuantity,
                         whiskeyAging = @whiskeyAging,
                         special = @special

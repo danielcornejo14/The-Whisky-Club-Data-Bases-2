@@ -61,6 +61,7 @@ CREATE TABLE WhiskeyXShop (
     idShop int NOT NULL FOREIGN KEY REFERENCES Shop(idShop),
     idWhiskey int NOT NULL FOREIGN KEY REFERENCES Whiskey(idWhiskey),
     currentStock int NOT NULL,
+    availability bit NOT NULL, --0 is not available and 1 is available.
     status bit NOT NULL DEFAULT 1
 )
 CREATE TABLE PaymentMethod(
