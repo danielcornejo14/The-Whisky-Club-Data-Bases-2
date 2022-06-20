@@ -1,4 +1,4 @@
-CREATE PROCEDURE syncEmployeeReviewReplication
+CREATE OR ALTER PROCEDURE syncEmployeeReviewReplication
 WITH ENCRYPTION
 AS
 BEGIN
@@ -13,6 +13,8 @@ BEGIN
                      OR B.comment != A.comment
                      OR B.evaluation != A.evaluation
                      OR B.date != A.date
+                     OR B.resolved != A.resolved
+                     OR B.administratorComment != A.administratorComment
                      OR B.status != A.status) > 0
             BEGIN
                 UPDATE EmployeeReview
@@ -36,6 +38,14 @@ BEGIN
                             FROM mysql_server...employeereview A
                             WHERE EmployeeReview.idEmployeeReview = A.idEmployeeReview)
                 UPDATE EmployeeReview
+                SET resolved = (SELECT A.resolved
+                                FROM mysql_server...employeereview A
+                                WHERE EmployeeReview.idEmployeeReview = A.idEmployeeReview)
+                UPDATE EmployeeReview
+                SET administratorComment = (SELECT A.administratorComment
+                                             FROM mysql_server...employeereview A
+                                             WHERE EmployeeReview.idEmployeeReview = A.idEmployeeReview)
+                UPDATE EmployeeReview
                 SET status = (SELECT A.status
                               FROM mysql_server...employeereview A
                               WHERE EmployeeReview.idEmployeeReview = A.idEmployeeReview)
@@ -49,9 +59,12 @@ BEGIN
             BEGIN
                 --The new registers are inserted.
                 INSERT INTO EmployeeReview (idEmployeeReview, idCustomer,
-                                            idEmployee, comment, evaluation, date)
+                                            idEmployee, comment, evaluation,
+                                            date, resolved, administratorComment,
+                                            status)
                 SELECT A.idEmployeeReview, A.idCustomer,
-                       A.idEmployee, A.comment, A.evaluation, A.date
+                       A.idEmployee, A.comment, A.evaluation, A.date,
+                       A.resolved, A.administratorComment, A.status
                 FROM mysql_server...employeereview A
                 LEFT JOIN EmployeeReview B
                 ON A.idEmployeeReview = B.idEmployeeReview

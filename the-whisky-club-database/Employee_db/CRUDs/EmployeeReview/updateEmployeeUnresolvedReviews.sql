@@ -12,7 +12,8 @@ BEGIN
 			SELECT 'An unresolved review must be selected';
 		ELSE
 			UPDATE employeereview
-			SET resolved = 1, administratorComment = pNewComment
+			SET resolved = 1,
+			    administratorComment = pNewComment
 			WHERE idEmployeeReview = pIdEmployeeReview;
 			SELECT 'Review updated successfully';
 			COMMIT;
