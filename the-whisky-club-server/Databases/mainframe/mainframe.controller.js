@@ -30,6 +30,10 @@ router.post('/insertCurrency', insertCurrency)
 router.post('/updateCurrency', updateCurrency)
 router.post('/deleteCurrency', deleteCurrency)
 
+router.post('/queryCustomerReport', queryCustomerReport)
+router.post('/queryEmployeeReport', queryEmployeeReport)
+router.post('/querySalesReport', querySalesReport)
+
 module.exports = router
 
 async function testdb(req, res){
@@ -71,63 +75,63 @@ async function insertCurrency(req, res){
 //===================================SELECT=============================
 
 async function selectWhiskey(req, res){
-    const recordset = await mainframeService.selectWhisky()
+    const recordset = await mainframeService.selectWhisky() 
     res.send(recordset)
 }
 async function selectPresentation(req,res){
-    const recordset = await mainframeService.selectPresentation()
+    const recordset = await mainframeService.selectPresentation() 
     res.send(recordset)
 }
 
 async function selectWhiskeyType(req,res){
-    const recordset = await mainframeService.selectWhiskeyType()
+    const recordset = await mainframeService.selectWhiskeyType() 
     res.send(recordset)
 }
 
 async function selectSupplier(req,res){
-    const recordset = await mainframeService.selectSupplier()
+    const recordset = await mainframeService.selectSupplier() 
     res.send(recordset)
 }
 
 async function selectCurrency(req, res){
-    const recordset = await  mainframeService.selectCurrency()
+    const recordset = await  mainframeService.selectCurrency() 
     res.send(recordset)
 }
 
 async function selectPaymentMethod(req, res){
-    const recordset = await mainframeService.selectPaymentMethod()
+    const recordset = await mainframeService.selectPaymentMethod() 
     res.send(recordset)
 }
 
 async function selectSubscription(req, res){
-    const recordset = await mainframeService.selectSubscription()
+    const recordset = await mainframeService.selectSubscription() 
     res.send(recordset)
 }
 
 //===================================UPDATE=============================
 async function updateWhiskey(req, res){
     const data = req.body
-    const result = await mainframeService.updateWhiskey(data)
+    const result = await mainframeService.updateWhiskey(data).then((conn)=>conn.close())
 }
 
 async function updateSubscription(req, res){
     const data = req.body
-    const result = await mainframeService.updateSubscription(data)
+    await mainframeService.updateSubscription(data).then((conn)=>conn.close())
 }
 
 async function updateWhiskeyType(req, res){
     const data = req.body
-    const result = await mainframeService.updateWhiskeyType(data)
+    await mainframeService.updateWhiskeyType(data)
 }
 
 async function updatePresentation(req, res){
     const data = req.body
-    const result = await mainframeService.updatePresentation(data)
+    await mainframeService.updatePresentation(data)
 }
 
 async function updateCurrency(req, res){
     const data = req.body
-    const result = await mainframeService.updateCurrency(data)
+    await mainframeService.updateCurrency(data)
 }
 
 //===================================DELETE=============================
@@ -154,4 +158,24 @@ async function deletePresentation(req, res){
 async function deleteCurrency(req, res){
     const data = req.body
     await mainframeService.deleteCurrency(data.id)
+}
+
+//=============================REPORTS==============================
+
+async function queryCustomerReport(req, res){
+    const data = req.body
+    const result = await mainframeService.queryCustomerReport(data)
+    res.send(result)
+}
+
+async function queryEmployeeReport(req, res){
+    const data = req.body
+    const result = await mainframeService.queryEmployeeReport(data)
+    res.send(result)
+}
+
+async function querySalesReport(req, res){
+    const data = req.body
+    const result = await mainframeService.querySalesReport(data)
+    res.send(result)
 }

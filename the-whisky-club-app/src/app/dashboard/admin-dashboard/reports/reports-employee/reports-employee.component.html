@@ -1,0 +1,71 @@
+<div class="container">
+    <table class="data">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Department</th>
+            <th>Local Salary</th>
+            <th>Dollar Salary</th>
+            <th>Status</th>
+            <th>Evaluation Avarage</th>
+        </tr>
+        <tr *ngFor="let report of reportList">
+            <td>{{report.idEmployee}}</td>
+            <td>{{report.employeeName}}</td>
+            <td>{{findDepartment(report.idDepartment)?.name}}</td>
+            <td>{{report.localSalary}}</td>
+            <td>{{report.dollarSalary}}</td>
+            <td>{{report.status===true? 'Active': 'Deleted'}}</td>
+            <td>{{report.evaluationAverage}}</td>
+        </tr>
+    </table>
+
+    <form class="filter" [formGroup]="filter">
+        
+        <mat-form-field appearance="outline">
+            <mat-label>Department</mat-label>
+            <mat-select formControlName="departmentName">
+                <mat-option *ngFor="let dept of deptList" [value]="dept.name">{{dept.name}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Minimum Score</mat-label>
+            <input matInput type="number" min="0" max="5" formControlName="minimumAverageScore">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Maximum Score</mat-label>
+            <input matInput type="number" min="0" max="5" formControlName="maximumAverageScore">
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline">
+            <mat-label>Minimum Local Salary</mat-label>
+            <input matInput type="number" min="0" max="5" formControlName="minimumLocalSalary">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Maximum Local Salary</mat-label>
+            <input matInput type="number" min="0" max="5" formControlName="maximumLocalSalary">
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline">
+            <mat-label>Minimum Dollar Salary</mat-label>
+            <input matInput type="number" min="0" max="5" formControlName="minimumDollarSalary">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Maximum Dollar Salary</mat-label>
+            <input matInput type="number" min="0" max="5" formControlName="maximumDollarSalary">
+        </mat-form-field>
+
+
+        <button mat-raised-button (click)="clearFilter()">Clear</button>
+        <button mat-raised-button color="primary" (click)="applyFilter()">Apply</button>
+
+
+
+    </form>
+</div>

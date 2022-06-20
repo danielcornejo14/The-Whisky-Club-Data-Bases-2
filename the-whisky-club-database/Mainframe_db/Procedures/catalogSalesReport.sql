@@ -1,5 +1,8 @@
 --this will consult on the existences of whiskeys with the given filters
-CREATE OR ALTER PROCEDURE productCatalogSalesReport @idWhiskeyType int, @countryId int, @beforeDate date, @afterDate date
+CREATE OR ALTER PROCEDURE productCatalogSalesReport @idWhiskeyType int = NULL,
+@countryId int = NULL,
+@beforeDate date = NULL,
+@afterDate date = NULL
 WITH ENCRYPTION
 AS
 BEGIN
@@ -94,7 +97,7 @@ GO
 EXEC productCatalogSalesReport NULL, NULL, NULL, NULL;
 EXEC productCatalogSalesReport 2, NULL, NULL, NULL;
 EXEC productCatalogSalesReport NULL, 1, NULL, NULL;
-EXEC productCatalogSalesReport NULL, 2, NULL, NULL; --devuelve total stock as null en lugar de 0
+EXEC productCatalogSalesReport NULL, 2, NULL, NULL;
 EXEC productCatalogSalesReport NULL, 3, NULL, NULL;
 EXEC productCatalogSalesReport NULL, NULL, '2022-06-18', NULL;
 EXEC productCatalogSalesReport NULL, NULL, '2022-06-19', NULL;

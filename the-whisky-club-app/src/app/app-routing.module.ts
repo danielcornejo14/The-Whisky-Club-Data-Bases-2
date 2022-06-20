@@ -21,6 +21,10 @@ import { WhiskeyTypesComponent } from './dashboard/admin-dashboard/whiskey-types
 import { PresentationsComponent } from './dashboard/admin-dashboard/presentations/presentations.component';
 import { CurrencyComponent } from './dashboard/admin-dashboard/currency/currency.component';
 import { ComplaintsComponent } from './dashboard/admin-dashboard/complaints/complaints.component';
+import { ReportsComponent } from './dashboard/admin-dashboard/reports/reports.component';
+import { ReportsEmployeeComponent } from './dashboard/admin-dashboard/reports/reports-employee/reports-employee.component';
+import { ReportsCustomerComponent } from './dashboard/admin-dashboard/reports/reports-customer/reports-customer.component';
+import { ReportsSalesComponent } from './dashboard/admin-dashboard/reports/reports-sales/reports-sales.component';
 
 const routes: Routes = [
   //logIn
@@ -50,7 +54,12 @@ const routes: Routes = [
       {path: 'whiskeyTypes', component: WhiskeyTypesComponent},
       {path: 'presentations', component: PresentationsComponent},
       {path: 'currency', component: CurrencyComponent},
-      {path: 'complaints', component: ComplaintsComponent}
+      {path: 'complaints', component: ComplaintsComponent},
+      {path: 'reports', component: ReportsComponent, children: [
+        {path: 'employeeReports', component: ReportsEmployeeComponent},
+        {path: 'customerReports', component: ReportsCustomerComponent},
+        {path: 'salesReports', component: ReportsSalesComponent}
+      ]}
     ]
   },
   {path: 'employee-dashboard', component: EmployeeDashboardComponent},

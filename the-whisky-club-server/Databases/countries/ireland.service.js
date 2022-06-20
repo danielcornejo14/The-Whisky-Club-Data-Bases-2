@@ -17,16 +17,16 @@ const config = {
 }
 
 async function selectTotal(order){
-
-    console.log(order)
-
+    mssql.close()
+    
     await mssql.connect(config)
-    let result;
-    if(order.location.lat == undefined){
-        result = await mssql.query(``).catch((err)=> console.log(err))
+    try{
+        const result = await mssql.query(`exec selectSaleInfo '${order}'`)
+        mssql.close()
+        return result.recordset[0]
     }
-    else{
-        result = await mssql.query(``).catch((err)=> console.log(err))
+    catch(err){
+        console.log(err) 
     }
 }
 

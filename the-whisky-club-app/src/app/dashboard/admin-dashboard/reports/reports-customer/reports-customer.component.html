@@ -1,0 +1,61 @@
+<div class="container">
+    <table class="data">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Suscription</th>
+            <th>Sales Total</th>
+            <th>Shipping Total</th>
+        </tr>
+        <tr *ngFor="let report of reportList">
+            <td>{{report.idCustomer}}</td>
+            <td>{{report.name}}</td>
+            <td>{{report.status===true? 'Active': 'Deleted'}}</td>
+            <td>{{report.subscription}}</td>
+            <td>{{report.salesTotal}}</td>
+            <td>{{report.totalShippingCost}}</td>
+        </tr>
+    </table>
+
+    <form class="filter" [formGroup]="filter">
+        
+        <mat-form-field appearance="outline">
+            <mat-label>Subscription</mat-label>
+            <mat-select formControlName="idSubscription">
+                <mat-option *ngFor="let sub of subList" [value]="sub.idSubscription">{{sub.name}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Before Date</mat-label>
+            <input matInput [matDatepicker]="beforeDatepicker" formControlName="beforeDate">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="beforeDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #beforeDatepicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>After Date</mat-label>
+            <input matInput [matDatepicker]="afterDatepicker" formControlName="afterDate">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="afterDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #afterDatepicker></mat-datepicker>
+          </mat-form-field>
+            
+
+        <mat-form-field appearance="outline">
+            <mat-label>Country</mat-label>
+            <mat-select formControlName="idCountry">
+                <mat-option *ngFor="let country of countrys" [value]="country.id">{{country.name}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+
+        <button mat-raised-button (click)="clearFilter()">Clear</button>
+        <button mat-raised-button color="primary" (click)="applyFilter()">Apply</button>
+
+
+
+    </form>
+</div>

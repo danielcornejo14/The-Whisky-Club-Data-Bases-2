@@ -62,6 +62,12 @@ import { PresentationUpdateComponent } from './dashboard/admin-dashboard/present
 import { CurrencyUpdateComponent } from './dashboard/admin-dashboard/currency/currency-update/currency-update.component';
 import { CurrencyCreateComponent } from './dashboard/admin-dashboard/currency/currency-create/currency-create.component';
 import { EmployeeCreateComponent } from './dashboard/admin-dashboard/employees/employee-create/employee-create.component';
+import { ReportsComponent } from './dashboard/admin-dashboard/reports/reports.component';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import { ReportsCustomerComponent } from './dashboard/admin-dashboard/reports/reports-customer/reports-customer.component';
+import { ReportsEmployeeComponent } from './dashboard/admin-dashboard/reports/reports-employee/reports-employee.component';
+import { ReportsSalesComponent } from './dashboard/admin-dashboard/reports/reports-sales/reports-sales.component';
+
 
 @NgModule({
   declarations: [
@@ -97,6 +103,10 @@ import { EmployeeCreateComponent } from './dashboard/admin-dashboard/employees/e
     CurrencyUpdateComponent,
     CurrencyCreateComponent,
     EmployeeCreateComponent,
+    ReportsComponent,
+    ReportsCustomerComponent,
+    ReportsEmployeeComponent,
+    ReportsSalesComponent,
   ],
   imports: [
     BrowserModule,
@@ -123,7 +133,8 @@ import { EmployeeCreateComponent } from './dashboard/admin-dashboard/employees/e
     MatCardModule,
     NgbModule,
     MatStepperModule,
-    MatRadioModule
+    MatRadioModule,
+    MatSidenavModule
 
   ],
   providers: [authInterceptorProviders],

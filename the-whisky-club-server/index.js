@@ -15,7 +15,7 @@ app.use('/ir-db', require('./Databases/countries/ireland.controller'))
 app.use('/sc-db', require('./Databases/countries/scotland.controller'))
 app.use('/employee-db', require('./Databases/employees/employees.controller'))
 
-app.get('/', (req,res)=>{
+app.get('/', (req,res)=>{ 
     res.json({message: "this is on codespaces"})
 })
 

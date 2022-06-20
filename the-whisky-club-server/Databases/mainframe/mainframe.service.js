@@ -26,7 +26,10 @@ module.exports = {
     deleteCurrency,
     insertPresentation,
     updatePresentation,
-    deletePresentation
+    deletePresentation,
+    queryCustomerReport,
+    queryEmployeeReport,
+    querySalesReport
 }
 
 const config = {
@@ -44,6 +47,7 @@ const config = {
 async function testdb(){
     await mssql.connect(config) 
     const result = await mssql.query(`select * from Customer`)
+
     return result.recordset
 }
 
@@ -69,6 +73,7 @@ async function insertWhiskey(whiskey){
     ${whiskey.whiskeyAging},
     ${whiskey.special}`).catch(err => console.log(err))
 
+
     return result.recordset
 }
 
@@ -86,6 +91,8 @@ async function insertCustomer(customer){
     '${customer.password}',
     ${customer.subscription}`).catch(err => console.log(err))
 
+
+
 }
 
 async function insertSubscription(sub){
@@ -93,7 +100,8 @@ async function insertSubscription(sub){
 
     const result = await mssql.query(`exec insertSubscription '${sub.name}', ${sub.shoppingDiscount}, ${sub.shippingDiscount}`).catch((err) => console.log(err))
 
-    return result.recordset
+
+
 }
 
 async function insertWhiskeyType(type){
@@ -106,11 +114,13 @@ async function insertWhiskeyType(type){
 async function insertPresentation(presentation){
     await mssql.connect(config)
     const result = await mssql.query(`exec insertPresentation '${presentation.description}'`).catch((err)=>console.log(err))
+
 }
 
 async function insertCurrency(currency){
     await mssql.connect(config)
     const result = await mssql.query(`exec insertCurrency '${currency.name}'`).catch((err)=>console.log(err))
+
 }
 
 //=============================SELECT==============================
@@ -119,7 +129,8 @@ async function insertCurrency(currency){
 async function verifyAdmin(username, password){
     await mssql.connect(config)
     const result = await mssql.query(`exec validateAdministrator '${username}', '${password}'`)
-    console.log(result.recordset)
+
+
 
     if(result.recordset[0].message === '00'){
         return true
@@ -132,16 +143,21 @@ async function verifyAdmin(username, password){
 async function verifyCustomer(username, password){
     await mssql.connect(config)
     const result = await mssql.query(`exec validateCustomer '${username}', '${password}'`)
+    
     if(result.recordset[0].message === '00'){
+
         return true
     }
     else if(result.recordset[0].message ===  '01'){
+
         return false
     }
 }
 
-async function  selectWhisky(){
-    await mssql.connect(config)
+async function selectWhisky(){
+
+    const conn = await mssql.connect(config)
+
     const result = await mssql.query(`exec selectWhiskey`)
 
     for(let i = 0; i < result.recordset.length; i++){
@@ -156,7 +172,8 @@ async function  selectWhisky(){
     }
     
 
-    return result.recordset
+    return result.recordset 
+    
 }
 
 async function selectPresentation(){
@@ -204,7 +221,7 @@ async function selectSubscription(){
 
 // async function selectTotal(data){
 //     await mssql.connect(config)
-//     const result = 
+//     const result =  
 // }
 
 //=============================UPDATE==============================
@@ -241,6 +258,8 @@ async function updateSubscription(sub){
         ${sub.shoppingDiscount},
         ${sub.shippingDiscount}`).catch((err) => console.log(err))
 
+
+
 }
 
 async function updateWhiskeyType(type){
@@ -248,6 +267,8 @@ async function updateWhiskeyType(type){
     console.log(type)
     const result = await mssql.query(`exec updateWhiskeyType ${type.idWhiskeyType},
         '${type.name}'`).catch((err)=> console.log(err))
+
+
 }
 
 async function updatePresentation(presentation){
@@ -255,6 +276,8 @@ async function updatePresentation(presentation){
 
     const result = await mssql.query(`exec updatePresentation ${presentation.idPresentation},
         '${presentation.description}'`).catch((err)=>console.log(err))
+
+
 }
 
 async function updateCurrency(currency){
@@ -262,6 +285,8 @@ async function updateCurrency(currency){
 
     const result = await mssql.query(`exec updateCurrency ${currency.idCurrency},
         '${currency.name}'`).catch((err)=>console.log(err))
+
+
 }
 
 //=============================DELETE==============================
@@ -269,20 +294,21 @@ async function updateCurrency(currency){
 async function deleteWhiskey(id){
     await mssql.connect(config)
     const result = await mssql.query(`exec deleteWhiskey ${id}`).catch(err => console.log(err))
-    
+
 }
 
 async function deleteSubscription(id){
     await mssql.connect(config)
     console.log(typeof(id))
     const result = await mssql.query(`exec deleteSubscription ${id}`).catch(err => console.log(err))
-    
+
 }
 
 async function deleteWhiskeyType(id){
     await mssql.connect(config)
     console.log(id)
     const result = await mssql.query(`exec deleteWhiskeyType ${id}`).catch(err=>console.log(err))
+
 }
 
 async function deletePresentation(id){
@@ -293,4 +319,61 @@ async function deletePresentation(id){
 async function deleteCurrency(id){
     await mssql.connect(config)
     const result = await mssql.query(`exec deleteCurrency ${id}`).catch((err)=>console.log(err))
+
+}
+
+
+//=============================REPORTS==============================
+
+async function queryCustomerReport(filter){
+    await mssql.connect(config)
+
+    if(filter.beforeDate !== null){
+        filter.beforeDate = "'"+filter.beforeDate+"'"
+    }
+
+    if(filter.afterDate !== null){
+        filter.afterDate = "'"+filter.afterDate+"'"
+    }
+    console.log(filter)
+
+    const result = await mssql.query(`exec customersReport ${filter.idSubscription},${filter.beforeDate},${filter.afterDate},${filter.idCountry}`).catch(err => console.log(err))
+    return result.recordset
+}
+
+async function queryEmployeeReport(filter){
+    await mssql.connect(config)
+
+    if(filter.departmentName !== null){
+        filter.departmentName = "'"+filter.departmentName+"'"
+    }
+
+    console.log(filter)
+
+    const result = await mssql.query(`exec employeesReport 
+    ${filter.departmentName},
+    ${filter.minimumAverageScore},
+    ${filter.maximumAverageScore},
+    ${filter.minimumLocalSalary},
+    ${filter.maximumLocalSalary},
+    ${filter.minimumDollarSalary},
+    ${filter.maximumDollarSalary}`).catch(err => console.log(err))
+    return result.recordset
+}
+
+async function querySalesReport(filter){
+    await mssql.connect(config)
+    console.log(filter)
+
+    if(filter.beforeDate !== null){
+        filter.beforeDate = "'"+filter.beforeDate+"'"
+    }
+
+    if(filter.afterDate !== null){
+        filter.afterDate = "'"+filter.afterDate+"'"
+    }
+    
+    const result = await mssql.query(`exec productCatalogSalesReport ${filter.idWhiskeyType},${filter.countryId},${filter.beforeDate},${filter.afterDate}`).catch(err => console.log(err))
+    console.log(result.recordset)
+    return result.recordset
 }

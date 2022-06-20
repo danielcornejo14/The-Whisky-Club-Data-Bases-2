@@ -8,13 +8,14 @@ module.exports = {
 }
 
 async function authAdmin(username, password) {
-    const response = await mainframeService.verifyAdmin(username, password)
+    const response = await mainframeService.verifyAdmin(username, password).catch(err => console.log(err))
     console.log(response) 
     return response
 }
 
 async function authCustomer(username, password){
-    const response = await mainframeService.verifyCustomer(username, password)
+    const response = await mainframeService.verifyCustomer(username, password).catch(err => console.log(err))
     console.log(response)
     return response
 }
+ 

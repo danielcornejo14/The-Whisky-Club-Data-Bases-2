@@ -1,4 +1,4 @@
-<mat-stepper [linear]="true" >
+<mat-stepper [linear]="false" >
     <mat-step>
         <ng-template matStepLabel>Cart</ng-template>
         <div class="container">
@@ -48,10 +48,11 @@
                 </google-map>
             </div>
     
-            <div>
-                <button mat-button (click)="saveLocation()">Save Location</button>
-                <button mat-button matStepperNext (click)="getTotal()">Next</button>
-            </div>
+
+            <button mat-button (click)="saveLocation()">Save Location</button>
+
+            <button mat-raised-button color="primary" matStepperNext (click)="getTotal()">Next</button>
+
         </div>
     </mat-step>
 
@@ -60,23 +61,24 @@
         <div class="wrapper">
 
             <div class="info">
-                <span>price</span>
-                <span>price</span>
-                <span>price</span>
+                <div>Sub Total: {{saleInfo.subTotal}}</div>
+                <div>Discount: {{saleInfo.saleDiscount}}</div>
+                <div>Shipping: {{saleInfo.shippingCost}}</div>
+                <div>Total: {{saleInfo.total}} {{saleInfo.currenyName}}s</div>
             </div>
         
 
-            <div class="controls">
+            
 
-                <mat-form-field appearance="outline">
-                    <mat-label>Payment Method</mat-label>
-                    <mat-select [(value)]="selectedMethod">
-                        <mat-option *ngFor="let method of this.paymentMethods" [value]="method.idPaymentMethod" >{{method.name}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Payment Method</mat-label>
+                <mat-select [(value)]="selectedMethod">
+                    <mat-option *ngFor="let method of this.paymentMethods" [value]="method.idPaymentMethod" >{{method.name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
 
-                <button mat-raised-button color="primary" (click)="checkOut()">Buy</button>
-            </div>
+            <button mat-raised-button color="primary" (click)="checkOut()">Buy</button>
+           
     
         </div>
     </mat-step>
