@@ -1,5 +1,8 @@
 --this will consult on the existences of whiskeys with the given filters
-CREATE OR ALTER PROCEDURE productCatalogSalesReport @idWhiskeyType int, @countryId int, @beforeDate date, @afterDate date
+CREATE OR ALTER PROCEDURE productCatalogSalesReport @idWhiskeyType int = NULL,
+@countryId int = NULL,
+@beforeDate date = NULL,
+@afterDate date = NULL
 WITH ENCRYPTION
 AS
 BEGIN
