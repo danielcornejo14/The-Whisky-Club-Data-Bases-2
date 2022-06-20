@@ -1,13 +1,13 @@
-CREATE PROCEDURE filterWhiskeys @userName varchar(64), @idWhiskeyType int,
-                                @brand varchar(64), @maxPrice money, @availability int,
-                                @order int, @popularity bit
+CREATE OR ALTER PROCEDURE filterWhiskeys @userName varchar(64), @idWhiskeyType int,
+                                         @brand varchar(64), @maxPrice money, @availability bit,
+                                         @order int, @popularity bit
 WITH ENCRYPTION
 AS
 BEGIN
     DECLARE @location geometry
     IF @availability = 1
     BEGIN
-        SELECT Whiskey.idWhiskey, Whiskey.idSupplier,
+        SELECT DISTINCT Whiskey.idWhiskey, Whiskey.idSupplier,
                Whiskey.idPresentation, Whiskey.idWhiskeyType,
                brand, price, alcoholContent,
                productionDate, dueDate,
@@ -21,7 +21,7 @@ BEGIN
     ELSE IF @userName != '' AND @order = 0
     BEGIN
         SET @location = (SELECT location FROM Customer WHERE userName = @userName)
-        SELECT Whiskey.idWhiskey, Whiskey.idSupplier,
+        SELECT DISTINCT Whiskey.idWhiskey, Whiskey.idSupplier,
                Whiskey.idPresentation, Whiskey.idWhiskeyType,
                brand, price, alcoholContent,
                productionDate, dueDate,
@@ -37,7 +37,7 @@ BEGIN
     ELSE IF @userName != '' AND @order = 1
     BEGIN
         SET @location = (SELECT location FROM Customer WHERE userName = @userName)
-        SELECT Whiskey.idWhiskey, Whiskey.idSupplier,
+        SELECT DISTINCT Whiskey.idWhiskey, Whiskey.idSupplier,
                Whiskey.idPresentation, Whiskey.idWhiskeyType,
                brand, price, alcoholContent,
                productionDate, dueDate,
@@ -52,7 +52,7 @@ BEGIN
     END
     ELSE IF @brand != ''
     BEGIN
-        SELECT Whiskey.idWhiskey, Whiskey.idSupplier,
+        SELECT DISTINCT Whiskey.idWhiskey, Whiskey.idSupplier,
                Whiskey.idPresentation, Whiskey.idWhiskeyType,
                brand, price, alcoholContent,
                productionDate, dueDate,
@@ -64,7 +64,7 @@ BEGIN
     END
     ELSE IF @maxPrice IS NOT NULL
     BEGIN
-        SELECT Whiskey.idWhiskey, Whiskey.idSupplier,
+        SELECT DISTINCT Whiskey.idWhiskey, Whiskey.idSupplier,
                Whiskey.idPresentation, Whiskey.idWhiskeyType,
                brand, price, alcoholContent,
                productionDate, dueDate,
@@ -77,7 +77,7 @@ BEGIN
     END
     ELSE IF @idWhiskeyType IS NOT NULL
     BEGIN
-        SELECT Whiskey.idWhiskey, Whiskey.idSupplier,
+        SELECT DISTINCT Whiskey.idWhiskey, Whiskey.idSupplier,
                Whiskey.idPresentation, Whiskey.idWhiskeyType,
                brand, price, alcoholContent,
                productionDate, dueDate,
