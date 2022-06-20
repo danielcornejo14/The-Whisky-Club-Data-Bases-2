@@ -2,15 +2,15 @@ CREATE OR ALTER PROCEDURE readWhiskeyReview @idWhiskey int
 WITH ENCRYPTION
 AS
 BEGIN
-    IF @idWhiskeyReview IS NOT NULL
+    IF @idWhiskey IS NOT NULL
     BEGIN
-        IF (SELECT COUNT(idWhiskeyReview) FROM WhiskeyReview WHERE idWhiskeyReview = @idWhiskeyReview AND
+        IF (SELECT COUNT(idWhiskeyReview) FROM WhiskeyReview WHERE idWhiskeyReview = @idWhiskey AND
              status = 1) > 0
         BEGIN
             SELECT idWhiskeyReview, idCustomer, idWhiskey,
                    comment, evaluation, date, status
             FROM WhiskeyReview
-            WHERE idWhiskey = @idWhiskey
+            WHERE idWhiskey = @idWhiskey AND status = 1
         END
         ELSE
         BEGIN
