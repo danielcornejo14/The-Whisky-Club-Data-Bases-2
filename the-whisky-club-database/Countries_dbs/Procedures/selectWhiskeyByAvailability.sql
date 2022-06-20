@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE selectWhiskeysByAvailability @availability int
+CREATE OR ALTER PROCEDURE selectWhiskeysByAvailability @availability bit
 
 WITH ENCRYPTION
 AS

@@ -79,7 +79,7 @@ BEGIN
         --The stock is not sufficient.
         IF @stockAvailable = 0
         BEGIN
-            SELECT 'There isn''t sufficient stock for the products.'
+            SELECT '00' AS CODE, 'mensaje' AS MESSAGE
         END
         ELSE
         BEGIN
@@ -175,5 +175,3 @@ BEGIN
         RAISERROR('Null data is not allowed.', 11, 1)
     END
 END
-
-EXEC selectSaleInfo
