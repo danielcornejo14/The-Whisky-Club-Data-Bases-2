@@ -1,12 +1,12 @@
-CREATE PROCEDURE insertWhiskeyReview @idCustomer int, @idWhiskey int,
+CREATE OR ALTER PROCEDURE insertWhiskeyReview @userName varchar(64), @idWhiskey int,
                                      @comment varchar(max), @evaluation int
 WITH ENCRYPTION
 AS
 BEGIN
-    IF @idCustomer IS NOT NULL AND @idWhiskey IS NOT NULL
+    IF @userName IS NOT NULL AND @idWhiskey IS NOT NULL
         AND @comment IS NOT NULL AND @evaluation IS NOT NULL
     BEGIN
-        IF ((SELECT COUNT(idCustomer) FROM Customer WHERE idCustomer = @idCustomer
+        IF ((SELECT COUNT(userName) FROM Customer WHERE userName = @userName
             AND status = 1) > 0
             AND (SELECT COUNT(idWhiskey) FROM Whiskey WHERE idWhiskey = @idWhiskey
             AND status = 1) > 0
@@ -14,6 +14,8 @@ BEGIN
         BEGIN
             BEGIN TRANSACTION
                 BEGIN TRY
+                    DECLARE @idCustomer int
+                    SET @idCustomer = (SELECT (idCustomer) FROM Customer WHERE userName = @userName)
                     INSERT INTO WhiskeyReview(idCustomer, idWhiskey, comment, evaluation, date)
                     VALUES (@idCustomer, @idWhiskey, @comment, @evaluation, GETDATE())
                     INSERT INTO UnitedStates_db.dbo.WhiskeyReview(idCustomer, idWhiskey, comment, evaluation, date)
@@ -32,7 +34,7 @@ BEGIN
         END
         ELSE
         BEGIN
-            RAISERROR('The ids must exist, and the evaluation must be a number between 1 and 5.', 11, 1)
+            RAISERROR('The id and the user name must exist, and the evaluation must be a number between 1 and 5.', 11, 1)
         END
     END
     ELSE

@@ -1,6 +1,6 @@
 CREATE OR ALTER PROCEDURE updateWhiskeyReview @userName varchar(64), @idWhiskey int,
-                                     @comment varchar(max), @evaluation int,
-                                     @idWhiskeyReview int
+                                             @comment varchar(max), @evaluation int,
+                                             @idWhiskeyReview int
 WITH ENCRYPTION
 AS
 BEGIN
