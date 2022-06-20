@@ -1,0 +1,12 @@
+<div class="wrapper">
+    <mat-drawer-container class="container">
+        <mat-drawer mode="side" opened>
+            <div class="buttons">
+                <a mat-raised-button routerLink="employeeReports">Employees Report</a>
+                <a mat-raised-button routerLink="customerReports">Customer Report</a>
+                <a mat-raised-button routerLink="salesReports">Sales Report</a>
+            </div>
+        </mat-drawer>
+        <mat-drawer-content><router-outlet></router-outlet></mat-drawer-content>
+    </mat-drawer-container>
+</div>

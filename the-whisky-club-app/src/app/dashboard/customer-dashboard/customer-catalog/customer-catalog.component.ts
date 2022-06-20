@@ -15,6 +15,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { CartService } from 'src/app/_services/cart/cart.service';
 import { CustomerCheckoutComponent } from './customer-checkout/customer-checkout.component';
 import { FormBuilder } from '@angular/forms';
+import { TokenStorageService } from 'src/app/_services/auth/token-storage.service';
 
 
 @Component({
@@ -29,7 +30,8 @@ export class CustomerCatalogComponent implements OnInit {
     private dialog: MatDialog,
     private sanitizer: DomSanitizer,
     private cartService: CartService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private storage: TokenStorageService
   ) { }
 
   WhiskyList: Whisky[] = []
@@ -43,11 +45,12 @@ export class CustomerCatalogComponent implements OnInit {
 
   filter = this.formBuilder.group({
     country: 1, // 1: Us, 2: Ireland, 3:Scotland
-    whiskeyType: [''], //idWhiskeyType
-    name: [''], // Whiskey name
-    price: [''], // Whiskey price
+    username: this.storage.getUser(), //Username
+    whiskeyType: [''], //idWhiskeyType -NULL-
+    name: [''], // Whiskey name -NULL-
+    price: [''], // Whiskey price -NULL-
     existance: false, // Show only available products
-    distanceOrder: [''], // ascendent descendent distance order
+    distanceOrder: 0, // 0 = not selected; 1= ascending; 2= descending
     popularity: false // Show only popular products
   })
 
@@ -58,6 +61,8 @@ export class CustomerCatalogComponent implements OnInit {
     this.SupplierList = this.route.snapshot.data['supplier']
     this.PresentationList = this.route.snapshot.data['presentation']
     this.CurrencyList = this.route.snapshot.data['currency']
+
+    console.log(this.WhiskyList[0])
   
   }
 

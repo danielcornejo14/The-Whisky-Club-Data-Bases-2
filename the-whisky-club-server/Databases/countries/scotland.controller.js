@@ -9,11 +9,13 @@ router.post('/insertSale', insertSale)
 module.exports = router
 
 async function selectTotal(req, res){
-    usService.selectTotal(req.body)
-    res.send({tomelo: "tomelo"})
+    const data = JSON.stringify(req.body)
+    const result = await usService.selectTotal(data) 
+    res.send(result) 
 }
 
 async function insertSale(req, res){
-    usService.insertSale(req.body)
-    res.send({tomelo: "tomelo"})
+    const data = JSON.stringify(req.body)
+    await usService.insertSale(data)
+
 }

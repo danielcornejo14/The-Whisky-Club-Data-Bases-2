@@ -38,13 +38,18 @@ export class CustomerCheckoutComponent implements OnInit {
         );
   }
 
+  //MAPS API
   center: google.maps.LatLngLiteral = {lat: 9.856060396098256, lng: -83.90951249096007};
   zoom = 15;
   markerOptions: google.maps.MarkerOptions = {draggable: false};
   markerPosition: google.maps.LatLngLiteral | undefined;
 
+  //Component Variables
   paymentMethods: PaymentMethod[] = []
   selectedMethod = 1
+  saleInfo: any = {
+
+  }
 
   ngOnInit(): void {
     this.mainframeService.getPaymentMethods().subscribe(methods => this.paymentMethods = methods)
@@ -64,18 +69,19 @@ export class CustomerCheckoutComponent implements OnInit {
         lat: this.markerPosition?.lat
       }
     }
+    console.log(order)
     switch(this.data.buyFrom){
       case 1:
         //US
-        this.countryService.getUsPrice(order).subscribe(x => console.log(x))
+        this.countryService.getUsPrice(order).subscribe(info => {console.log(info); this.saleInfo = info})
         break;
       case 2:
         //IR
-        this.countryService.getIrPrice(order).subscribe(x => console.log(x))
+        this.countryService.getIrPrice(order).subscribe(info => this.saleInfo = info)
         break;
       case 3:
         //SC
-        this.countryService.getScPrice(order).subscribe(x => console.log(x))
+        this.countryService.getScPrice(order).subscribe(info => this.saleInfo = info)
         break;
     }
   }
@@ -84,21 +90,25 @@ export class CustomerCheckoutComponent implements OnInit {
     let order = {
       username: this.storageService.getUser(),
       cart: this.cartService.cartList,
+      method: this.selectedMethod,
       location: {
         lng: this.markerPosition?.lng,
         lat: this.markerPosition?.lat
       }
     }
+    console.log(order)
     switch(this.data.buyFrom){
       case 1:
-        console.log("US")
-        console.log(order)
+        //US
+        this.countryService.processUsSale(order).subscribe(info => console.log(info))
         break;
       case 2:
-        console.log("IR")
+        //IR
+        this.countryService.processIrSale(order).subscribe(info => console.log(info))
         break;
       case 3:
-        console.log("SC")
+        //SC
+        this.countryService.processScSale(order).subscribe(info => console.log(info))
         break;
     }
   }

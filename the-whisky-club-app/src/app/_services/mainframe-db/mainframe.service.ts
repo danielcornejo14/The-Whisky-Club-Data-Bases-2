@@ -9,6 +9,9 @@ import {Currency} from "../../_interfaces/Whiskey/Currency";
 import { Customer } from 'src/app/_interfaces/Customer/Customer';
 import { PaymentMethod } from 'src/app/_interfaces/Customer/PaymentMethod';
 import { Subscription } from 'src/app/_interfaces/Misc/Subscription';
+import { CustomerReport } from 'src/app/_interfaces/Reports/CustomerReport';
+import { EmployeeReport } from 'src/app/_interfaces/Reports/EmployeeReport';
+import { SalesReport } from 'src/app/_interfaces/Reports/SalesReport';
 
 const DB_URL = environment.apiUrl+'/main-db'
 
@@ -124,4 +127,19 @@ export class MainframeService {
     return this.http.post(DB_URL+'/deleteCurrency', {"id": currencyId})
   }
 
+  // =================
+  // ==== Reports ====
+  // =================
+
+  queryCustomerReport(filter: any){
+    return this.http.post<CustomerReport[]>(DB_URL+'/queryCustomerReport', filter)
+  }
+
+  queryEmployeeReport(filter: any){
+    return this,this.http.post<EmployeeReport[]>(DB_URL+'/queryEmployeeReport', filter)
+  }
+
+  querySalesReport(filter: any){
+    return this,this.http.post<SalesReport[]>(DB_URL+'/querySalesReport', filter)
+  }
 }
