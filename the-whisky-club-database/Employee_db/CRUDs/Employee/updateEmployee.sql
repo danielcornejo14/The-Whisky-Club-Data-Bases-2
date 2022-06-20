@@ -3,6 +3,7 @@ CREATE PROCEDURE updateEmployee (
      IN pIdEmployee int,
      IN pIdDepartment int,
      IN pIdEmployeeType int,
+     IN pIdShop int,
      IN pName varchar(64),
      IN pLastName1 varchar(64),
      IN pLastName2 varchar(64),
@@ -14,17 +15,20 @@ BEGIN
         AND pIdEmployeeType IS NOT NULL AND pLastName1 IS NOT NULL
         AND pLastName2 IS NOT NULL AND pLocalSalary IS NOT NULL
         AND pDollarSalary IS NOT NULL AND pIdEmployee IS NOT NULL
+        AND pIdShop IS NOT NULL
      THEN
         IF ((SELECT COUNT(idDepartment) FROM department WHERE idDepartment = pIdDepartment AND status = 1) > 0
             AND (SELECT COUNT(idEmployeeType) FROM employeetype WHERE idEmployeeType = pIdEmployeeType AND status = 1) > 0
             AND pLocalSalary > 0
             AND pDollarSalary > 0
-            AND (SELECT COUNT(idEmployee) FROM employee WHERE idEmployee = pIdEmployee AND status = 1) > 0)
+            AND (SELECT COUNT(idEmployee) FROM employee WHERE idEmployee = pIdEmployee AND status = 1) > 0
+            AND (SELECT COUNT(idShop) FROM shop WHERE idShop = pIdShop AND status = 1) > 0)
         THEN
             START TRANSACTION;
             UPDATE employee
             SET idDepartment = pIdDepartment,
                 idEmployeeType = pIdEmployeeType,
+                idShop = pIdShop,
                 name = pName,
                 lastName1 = pLastName1,
                 lastName2 = pLastName2,

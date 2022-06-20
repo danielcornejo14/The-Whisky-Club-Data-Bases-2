@@ -1,4 +1,4 @@
-CREATE PROCEDURE readWhiskeyXShop @idWhiskeyXShop int
+CREATE OR ALTER PROCEDURE readWhiskeyXShop @idWhiskeyXShop int
 WITH ENCRYPTION
 AS
 BEGIN
@@ -7,7 +7,7 @@ BEGIN
         IF (SELECT COUNT(idWhiskeyXShop) FROM WhiskeyXShop WHERE idWhiskeyXShop = @idWhiskeyXShop
             AND status = 1) > 0
         BEGIN
-            SELECT idWhiskeyXShop, idShop, idWhiskey, currentStock, status
+            SELECT idWhiskeyXShop, idShop, idWhiskey, currentStock, availability, status
             FROM WhiskeyXShop
             WHERE idWhiskeyXShop = @idWhiskeyXShop
         END

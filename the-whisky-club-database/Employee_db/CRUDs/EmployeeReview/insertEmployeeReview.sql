@@ -17,9 +17,9 @@ BEGIN
             AND (SELECT COUNT(comment) FROM employeereview WHERE comment = pComment) = 0)
         THEN
             START TRANSACTION;
-            INSERT INTO employeereview(idCustomer, idEmployee, comment, evaluation, date)
-            VALUES (pIdCustomer, pIdEmployee, pComment, pEvaluation, (SELECT CURDATE()));
-            SELECT 'Employee review updated.';
+            INSERT INTO employeereview(idCustomer, idEmployee, comment, evaluation, date, resolved, administratorComment)
+            VALUES (pIdCustomer, pIdEmployee, pComment, pEvaluation, (SELECT CURDATE()),  IF(pEvaluation <= 2, 0, 1), IF(pEvaluation <= 2,'Unresolved', 'Resolved'));
+            SELECT 'Employee review inserted.';
             COMMIT;
         ELSE
             SELECT 'The ids must exist, the comment cannot be repeated and the evaluation must be a number between 1 and 5.';

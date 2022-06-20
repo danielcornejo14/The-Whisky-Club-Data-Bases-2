@@ -1,11 +1,12 @@
-CREATE PROCEDURE selectWhiskey
+CREATE OR ALTER PROCEDURE selectWhiskey
 WITH ENCRYPTION
 AS
 BEGIN
-    SELECT idWhiskey, idSupplier, idPresentation,
-           idCurrency, idWhiskeyType, brand, price,
-           alcoholContent, productionDate, dueDate,
-           availability, millilitersQuantity, whiskeyAging,
+    SELECT idWhiskey, idSupplier,
+           idPresentation, idWhiskeyType,
+           brand, price, alcoholContent,
+           productionDate, dueDate,
+           millilitersQuantity, whiskeyAging,
            special, status
     FROM Whiskey
 END

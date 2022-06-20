@@ -9,22 +9,8 @@ BEGIN
         BEGIN
             BEGIN TRANSACTION
                 BEGIN TRY
-                    --Delete whiskey cursor
-                    DECLARE @idWhiskeyCursor int, @idCurrencyCursor int
-                    DECLARE whiskeyCursor CURSOR FOR SELECT
-                    idWhiskey, idCurrency FROM Whiskey
-                    OPEN whiskeyCursor
-                    FETCH NEXT FROM whiskeyCursor INTO @idWhiskeyCursor, @idCurrencyCursor
-                    WHILE @@FETCH_STATUS = 0
-                    BEGIN
-                        IF @idCurrencyCursor = @idCurrency
-                            EXEC deleteWhiskey @idWhiskey = @idWhiskeyCursor
-                        FETCH NEXT FROM whiskeyCursor INTO @idWhiskeyCursor, @idCurrencyCursor
-                    END
-                    CLOSE whiskeyCursor
-                    DEALLOCATE whiskeyCursor
                     --Delete country cursor
-                    DECLARE @idCountryCursor int
+                    DECLARE @idCountryCursor int, @idCurrencyCursor int
                     DECLARE countryCursor CURSOR FOR SELECT
                     idCountry, idCurrency FROM Country
                     OPEN countryCursor

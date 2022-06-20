@@ -1,4 +1,4 @@
-CREATE PROCEDURE readWhiskey @idWhiskey int
+CREATE OR ALTER PROCEDURE readWhiskey @idWhiskey int
 WITH ENCRYPTION
 AS
 BEGIN
@@ -8,10 +8,10 @@ BEGIN
              status = 1) > 0
         BEGIN
             SELECT idWhiskey, idSupplier, idPresentation,
-                   idCurrency, idWhiskeyType, brand, price,
-                   alcoholContent, productionDate, dueDate,
-                   availability, millilitersQuantity,
-                   whiskeyAging, special, status
+                   idWhiskeyType, brand, price, alcoholContent,
+                   productionDate, dueDate,
+                   millilitersQuantity, whiskeyAging,
+                   special, status
             FROM Whiskey
             WHERE idWhiskey = @idWhiskey
         END

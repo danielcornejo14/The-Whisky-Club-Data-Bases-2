@@ -2,6 +2,7 @@ DELIMITER //
 CREATE PROCEDURE insertEmployee (
      IN pIdDepartment int,
      IN pIdEmployeeType int,
+     IN pIdShop int,
      IN pName varchar(64),
      IN pLastName1 varchar(64),
      IN pLastName2 varchar(64),
@@ -15,13 +16,14 @@ BEGIN
         AND pIdEmployeeType IS NOT NULL AND pLastName1 IS NOT NULL
         AND pLastName2 IS NOT NULL AND pLocalSalary IS NOT NULL
         AND pDollarSalary IS NOT NULL AND pUserName IS NOT NULL
-        AND pPassword IS NOT NULL
+        AND pPassword IS NOT NULL AND pIdShop IS NOT NULL
      THEN
         IF ((SELECT COUNT(idDepartment) FROM department WHERE idDepartment = pIdDepartment AND status = 1) > 0
             AND (SELECT COUNT(idEmployeeType) FROM employeetype WHERE idEmployeeType = pIdEmployeeType AND status = 1) > 0
             AND pLocalSalary > 0
             AND pDollarSalary > 0
-            AND (SELECT COUNT(userName) FROM employee WHERE userName = pUserName) = 0)
+            AND (SELECT COUNT(userName) FROM employee WHERE userName = pUserName) = 0
+            AND (SELECT COUNT(idShop) FROM shop WHERE idShop = pIdShop AND status = 1) > 0)
         THEN
             /*              Password requirements
             1. The minimum length is 8 and maximum length is 64.
@@ -33,12 +35,12 @@ BEGIN
                 AND LENGTH(pPassword) BETWEEN 8 AND 64
             THEN
                 START TRANSACTION;
-                INSERT INTO employee(idDepartment, idEmployeeType,
-                                     name, lastName1, lastName2,
-                                     localSalary, dollarSalary,
-                                     userName, password)
+                INSERT INTO employee(idDepartment,
+                                     idEmployeeType, idShop, name,
+                                     lastName1, lastName2, localSalary,
+                                     dollarSalary, userName, password)
                 VALUES (pIdDepartment, pIdEmployeeType,
-                        pName, pLastName1, pLastName2,
+                        pIdShop, pName, pLastName1, pLastName2,
                         pLocalSalary, pDollarSalary,
                         pUserName, SHA2(pPassword, 256));
                 #Vertical fragmentation with employee account

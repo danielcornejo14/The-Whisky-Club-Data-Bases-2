@@ -1,4 +1,4 @@
-CREATE PROCEDURE processSale @json varchar(max)
+CREATE OR ALTER PROCEDURE processSale @json varchar(max)
 WITH ENCRYPTION
 AS
 BEGIN
@@ -56,20 +56,20 @@ BEGIN
                        WITH (
                         lng varchar(max) '$.location.lng'
                       ))
-        DECLARE @latitude varchar(max)
-        SET @latitude = (SELECT lat
+        DECLARE @longitude varchar(max)
+        SET @longitude = (SELECT lat
                          FROM OPENJSON(@json)
                          WITH (
                          lat varchar(max) '$.location.lat'
-                        ))
+                         ))
         DECLARE @customerLocation geometry
-        IF @length IS NULL AND @latitude IS NULL
+        IF @length IS NULL AND @longitude IS NULL
         BEGIN
             SET @customerLocation = (SELECT location FROM Customer WHERE idCustomer = @idCustomer)
         END
         ELSE
         BEGIN
-            SET @customerLocation = geometry::STPointFromText('POINT (' + @length + ' ' + @latitude + ')', 0)
+            SET @customerLocation = geometry::STPointFromText('POINT (' + @length + ' ' + @longitude + ')', 0)
         END
         --------------------------------------
         --SELECT the closest shop for the customer
@@ -77,25 +77,6 @@ BEGIN
         SET @idShop = ( SELECT TOP (1) idShop
                         FROM Shop
                         ORDER BY @customerLocation.STDistance(Shop.location))
-        --------------------------------------
-        --Select shipping cost
-        DECLARE @shippingCost money
-        SET @shippingCost = (SELECT shippingCost FROM ##SaleInfo)
-        --------------------------------------
-        --Select saleDiscount cost
-        DECLARE @saleDiscount money
-        SET @saleDiscount = (SELECT saleDiscount FROM ##SaleInfo)
-        --------------------------------------
-        --Select subTotal cost
-        DECLARE @subTotal money
-        SET @subTotal = (SELECT subTotal FROM ##SaleInfo)
-        --------------------------------------
-        --Select total cost
-        DECLARE @total money
-        SET @total = (SELECT total FROM ##SaleInfo)
-        --------------------------------------
-        DROP TABLE ##SaleInfo
-        --------------------------------------
         --The whiskeys selected ids are stored in a temporal table.
         CREATE TABLE #WhiskeysSelected(
             idWhiskey int
@@ -110,7 +91,75 @@ BEGIN
                 WITH (
                     idWhiskey int '$'
                 )
+        -------------------------------------------------------------------
+        DECLARE @idSubscription int
+        SET @idSubscription = (SELECT idSubscription FROM Customer WHERE idCustomer = @idCustomer)
+        DECLARE @shippingDiscount float
+        DECLARE @shoppingDiscount float
+        IF @idSubscription = 1 --Tier normal subscription
+        BEGIN
+            SET @shippingDiscount = 0
+            SET @shoppingDiscount = 0
+        END
+        ELSE IF @idSubscription = 2 --Tier short glass subscription
+        BEGIN
+            SET @shippingDiscount = 0
+            SET @shoppingDiscount = 0.05
+        END
+        ELSE IF @idSubscription = 3 --Tier gleincairn
+        BEGIN
+            SET @shippingDiscount = 0.2
+            SET @shoppingDiscount = 0.1
+        END
+        ELSE IF @idSubscription = 4 --Tier master distiller
+        BEGIN
+            SET @shippingDiscount = 1
+            SET @shoppingDiscount = 0.3
+        END
+        --Select the distance between the customer and the closest shop.
+        DECLARE @distance float
+        SET @distance = (SELECT @customerLocation.STDistance(Shop.location)
+                         FROM Shop
+                         WHERE idShop = @idShop)
         --------------------------------------
+        --The shipping cost is $0.5 per Kilometer
+        DECLARE @shippingCost money
+        SET @shippingCost = (@distance * 0.5)
+        --The shipping discount is applied in the shipping cost.
+        SET @shippingCost = (@shippingCost - (@shippingDiscount * @shippingCost))
+        --Calculate the subtotal from the whiskeys cost.
+        DECLARE @subTotal money --The subtotal is the sum of every whiskey price.
+        SET @subTotal = (SELECT sum(Whiskey.price)
+                         FROM #WhiskeysSelected
+                         INNER JOIN Whiskey ON #WhiskeysSelected.idWhiskey = Whiskey.idWhiskey)
+        --------------------------------------
+        --The sale discount is calculated.
+        DECLARE @saleDiscount money
+        SET @saleDiscount = (@subTotal * @shoppingDiscount)
+        --------------------------------------
+        --The total is calculated.
+        DECLARE @total money
+        SET @total = (@subTotal - @saleDiscount + @shippingCost)
+        --------------------------------------
+        DECLARE @idCurrency int
+        SET @idCurrency = (SELECT DISTINCT Country.idCurrency
+                           FROM Shop
+                           INNER JOIN Country ON Shop.idCountry = Country.idCountry)
+        --------------------------------------------------------------------------
+        IF @idCurrency = 1--It is Euro
+        BEGIN
+            SET @shippingCost = 0.95 * @shippingCost
+            SET @saleDiscount = 0.95 * @saleDiscount
+            SET @subTotal = 0.95 * @subTotal
+            SET @total = 0.95 * @total
+        END
+        ELSE IF @idCurrency = 3 --It is pound
+        BEGIN
+            SET @shippingCost = 0.82 * @shippingCost
+            SET @saleDiscount = 0.82 * @saleDiscount
+            SET @subTotal = 0.82 * @subTotal
+            SET @total = 0.82 * @total
+        END
         BEGIN TRANSACTION
             BEGIN TRY
                 --Insert the sale
@@ -144,6 +193,16 @@ BEGIN
                     WHERE idWhiskey = @currentIdWhiskey AND
                           idShop = @idShop
                     -----------------------------------------------------
+                    IF (SELECT currentStock
+                        FROM WhiskeyXShop
+                        WHERE idWhiskey = @currentIdWhiskey AND
+                              idShop = @idShop) = 0
+                    BEGIN
+                        UPDATE WhiskeyXShop
+                        SET availability = 0
+                        WHERE idWhiskey = @currentIdWhiskey AND
+                              idShop = @idShop
+                    END
                     FETCH NEXT FROM whiskeysCursor INTO @currentIdWhiskey
                 END
                 CLOSE whiskeysCursor
