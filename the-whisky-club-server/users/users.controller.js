@@ -2,9 +2,12 @@ const express = require('express')
 const router = express.Router()
 const jwt = require('jsonwebtoken')
 const userService = require('./users.service')
+const employeeService = require("../Databases/employees/employees.service")
+
 
 router.post('/authAdmin', authAdmin)
 router.post('/authCustomer', authCustomer)
+router.post('/authEmployee', authEmployee)
 
 module.exports = router;
 
@@ -26,4 +29,9 @@ async function authCustomer(req, res){
     else{
         res.sendStatus(401)
     }
+}
+
+function authEmployee(req, res){
+    const data = req.body
+    employeeService.authEmployee(data.username, data.password, res)
 }

@@ -9,7 +9,7 @@ module.exports = {
 const config = {
     user: process.env.MSSQL_USER,
     password: process.env.MSSQL_PASSWORD,
-    database: 'UnitedStates_db',
+    database: process.env.MSSQL_DB_US,
     server: process.env.HOST,
     options: {
         encrypt: true, // for azure
@@ -22,7 +22,7 @@ async function selectTotal(order){
     await mssql.connect(config)
     console.log(order)
     try{
-        const result = await mssql.query(`exec selectSaleInfo '${order}'`)
+        const result = await mssql.query(`exec selectSaleInfo '${order}'`).catch((err)=>{console.log(err)})
         mssql.close()
         return result.recordset[0]
     }
@@ -38,7 +38,7 @@ async function insertSale(order){
     await mssql.connect(config)
     console.log(order)
     try{
-        const result = await mssql.query(`exec processSale '${order}'`)
+        const result = await mssql.query(`exec processSale '${order}'`).catch((err)=>{console.log(err)})
         mssql.close()
         console.log(result.recordset)
     }
@@ -58,13 +58,13 @@ async function filterWhiskey(filter){
         ${filter.price},
         ${filter.existance},
         ${filter.distanceOrder},
-        ${filter.popularity}`)
+        ${filter.popularity}`).catch((err)=>{console.log(err)})
    
        
 
         for(let i = 0; i < result.recordset.length; i++){
             const imageRecordset = await mssql.query(` use Mainframe_db;
-            exec selectImage ${result.recordset[i].idWhiskey}`)
+            exec selectImage ${result.recordset[i].idWhiskey}`).catch((err)=>{console.log(err)})
             let imageSet = []
     
             for(let j = 0; j < imageRecordset.recordset.length; j++){

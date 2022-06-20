@@ -27,6 +27,9 @@ export class EmployeesdbService {
     return this.http.post(DB_URL+'/insertEmployee', employee)
   }
 
+  createEmployeeReview(review: any){
+    return this.http.post(DB_URL+'/insertReport', review)
+  }
 
   // =================
   // ==== Select =====
@@ -55,6 +58,11 @@ export class EmployeesdbService {
     return this.http.post(DB_URL+'/updateEmployee', employee)
   }
 
+  
+  updateReview(resolve: any){
+    return this.http.post(DB_URL+'/updateReview', resolve)
+  }
+
   // =================
   // ==== Delete =====
   // =================
@@ -62,5 +70,11 @@ export class EmployeesdbService {
   deleteEmployee(employeeId: number){
     return this.http.post(DB_URL+'/deleteEmployee', {"id": employeeId})
   }
+
+  // =================
+  // ====   SP   =====
+  // =================
+
+
 
 }

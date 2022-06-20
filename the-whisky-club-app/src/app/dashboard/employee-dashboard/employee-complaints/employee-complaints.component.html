@@ -1,0 +1,27 @@
+<div class="container">
+
+    <table>
+        <tr>
+            <th>Employee Review ID</th>
+            <th>Customer ID</th>
+            <th>Employee ID</th>
+            <th>Comment</th>
+            <th>Evaluation</th>
+            <th>Date</th>
+            <th>Resolve</th>
+        </tr>
+        <tr *ngFor="let complaint of complaintList">
+            <td>{{complaint.idEmployeeReview}}</td>
+            <td>{{complaint.idCustomer}}</td>
+            <td>{{complaint.idEmployee}}</td>
+            <td>{{complaint.comment}}</td>
+            <td>{{complaint.evaluation}}</td>
+            <td>{{complaint.date}}</td>
+            <td>
+                <button mat-icon-button color="primmary" (click)="resolveReport(complaint)">
+                  <mat-icon>task_alt</mat-icon>
+                </button>
+            </td>
+        </tr>
+    </table>
+</div>

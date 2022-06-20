@@ -9,6 +9,10 @@ export class EmployeeDashboardComponent implements OnInit {
 
   constructor() { }
 
+  links = ['complaints']
+
+  
+
   ngOnInit(): void {
   }
 

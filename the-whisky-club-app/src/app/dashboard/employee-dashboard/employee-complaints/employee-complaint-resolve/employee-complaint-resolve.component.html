@@ -1,0 +1,10 @@
+<form class="resolve" [formGroup]="resolve">
+    <h1>Review ID: {{this.data.idEmployeeReview}}</h1>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Resolve issue</mat-label>
+        <textarea matInput formControlName="comment"></textarea>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" [mat-dialog-close]="resolve.value">Submit</button>
+</form>

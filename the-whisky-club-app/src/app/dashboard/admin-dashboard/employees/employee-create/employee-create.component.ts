@@ -17,9 +17,12 @@ export class EmployeeCreateComponent implements OnInit {
     private formBuilder: FormBuilder
   ) { }
 
+  shops: number[] = [1,2,3,4,5,6,7,8,9]
+
     createItem = this.formBuilder.group({
       idDepartment: [''],
       idEmployeeType: [''],
+      idShop:[''],
       name: [''],
       lastName1: [''],
       lastName2: [''],

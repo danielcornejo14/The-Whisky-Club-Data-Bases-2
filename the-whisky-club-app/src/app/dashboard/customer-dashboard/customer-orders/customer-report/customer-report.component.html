@@ -1,0 +1,16 @@
+<form [formGroup]="newReport" class="report">
+    <h1>Select a employee to report</h1>
+    <mat-radio-group formControlName="idEmployee">
+        <mat-radio-button [value]="this.data.order.idCashier">Cashier</mat-radio-button>
+        <mat-radio-button [value]="this.data.order.idCourier">Courier</mat-radio-button>
+    </mat-radio-group>
+    <mat-divider></mat-divider>
+    <ngb-rating formControlName="evaluation" [max]="5"></ngb-rating>
+    <mat-divider></mat-divider>
+    <mat-form-field appearance="outline">
+        <mat-label>Dsecribe your problem</mat-label>
+        <textarea matInput formControlName="comment"></textarea>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" [mat-dialog-close]="newReport.value">Submit</button>
+</form>

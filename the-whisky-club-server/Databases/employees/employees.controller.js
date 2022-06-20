@@ -14,6 +14,8 @@ router.get('/selectEmployeeType', selectEmployeeType)
 router.post('/updateEmployee', updateEmployee)
 router.post('/insertEmployee', insertEmployee)
 router.post('/deleteEmployee', deleteEmployee)
+router.post('/updateReview', updateReview)
+router.post('/insertReport', insertReport)
 
 module.exports = router
 
@@ -52,11 +54,21 @@ function updateEmployee(req, res){
     
 }
 
+function updateReview(req, res){
+    const data = req.body
+    employeeService.updateReview(data, res)
+}
+
 //================INSERT================
 
 function insertEmployee(req, res){
     const data = req.body
     employeeService.insertEmployee(data, res)
+}
+
+function insertReport(req,res){
+    const data = req.body
+    employeeService.insertReport(data, res)
 }
 
 //================DELETE================
