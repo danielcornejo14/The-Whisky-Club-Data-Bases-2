@@ -1,19 +1,19 @@
 DELIMITER //
 CREATE PROCEDURE updateEmployeeReview (
      IN pIdEmployeeReview int,
-     IN pIdCustomer int,
+     IN pUserName int,
      IN pIdEmployee int,
      IN pComment varchar(64),
      IN pEvaluation int
 )
 BEGIN
-    IF pIdCustomer IS NOT NULL AND pIdEmployee IS NOT NULL
+    IF pUserName IS NOT NULL AND pIdEmployee IS NOT NULL
         AND pComment IS NOT NULL AND pEvaluation IS NOT NULL
         AND pIdEmployeeReview IS NOT NULL
     THEN
         IF ((SELECT COUNT(idEmployee) FROM employee WHERE idEmployee = pIdEmployee
                 AND status = 1) > 0
-            AND (SELECT COUNT(idCustomer) FROM customer WHERE idCustomer = pIdCustomer
+            AND (SELECT COUNT(idCustomer) FROM customer WHERE userName = pUserName
                 AND status = 1) > 0
             AND (SELECT COUNT(idEmployeeReview) FROM employeereview WHERE idEmployeeReview = pIdEmployeeReview
                 AND status = 1) > 0
@@ -22,7 +22,7 @@ BEGIN
         THEN
             START TRANSACTION;
             UPDATE employeereview
-            SET idCustomer = pIdCustomer,
+            SET idCustomer = (SELECT idCustomer FROM customer WHERE userName = pUserName),
                 idEmployee = pIdEmployee,
                 comment = pComment,
                 evaluation = pEvaluation,

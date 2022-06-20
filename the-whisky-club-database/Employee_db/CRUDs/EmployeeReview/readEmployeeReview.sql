@@ -9,7 +9,8 @@ BEGIN
             AND status = 1) > 0
         THEN
             SELECT idEmployeeReview, idCustomer, idEmployee,
-                   comment, evaluation, date, status
+                   comment, evaluation, date, status,
+                   resolved, administratorComment
             FROM EmployeeReview;
         ELSE
             SELECT 'The id must exist.';
