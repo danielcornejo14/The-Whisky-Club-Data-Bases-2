@@ -58,28 +58,37 @@
 
     <mat-step>
         <ng-template matStepLabel>Done</ng-template>
-        <div class="wrapper">
+        <div class="wrapper" *ngIf="saleFlag===0; else data">
+            <mat-spinner></mat-spinner>
+        </div>
 
-            <div class="info">
-                <div>Sub Total: {{saleInfo.subTotal}}</div>
-                <div>Discount: {{saleInfo.saleDiscount}}</div>
-                <div>Shipping: {{saleInfo.shippingCost}}</div>
-                <div>Total: {{saleInfo.total}} {{saleInfo.currenyName}}s</div>
+        <ng-template #data>
+            <div class="wrapper" *ngIf="saleFlag === 2; else warning">
+                <div class="info">
+                    <div>Sub Total: {{saleInfo.subTotal}}</div>
+                    <div>Discount: {{saleInfo.saleDiscount}}</div>
+                    <div>Shipping: {{saleInfo.shippingCost}}</div>
+                    <div>Total: {{saleInfo.total}} {{saleInfo.currenyName}}s</div>
+                </div>
+            
+    
+                
+    
+                <mat-form-field appearance="outline">
+                    <mat-label>Payment Method</mat-label>
+                    <mat-select [(value)]="selectedMethod">
+                        <mat-option *ngFor="let method of this.paymentMethods" [value]="method.idPaymentMethod" >{{method.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+    
+                <button mat-raised-button color="primary" (click)="checkOut()">Buy</button>
             </div>
+
+            <ng-template #warning>
+                <h1>The products are not available in this country</h1>
+            </ng-template>
+        </ng-template>
         
 
-            
-
-            <mat-form-field appearance="outline">
-                <mat-label>Payment Method</mat-label>
-                <mat-select [(value)]="selectedMethod">
-                    <mat-option *ngFor="let method of this.paymentMethods" [value]="method.idPaymentMethod" >{{method.name}}</mat-option>
-                </mat-select>
-            </mat-form-field>
-
-            <button mat-raised-button color="primary" (click)="checkOut()">Buy</button>
-           
-    
-        </div>
     </mat-step>
 </mat-stepper>

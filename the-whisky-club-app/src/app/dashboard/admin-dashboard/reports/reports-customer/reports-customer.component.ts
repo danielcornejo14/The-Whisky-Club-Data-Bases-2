@@ -30,7 +30,7 @@ export class ReportsCustomerComponent implements OnInit {
 
   ngOnInit(): void {
     this.mainframe.getSubscriptions().subscribe(subs => this.subList = subs)
-    this.mainframe.queryCustomerReport(this.filter.value).subscribe(reports =>  this.reportList = reports)
+    this.mainframe.queryCustomerReport(this.filter.value).subscribe(reports =>  {this.reportList = reports; console.log(reports)})
   }
 
   clearFilter(){

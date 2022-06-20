@@ -29,7 +29,9 @@ module.exports = {
     deletePresentation,
     queryCustomerReport,
     queryEmployeeReport,
-    querySalesReport
+    querySalesReport,
+    selectWhiskeyReviews,
+    insertReview
 }
 
 const config = {
@@ -46,7 +48,7 @@ const config = {
 
 async function testdb(){
     await mssql.connect(config) 
-    const result = await mssql.query(`select * from Customer`)
+    const result = await mssql.query(`select * from Customer`) 
 
     return result.recordset
 }
@@ -121,6 +123,11 @@ async function insertCurrency(currency){
     await mssql.connect(config)
     const result = await mssql.query(`exec insertCurrency '${currency.name}'`).catch((err)=>console.log(err))
 
+}
+
+async function insertReview(review){
+    await mssql.connect(config)
+    const result = await mssql.query(`exec insertWhiskeyReview '${review.username}', ${review.idWhiskey}, '${review.comment}', ${review.evaluation}`)
 }
 
 //=============================SELECT==============================
@@ -219,10 +226,12 @@ async function selectSubscription(){
     return result.recordset
 }
 
-// async function selectTotal(data){
-//     await mssql.connect(config)
-//     const result =  
-// }
+
+async function selectWhiskeyReviews(id){
+    await mssql.connect(config)
+    const result = await mssql.query(`exec readWhiskeyReview ${id}`)
+    return result.recordset
+}
 
 //=============================UPDATE==============================
 

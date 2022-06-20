@@ -28,7 +28,8 @@ export class CatalogUpdateComponent implements OnInit {
     dueDate: this.data.item.dueDate,
     millilitersQuantity:this.data.item.millilitersQuantity,
     whiskeyAging: this.data.item.whiskeyAging,
-    special: this.data.item.special
+    special: this.data.item.special,
+    addStock: 0
   })
 
   ngOnInit(): void {

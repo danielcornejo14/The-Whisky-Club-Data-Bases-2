@@ -34,7 +34,7 @@ export class ReportsEmployeeComponent implements OnInit {
 
   ngOnInit(): void {
     this.employees.getDepartment().subscribe(dep => this.deptList = dep)
-    this.mainframe.queryEmployeeReport(this.filter.value).subscribe(reps => this.reportList = reps)
+    this.mainframe.queryEmployeeReport(this.filter.value).subscribe(reports =>  {this.reportList = reports; console.log(reports)})
   }
 
   findDepartment(departmentId: number){

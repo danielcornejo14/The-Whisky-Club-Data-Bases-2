@@ -47,9 +47,8 @@ export class CustomerCheckoutComponent implements OnInit {
   //Component Variables
   paymentMethods: PaymentMethod[] = []
   selectedMethod = 1
-  saleInfo: any = {
-
-  }
+  saleInfo: any = {}
+  saleFlag: number = 0
 
   ngOnInit(): void {
     this.mainframeService.getPaymentMethods().subscribe(methods => this.paymentMethods = methods)
@@ -73,15 +72,39 @@ export class CustomerCheckoutComponent implements OnInit {
     switch(this.data.buyFrom){
       case 1:
         //US
-        this.countryService.getUsPrice(order).subscribe(info => {console.log(info); this.saleInfo = info})
+        this.countryService.getUsPrice(order).subscribe((info: any )=> {
+          if(info.CODE == '00'){
+            this.saleFlag = 1
+          }
+          else{
+            this.saleFlag = 2
+            this.saleInfo = info
+          }
+        })
         break;
       case 2:
         //IR
-        this.countryService.getIrPrice(order).subscribe(info => this.saleInfo = info)
+        this.countryService.getIrPrice(order).subscribe((info: any )=> {
+          if(info.CODE == '00'){
+            this.saleFlag = 1
+          }
+          else{
+            this.saleFlag = 2
+            this.saleInfo = info
+          }
+        })
         break;
       case 3:
         //SC
-        this.countryService.getScPrice(order).subscribe(info => this.saleInfo = info)
+        this.countryService.getScPrice(order).subscribe((info: any )=> {
+          if(info.CODE == '00'){
+            this.saleFlag = 1
+          }
+          else{
+            this.saleFlag = 2
+            this.saleInfo = info
+          }
+        })
         break;
     }
   }
@@ -124,5 +147,4 @@ export class CustomerCheckoutComponent implements OnInit {
   saveLocation(){
     console.log(this.markerPosition)
   }
-
 }

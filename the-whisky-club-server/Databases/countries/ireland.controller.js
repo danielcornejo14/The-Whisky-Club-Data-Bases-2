@@ -5,6 +5,7 @@ const usService = require('./ireland.service')
 
 router.post('/selectTotal', selectTotal) 
 router.post('/insertSale', insertSale)
+router.post('/filterWhiskey', filterWhiskey)
 
 module.exports = router
 
@@ -18,4 +19,10 @@ async function insertSale(req, res){
     const data = JSON.stringify(req.body)
     await usService.insertSale(data)
 
+}
+
+async function filterWhiskey(req, res){
+    const data = req.body
+    const result = await usService.filterWhiskey(data)
+    res.send(result)
 }
