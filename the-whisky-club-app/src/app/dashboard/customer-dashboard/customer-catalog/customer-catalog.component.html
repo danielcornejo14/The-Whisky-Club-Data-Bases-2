@@ -32,6 +32,10 @@
       
           <div class="productControl">
             <button mat-raised-button type="button" color="primary" (click)="addToCart(item)">Buy</button>
+
+            <button mat-mini-fab (click)="openReviews(item.idWhiskey)">
+              <mat-icon>reviews</mat-icon>
+            </button>
           </div>
       
         </div>
@@ -57,7 +61,7 @@
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Name</mat-label>
+            <mat-label>Brand</mat-label>
             <input matInput type="text" formControlName="name">
           </mat-form-field>
 

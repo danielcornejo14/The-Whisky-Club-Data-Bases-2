@@ -35,6 +35,10 @@ export class CountriesDbService {
     return this.http.post(US_DB_URL+'/insertSale', order)
   }
 
+  filterUsWhiskeys(filter: any){
+    return this.http.post<Whisky[]>(US_DB_URL+'/filterWhiskey', filter)
+  }
+
 // IR
 
   getIrPrice(order: any){
@@ -49,6 +53,10 @@ export class CountriesDbService {
     order.cart.forEach((x: any) => productIndex.push(x.idWhiskey))
     order.cart = productIndex
     return this.http.post(IR_DB_URL+'/insertSale', order)
+  }
+
+  filterIrWhiskeys(filter: any){
+    return this.http.post<Whisky[]>(IR_DB_URL+'/filterWhiskey', filter)
   }
 
 // SC
@@ -67,4 +75,9 @@ export class CountriesDbService {
     return this.http.post(SC_DB_URL+'/insertSale', order)
   }
 
+  filterScWhiskeys(filter: any){
+    return this.http.post<Whisky[]>(SC_DB_URL+'/filterWhiskey', filter)
+  }
+  
 }
+

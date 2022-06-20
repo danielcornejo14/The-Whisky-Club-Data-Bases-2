@@ -2,7 +2,8 @@ const mssql = require('mssql')
 
 module.exports = {
     selectTotal,
-    insertSale
+    insertSale,
+    filterWhiskey
 }
 
 const config = {
@@ -38,5 +39,24 @@ async function insertSale(order){
     }
     else{
         result = await mssql.query(``).catch((err)=> console.log(err))
+    }
+}
+async function filterWhiskey(filter){
+    mssql.close()
+    await mssql.connect(config)
+
+    try{
+        const result = await mssql.query(`exec filterWhiskeys '${filter.username}',
+        ${filter.whiskeyType},
+        ${filter.name},
+        ${filter.price},
+        ${filter.existance},
+        ${filter.distanceOrder},
+        ${filter.popularity}`)
+        mssql.close()
+        console.log(result.recordset)
+    }
+    catch(err){
+        console.log(err)
     }
 }

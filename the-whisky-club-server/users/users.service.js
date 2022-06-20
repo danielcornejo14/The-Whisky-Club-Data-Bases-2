@@ -17,5 +17,5 @@ async function authCustomer(username, password){
     const response = await mainframeService.verifyCustomer(username, password).catch(err => console.log(err))
     console.log(response)
     return response
-}
+} 
  

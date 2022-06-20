@@ -29,6 +29,8 @@ router.post('/deletePresentation', deletePresentation)
 router.post('/insertCurrency', insertCurrency)
 router.post('/updateCurrency', updateCurrency)
 router.post('/deleteCurrency', deleteCurrency)
+router.post('/selectWhiskeyReview', selectWhiskeyReview)
+router.post('/insertReview', insertReview)
 
 router.post('/queryCustomerReport', queryCustomerReport)
 router.post('/queryEmployeeReport', queryEmployeeReport)
@@ -72,6 +74,11 @@ async function insertCurrency(req, res){
     await mainframeService.insertCurrency(data)
 }
 
+async function insertReview(req, res){
+    const data = req.body
+    await mainframeService.insertReview(data)
+}
+
 //===================================SELECT=============================
 
 async function selectWhiskey(req, res){
@@ -105,6 +112,12 @@ async function selectPaymentMethod(req, res){
 
 async function selectSubscription(req, res){
     const recordset = await mainframeService.selectSubscription() 
+    res.send(recordset)
+}
+
+async function selectWhiskeyReview(req, res){
+    const data = req.body
+    const recordset = await mainframeService.selectWhiskeyReviews(data.id)
     res.send(recordset)
 }
 

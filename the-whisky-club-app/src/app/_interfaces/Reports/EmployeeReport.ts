@@ -4,6 +4,5 @@ export interface EmployeeReport{
     idDepartment: number,
     localSalary: number,
     dollarSalary: number,
-    status: boolean,
     evaluationAverage: number
 }

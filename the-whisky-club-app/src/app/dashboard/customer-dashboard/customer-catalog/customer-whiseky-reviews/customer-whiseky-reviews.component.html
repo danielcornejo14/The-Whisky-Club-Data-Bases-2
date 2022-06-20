@@ -1,0 +1,33 @@
+<!-- idWhiskeyReview: number,
+idCustomer: number,
+idWhiskey: number,
+comment: string,
+evaluation: number,
+date: string -->
+<div class="container">
+    
+    <div class="review" *ngFor="let item of reviewList">
+        <h1>Cusotmer: {{item.idCustomer}}</h1>
+        <ngb-rating [rate]="item.evaluation" [readonly]="true" [max]="5"></ngb-rating>
+        <pre>{{item.date}}</pre>
+        <p>{{item.comment}}</p>
+        <hr>
+    </div>
+
+
+    <form [formGroup]="review" class="form">
+
+        <ngb-rating formControlName="evaluation" [max]="5"></ngb-rating>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Comment</mat-label>
+            <textarea matInput placeholder="Ex. It makes me feel..." formControlName="comment" maxlength="250"></textarea>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit" [mat-dialog-close]="review.value">Submit</button>
+    </form>
+
+</div>
+
+
+

@@ -67,6 +67,9 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import { ReportsCustomerComponent } from './dashboard/admin-dashboard/reports/reports-customer/reports-customer.component';
 import { ReportsEmployeeComponent } from './dashboard/admin-dashboard/reports/reports-employee/reports-employee.component';
 import { ReportsSalesComponent } from './dashboard/admin-dashboard/reports/reports-sales/reports-sales.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { CustomerWhisekyReviewsComponent } from './dashboard/customer-dashboard/customer-catalog/customer-whiseky-reviews/customer-whiseky-reviews.component';
+
 
 
 @NgModule({
@@ -107,6 +110,7 @@ import { ReportsSalesComponent } from './dashboard/admin-dashboard/reports/repor
     ReportsCustomerComponent,
     ReportsEmployeeComponent,
     ReportsSalesComponent,
+    CustomerWhisekyReviewsComponent,
   ],
   imports: [
     BrowserModule,
@@ -134,7 +138,8 @@ import { ReportsSalesComponent } from './dashboard/admin-dashboard/reports/repor
     NgbModule,
     MatStepperModule,
     MatRadioModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatProgressSpinnerModule
 
   ],
   providers: [authInterceptorProviders],

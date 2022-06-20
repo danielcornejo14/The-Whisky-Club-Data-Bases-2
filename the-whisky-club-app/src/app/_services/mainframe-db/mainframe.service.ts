@@ -12,6 +12,7 @@ import { Subscription } from 'src/app/_interfaces/Misc/Subscription';
 import { CustomerReport } from 'src/app/_interfaces/Reports/CustomerReport';
 import { EmployeeReport } from 'src/app/_interfaces/Reports/EmployeeReport';
 import { SalesReport } from 'src/app/_interfaces/Reports/SalesReport';
+import { WhiskeyReview } from 'src/app/_interfaces/Whiskey/WhiskeyReview';
 
 const DB_URL = environment.apiUrl+'/main-db'
 
@@ -53,6 +54,10 @@ export class MainframeService {
     return this.http.post(DB_URL+'/insertCurrency', currency)
   }
 
+  createReview(review: any){
+    return this.http.post(DB_URL+'/insertReview', review)
+  }
+
   // =================
   // ==== Select =====
   // =================
@@ -77,6 +82,10 @@ export class MainframeService {
 
   getSubscriptions(){
     return this.http.get<Subscription[]>(DB_URL+'/selectSubscription')
+  }
+
+  getWhiskeyReview(whisekyId: number){
+    return this.http.post<WhiskeyReview[]>(DB_URL+'/selectWhiskeyReview', {"id": whisekyId})
   }
 
   // =================

@@ -6,7 +6,6 @@
             <th>Department</th>
             <th>Local Salary</th>
             <th>Dollar Salary</th>
-            <th>Status</th>
             <th>Evaluation Avarage</th>
         </tr>
         <tr *ngFor="let report of reportList">
@@ -15,7 +14,6 @@
             <td>{{findDepartment(report.idDepartment)?.name}}</td>
             <td>{{report.localSalary}}</td>
             <td>{{report.dollarSalary}}</td>
-            <td>{{report.status===true? 'Active': 'Deleted'}}</td>
             <td>{{report.evaluationAverage}}</td>
         </tr>
     </table>

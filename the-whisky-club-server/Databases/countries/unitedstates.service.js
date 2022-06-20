@@ -2,7 +2,8 @@ const mssql = require('mssql')
 
 module.exports = {
     selectTotal,
-    insertSale
+    insertSale,
+    filterWhiskey
 }
 
 const config = {
@@ -33,18 +34,53 @@ async function selectTotal(order){
 
 async function insertSale(order){ 
 
+    mssql.close()
+    await mssql.connect(config)
     console.log(order)
+    try{
+        const result = await mssql.query(`exec processSale '${order}'`)
+        mssql.close()
+        console.log(result.recordset)
+    }
+    catch(err){ 
+        console.log(err)  
+    }
+}
 
-    // mssql.close()
+async function filterWhiskey(filter){
+    mssql.close()
+    await mssql.connect(config)
+    console.log(filter)
+    try{
+        const result = await mssql.query(`exec filterWhiskeys '${filter.username}',
+        ${filter.whiskeyType},
+        '${filter.name}',
+        ${filter.price},
+        ${filter.existance},
+        ${filter.distanceOrder},
+        ${filter.popularity}`)
+   
+       
 
-    // await mssql.connect(config)
-    // let result;
-    // if(order.location.lat == undefined){
-    //     result = await mssql.query(``).catch((err)=> console.log(err))
-    //     mssql.close()
-    // }
-    // else{
-    //     result = await mssql.query(``).catch((err)=> console.log(err))
-    //     mssql.close()
-    // }
+        for(let i = 0; i < result.recordset.length; i++){
+            const imageRecordset = await mssql.query(` use Mainframe_db;
+            exec selectImage ${result.recordset[i].idWhiskey}`)
+            let imageSet = []
+    
+            for(let j = 0; j < imageRecordset.recordset.length; j++){
+                imageSet.push(imageRecordset.recordset[j].image)
+            }
+            
+            result.recordset[i].images = imageSet
+        }
+
+        mssql.close()
+
+        console.log(result.recordset)
+
+        return result.recordset
+    }
+    catch(err){
+        console.log(err)
+    }
 }
