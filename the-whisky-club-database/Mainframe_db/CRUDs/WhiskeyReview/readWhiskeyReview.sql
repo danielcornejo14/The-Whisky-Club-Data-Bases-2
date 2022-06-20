@@ -1,4 +1,4 @@
-CREATE PROCEDURE readWhiskeyReview @idWhiskeyReview int
+CREATE OR ALTER PROCEDURE readWhiskeyReview @idWhiskey int
 WITH ENCRYPTION
 AS
 BEGIN
@@ -10,7 +10,7 @@ BEGIN
             SELECT idWhiskeyReview, idCustomer, idWhiskey,
                    comment, evaluation, date, status
             FROM WhiskeyReview
-            WHERE idWhiskeyReview = @idWhiskeyReview
+            WHERE idWhiskey = @idWhiskey
         END
         ELSE
         BEGIN
