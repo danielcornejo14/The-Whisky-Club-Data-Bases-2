@@ -68,7 +68,6 @@ export class CustomerCheckoutComponent implements OnInit {
         lat: this.markerPosition?.lat
       }
     }
-    console.log(order)
     switch(this.data.buyFrom){
       case 1:
         //US

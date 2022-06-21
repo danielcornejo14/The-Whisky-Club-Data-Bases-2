@@ -62,8 +62,11 @@ export class MainframeService {
   // =================
   // ==== Select =====
   // =================
-  getWhiskey(){
-    return this.http.get<Whisky[]>(DB_URL+'/selectWhiskey')
+  getWhiskey(username: string){
+    return this.http.post<Whisky[]>(DB_URL+'/selectWhiskey', {"username": username})
+  }
+  getWhiskeyAdmin(){
+    return this.http.get<Whisky[]>(DB_URL+'/selectWhiskeyAdmin')
   }
   getPresentation(){
     return this.http.get<Presentation[]>(DB_URL+'/selectPresentation')

@@ -27,6 +27,7 @@ import { ReportsCustomerComponent } from './dashboard/admin-dashboard/reports/re
 import { ReportsSalesComponent } from './dashboard/admin-dashboard/reports/reports-sales/reports-sales.component';
 import { EmployeeLoginComponent } from './login/employee-login/employee-login.component';
 import { EmployeeComplaintsComponent } from './dashboard/employee-dashboard/employee-complaints/employee-complaints.component';
+import { WhiskeyAdminResolver } from './_resolvers/dashboard/catalog/whiskey-admin.resolver';
 
 const routes: Routes = [
   //logIn
@@ -46,7 +47,7 @@ const routes: Routes = [
   {path: 'admin-dashboard', component: AdminDashboardComponent, children:[
       {path: 'catalog', component: CatalogComponent, resolve:
           {
-            whiskey: WhiskeyResolver,
+            whiskey: WhiskeyAdminResolver,
             whiskeyType: WhiskeyTypeResolver,
             supplier: SupplierResolver,
             presentation: PresentationResolver,

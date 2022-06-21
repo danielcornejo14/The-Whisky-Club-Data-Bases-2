@@ -18,17 +18,16 @@ export class CatalogCreateComponent implements OnInit {
   updateItem = this.formBuilder.group({
     idSupplier: [''],
     idPresentation: [''],
-    idCurrency: [''],
     idWhiskeyType: [''],
     brand: [''],
     price: [''],
     alcoholContent: [''],
     productionDate: [''],
     dueDate: [''],
-    availability: [false],
     millilitersQuantity: [''],
     whiskeyAging: [''],
-    special: [false]
+    special: [false],
+    addStock: 0
   })
 
 

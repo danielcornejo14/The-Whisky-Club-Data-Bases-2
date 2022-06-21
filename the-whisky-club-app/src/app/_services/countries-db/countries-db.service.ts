@@ -25,6 +25,7 @@ export class CountriesDbService {
     let productIndex: number[] = []
     order.cart.forEach((x: any) => productIndex.push(x.idWhiskey))
     order.cart = productIndex
+    console.log(JSON.stringify(order))
     return this.http.post(US_DB_URL+'/selectTotal', order)
   }
 

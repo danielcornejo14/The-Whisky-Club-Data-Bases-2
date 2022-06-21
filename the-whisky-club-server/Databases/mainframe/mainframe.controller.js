@@ -4,7 +4,7 @@ const router = express.Router()
 const mainframeService = require('./mainframe.service')
 
 
-router.get('/selectWhiskey', selectWhiskey)
+router.get('/selectWhiskeyAdmin', selectWhiskeyAdmin)
 router.get('/selectWhiskeyType', selectWhiskeyType)
 router.get('/selectPresentation', selectPresentation)
 router.get('/selectSupplier', selectSupplier)
@@ -31,6 +31,7 @@ router.post('/deleteCurrency', deleteCurrency)
 router.post('/selectWhiskeyReview', selectWhiskeyReview)
 router.post('/insertReview', insertReview)
 router.post('/selectSales', selectSales)
+router.post('/selectWhiskey', selectWhiskey)
 
 router.post('/queryCustomerReport', queryCustomerReport)
 router.post('/queryEmployeeReport', queryEmployeeReport)
@@ -79,7 +80,13 @@ async function insertReview(req, res){
 //===================================SELECT=============================
 
 async function selectWhiskey(req, res){
-    const recordset = await mainframeService.selectWhisky() 
+    const data = req.body
+    const recordset = await mainframeService.selectWhisky(data.username) 
+    res.send(recordset)
+}
+
+async function selectWhiskeyAdmin(req,res){
+    const recordset = await mainframeService.selectWhiskyAdmin() 
     res.send(recordset)
 }
 async function selectPresentation(req,res){
@@ -127,12 +134,12 @@ async function selectSales(req, res){
 //===================================UPDATE=============================
 async function updateWhiskey(req, res){
     const data = req.body
-    const result = await mainframeService.updateWhiskey(data).then((conn)=>conn.close())
+    const result = await mainframeService.updateWhiskey(data)
 }
 
 async function updateSubscription(req, res){
     const data = req.body
-    await mainframeService.updateSubscription(data).then((conn)=>conn.close())
+    await mainframeService.updateSubscription(data)
 }
 
 async function updateWhiskeyType(req, res){
