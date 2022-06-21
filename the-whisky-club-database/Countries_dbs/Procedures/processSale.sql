@@ -176,6 +176,20 @@ BEGIN
                 DECLARE @idSale int
                 SET @idSale = SCOPE_IDENTITY()
                 --------------------------------------------------------------------------
+                --A whiskey is given to the customer for free every ten sales, only for subscription 4.
+                IF (SELECT COUNT(idSale) FROM Sale WHERE idCustomer = @idCustomer) % 10 = 0 AND @idSubscription = 4
+                BEGIN
+                    DECLARE @idRandomWhiskey int
+                    SET @idRandomWhiskey = (SELECT TOP (1) idWhiskey FROM WhiskeyXShop ORDER BY NEWID())
+                    INSERT INTO WhiskeyXSale(idSale, idWhiskey, quantity)
+                    VALUES (@idSale, @idRandomWhiskey , 1)
+                    --Decrease whiskey current stock
+                    UPDATE WhiskeyXShop
+                    SET currentStock = currentStock - 1
+                    WHERE idWhiskey = @idRandomWhiskey AND
+                          idShop = @idShop
+                END
+                --------------------------------------------------------------------------
                 --Cursor for sold whiskeys
                 DECLARE @currentIdWhiskey int
                 DECLARE whiskeysCursor CURSOR FOR SELECT

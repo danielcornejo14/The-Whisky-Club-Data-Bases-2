@@ -4,7 +4,7 @@ CREATE OR ALTER PROCEDURE insertWhiskey @idSupplier int, @idPresentation int,
                                         @alcoholContent float, @productionDate date,
                                         @dueDate date,
                                         @millilitersQuantity float, @whiskeyAging int,
-                                        @special bit
+                                        @special bit, @quantity int
 WITH ENCRYPTION
 AS
 BEGIN
@@ -13,7 +13,7 @@ BEGIN
         AND @alcoholContent IS NOT NULL AND @millilitersQuantity IS NOT NULL
         AND @productionDate IS NOT NULL AND @dueDate IS NOT NULL
         AND @idWhiskeyType IS NOT NULL AND @whiskeyAging IS NOT NULL
-        AND @special IS NOT NULL
+        AND @special IS NOT NULL AND @quantity IS NOT NULL
     BEGIN
         IF ((SELECT COUNT(idSupplier) FROM Supplier WHERE idSupplier = @idSupplier
             AND status = 1) > 0
@@ -26,7 +26,7 @@ BEGIN
             AND (@productionDate < @dueDate)
             AND @millilitersQuantity > 0
             AND @whiskeyAging >= 0
-            )
+            AND @quantity >= 0)
         BEGIN
             BEGIN TRANSACTION
                 BEGIN TRY
@@ -38,6 +38,8 @@ BEGIN
                             @idWhiskeyType, @brand, @price , @alcoholContent,
                             @productionDate, @dueDate,
                             @millilitersQuantity, @whiskeyAging, @special)
+                    DECLARE @idWhiskeyInserted int
+                    SET @idWhiskeyInserted = SCOPE_IDENTITY()
                     INSERT INTO UnitedStates_db.dbo.Whiskey(idSupplier, idPresentation,
                                         idWhiskeyType, brand, price, alcoholContent,
                                         productionDate, dueDate,
@@ -46,6 +48,9 @@ BEGIN
                             @idWhiskeyType, @brand, @price , @alcoholContent,
                             @productionDate, @dueDate,
                             @millilitersQuantity, @whiskeyAging, @special)
+                    INSERT INTO UnitedStates_db.dbo.WhiskeyXShop(idShop, idWhiskey, currentStock, availability)
+                    SELECT idShop, @idWhiskeyInserted, @quantity, 1
+                    FROM UnitedStates_db.dbo.Shop
                     INSERT INTO Scotland_db.dbo.Whiskey(idSupplier, idPresentation,
                                         idWhiskeyType, brand, price, alcoholContent,
                                         productionDate, dueDate,
@@ -54,6 +59,9 @@ BEGIN
                             @idWhiskeyType, @brand, @price , @alcoholContent,
                             @productionDate, @dueDate,
                             @millilitersQuantity, @whiskeyAging, @special)
+                    INSERT INTO Scotland_db.dbo.WhiskeyXShop(idShop, idWhiskey, currentStock, availability)
+                    SELECT idShop, @idWhiskeyInserted, @quantity, 1
+                    FROM Scotland_db.dbo.Shop
                     INSERT INTO Ireland_db.dbo.Whiskey(idSupplier, idPresentation,
                                         idWhiskeyType, brand, price, alcoholContent,
                                         productionDate, dueDate,
@@ -62,6 +70,9 @@ BEGIN
                             @idWhiskeyType, @brand, @price , @alcoholContent,
                             @productionDate, @dueDate,
                             @millilitersQuantity, @whiskeyAging, @special)
+                    INSERT INTO Ireland_db.dbo.WhiskeyXShop(idShop, idWhiskey, currentStock, availability)
+                    SELECT idShop, @idWhiskeyInserted, @quantity, 1
+                    FROM Ireland_db.dbo.Shop
                     PRINT('Whiskey inserted.')
 					SELECT '00' AS CODE, 'Whiskey inserted.' AS MESSAGE
                     COMMIT TRANSACTION
@@ -85,3 +96,10 @@ BEGIN
     END
 END
 GO
+
+EXEC insertWhiskey @idSupplier = 2, @idPresentation = 1,
+    @idWhiskeyType = 1, @brand = 'test', @price = 100, @alcoholContent = 0.5,
+    @productionDate = N'2022-06-27', @dueDate = N'2022-10-27', @millilitersQuantity = 1200,
+    @whiskeyAging = 18, @special = 1, @quantity = 100
+
+select * from Whiskey

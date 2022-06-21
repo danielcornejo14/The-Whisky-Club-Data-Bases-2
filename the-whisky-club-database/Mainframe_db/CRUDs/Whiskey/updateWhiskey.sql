@@ -4,7 +4,7 @@ CREATE OR ALTER PROCEDURE updateWhiskey @idSupplier int, @idPresentation int,
                                         @alcoholContent float, @productionDate date,
                                         @dueDate date,
                                         @millilitersQuantity float, @whiskeyAging int,
-                                        @special bit, @idWhiskey int
+                                        @special bit, @idWhiskey int, @quantity int
 WITH ENCRYPTION
 AS
 BEGIN
@@ -14,6 +14,7 @@ BEGIN
         AND @productionDate IS NOT NULL AND @dueDate IS NOT NULL
         AND @idWhiskeyType IS NOT NULL AND @whiskeyAging IS NOT NULL
         AND @special IS NOT NULL AND @idWhiskey IS NOT NULL
+        AND @quantity IS NOT NULL
     BEGIN
         IF ((SELECT COUNT(idSupplier) FROM Supplier WHERE idSupplier = @idSupplier
             AND status = 1) > 0
@@ -28,7 +29,7 @@ BEGIN
             AND (@productionDate < @dueDate)
             AND @millilitersQuantity > 0
             AND @whiskeyAging >= 0
-            )
+            AND @quantity >= 0)
         BEGIN
             BEGIN TRANSACTION
                 BEGIN TRY
@@ -45,6 +46,10 @@ BEGIN
                         whiskeyAging = @whiskeyAging,
                         special = @special
                     WHERE idWhiskey = @idWhiskey
+                    UPDATE UnitedStates_db.dbo.WhiskeyXShop
+                    SET currentStock = currentStock + @quantity,
+                        availability = 1
+                    WHERE idWhiskey = @idWhiskey
                     UPDATE UnitedStates_db.dbo.Whiskey
                     SET idSupplier = @idSupplier,
                         idPresentation = @idPresentation,
@@ -58,6 +63,10 @@ BEGIN
                         whiskeyAging = @whiskeyAging,
                         special = @special
                     WHERE idWhiskey = @idWhiskey
+                    UPDATE Scotland_db.dbo.WhiskeyXShop
+                    SET currentStock = currentStock + @quantity,
+                        availability = 1
+                    WHERE idWhiskey = @idWhiskey
                     UPDATE Scotland_db.dbo.Whiskey
                     SET idSupplier = @idSupplier,
                         idPresentation = @idPresentation,
@@ -70,6 +79,10 @@ BEGIN
                         millilitersQuantity = @millilitersQuantity,
                         whiskeyAging = @whiskeyAging,
                         special = @special
+                    WHERE idWhiskey = @idWhiskey
+                    UPDATE Ireland_db.dbo.WhiskeyXShop
+                    SET currentStock = currentStock + @quantity,
+                        availability = 1
                     WHERE idWhiskey = @idWhiskey
                     UPDATE Ireland_db.dbo.Whiskey
                     SET idSupplier = @idSupplier,

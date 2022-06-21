@@ -13,7 +13,7 @@ BEGIN
                millilitersQuantity, whiskeyAging,
                special, status
         FROM Whiskey
-        WHERE Whiskey.special = 1
+        WHERE Whiskey.special = 1 OR Whiskey.special = 0
     END
     ELSE
     BEGIN
