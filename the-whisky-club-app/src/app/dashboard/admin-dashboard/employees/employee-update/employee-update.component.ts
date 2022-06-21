@@ -14,12 +14,14 @@ export class EmployeeUpdateComponent implements OnInit {
     public updateWindow: MatDialogRef<EmployeeUpdateComponent>,
     private formBuilder: FormBuilder
   ) { }
-
+  
+  shops: number[] = [1,2,3,4,5,6,7,8,9]
 
   updateItem = this.formBuilder.group({
     idEmployee: this.data.item.idEmployee,
     idDepartment: this.data.item.idDepartment,
     idEmployeeType: this.data.item.idEmployeeType,
+    idShop: this.data.item.idShop,
     name: this.data.item.name,
     lastName1: this.data.item.lastName1,
     lastName2: this.data.item.lastName2,

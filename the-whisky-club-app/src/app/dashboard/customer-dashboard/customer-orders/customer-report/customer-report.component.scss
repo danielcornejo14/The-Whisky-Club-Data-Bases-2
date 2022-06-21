@@ -1,0 +1,10 @@
+.report{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+form > *{
+    margin-top: 5px;
+}

@@ -25,15 +25,19 @@ import { ReportsComponent } from './dashboard/admin-dashboard/reports/reports.co
 import { ReportsEmployeeComponent } from './dashboard/admin-dashboard/reports/reports-employee/reports-employee.component';
 import { ReportsCustomerComponent } from './dashboard/admin-dashboard/reports/reports-customer/reports-customer.component';
 import { ReportsSalesComponent } from './dashboard/admin-dashboard/reports/reports-sales/reports-sales.component';
+import { EmployeeLoginComponent } from './login/employee-login/employee-login.component';
+import { EmployeeComplaintsComponent } from './dashboard/employee-dashboard/employee-complaints/employee-complaints.component';
 
 const routes: Routes = [
   //logIn
   {path:'login', component: LoginComponent, children: [
     {path: 'admin', redirectTo: '/login-admin', pathMatch: 'full'},
-    {path: 'customer', redirectTo: '/login-customer', pathMatch: 'full'}
+    {path: 'customer', redirectTo: '/login-customer', pathMatch: 'full'},
+    {path: 'employee', redirectTo: '/login-employee', pathMatch: 'full'}
   ]},
   {path: 'login-admin', component: AdminLoginComponent},
   {path: 'login-customer', component: CustomerLoginComponent},
+  {path: 'login-employee', component: EmployeeLoginComponent},
 
   //SignUp
   {path:'signup', component: SignupComponent},
@@ -62,7 +66,9 @@ const routes: Routes = [
       ]}
     ]
   },
-  {path: 'employee-dashboard', component: EmployeeDashboardComponent},
+  {path: 'employee-dashboard', component: EmployeeDashboardComponent, children: [
+    {path: 'complaints', component: EmployeeComplaintsComponent}
+  ]},
   {path: 'customer-dashboard', component: CustomerDashboardComponent, children:[
     {path: 'catalog', component: CustomerCatalogComponent, resolve:
     {

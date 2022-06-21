@@ -13,6 +13,7 @@ import { CustomerReport } from 'src/app/_interfaces/Reports/CustomerReport';
 import { EmployeeReport } from 'src/app/_interfaces/Reports/EmployeeReport';
 import { SalesReport } from 'src/app/_interfaces/Reports/SalesReport';
 import { WhiskeyReview } from 'src/app/_interfaces/Whiskey/WhiskeyReview';
+import { Order } from 'src/app/_interfaces/Customer/Order';
 
 const DB_URL = environment.apiUrl+'/main-db'
 
@@ -86,6 +87,10 @@ export class MainframeService {
 
   getWhiskeyReview(whisekyId: number){
     return this.http.post<WhiskeyReview[]>(DB_URL+'/selectWhiskeyReview', {"id": whisekyId})
+  }
+
+  getSales(username: string){
+    return this.http.post<Order[]>(DB_URL+'/selectSales',{"username": username})
   }
 
   // =================

@@ -69,6 +69,10 @@ import { ReportsEmployeeComponent } from './dashboard/admin-dashboard/reports/re
 import { ReportsSalesComponent } from './dashboard/admin-dashboard/reports/reports-sales/reports-sales.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { CustomerWhisekyReviewsComponent } from './dashboard/customer-dashboard/customer-catalog/customer-whiseky-reviews/customer-whiseky-reviews.component';
+import { CustomerReportComponent } from './dashboard/customer-dashboard/customer-orders/customer-report/customer-report.component';
+import { EmployeeLoginComponent } from './login/employee-login/employee-login.component';
+import { EmployeeComplaintsComponent } from './dashboard/employee-dashboard/employee-complaints/employee-complaints.component';
+import { EmployeeComplaintResolveComponent } from './dashboard/employee-dashboard/employee-complaints/employee-complaint-resolve/employee-complaint-resolve.component';
 
 
 
@@ -111,6 +115,10 @@ import { CustomerWhisekyReviewsComponent } from './dashboard/customer-dashboard/
     ReportsEmployeeComponent,
     ReportsSalesComponent,
     CustomerWhisekyReviewsComponent,
+    CustomerReportComponent,
+    EmployeeLoginComponent,
+    EmployeeComplaintsComponent,
+    EmployeeComplaintResolveComponent,
   ],
   imports: [
     BrowserModule,

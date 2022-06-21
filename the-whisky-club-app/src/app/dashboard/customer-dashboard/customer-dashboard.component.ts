@@ -8,7 +8,6 @@ import { Component, OnInit } from '@angular/core';
 export class CustomerDashboardComponent implements OnInit {
 
   links=['catalog', 'orders']
-  activeLink = this.links[0]
 
   constructor() { }
 

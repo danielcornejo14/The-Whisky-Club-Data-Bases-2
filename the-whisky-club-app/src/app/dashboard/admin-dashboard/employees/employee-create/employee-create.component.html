@@ -2,12 +2,21 @@
 
     <h1>Create New Employee</h1>
 
-    <mat-form-field appearance="outline">
-        <mat-label>Department</mat-label>
-        <mat-select formControlName="idDepartment">
-            <mat-option *ngFor="let department of data.departments" [value]="department.idDepartment">{{department.idShop}} {{department.name}}</mat-option>
-        </mat-select>
-    </mat-form-field>
+    <div class="location">
+        <mat-form-field appearance="outline">
+            <mat-label>Department</mat-label>
+            <mat-select formControlName="idDepartment">
+                <mat-option *ngFor="let department of data.departments" [value]="department.idDepartment">{{department.name}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Shop</mat-label>
+            <mat-select formControlName="idShop">
+                <mat-option *ngFor="let shop of shops" [value]="shop">{{shop}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
 
     <mat-form-field appearance="outline">
         <mat-label>Type</mat-label>

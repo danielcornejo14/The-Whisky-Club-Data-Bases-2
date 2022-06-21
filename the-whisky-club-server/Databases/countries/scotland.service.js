@@ -22,7 +22,7 @@ async function selectTotal(order){
 
     await mssql.connect(config)
     try{
-        const result = await mssql.query(`exec selectSaleInfo '${order}'`)
+        const result = await mssql.query(`exec selectSaleInfo '${order}'`).catch((err)=>{console.log(err)})
         mssql.close()
         return result.recordset[0]
     }
@@ -31,14 +31,18 @@ async function selectTotal(order){
     }
 }
 
-async function insertSale(order){
+async function insertSale(order){ 
+
+    mssql.close()
     await mssql.connect(config)
-    let result;
-    if(order.location.lat == undefined){
-        result = await mssql.query(``).catch((err)=> console.log(err))
+    console.log(order)
+    try{
+        const result = await mssql.query(`exec processSale '${order}'`).catch((err)=>{console.log(err)})
+        mssql.close()
+        console.log(result.recordset)
     }
-    else{
-        result = await mssql.query(``).catch((err)=> console.log(err))
+    catch(err){ 
+        console.log(err)  
     }
 }
 async function filterWhiskey(filter){
@@ -52,7 +56,7 @@ async function filterWhiskey(filter){
         ${filter.price},
         ${filter.existance},
         ${filter.distanceOrder},
-        ${filter.popularity}`)
+        ${filter.popularity}`).catch((err)=>{console.log(err)})
         mssql.close()
         console.log(result.recordset)
     }

@@ -28,6 +28,13 @@ export class AuthService {
     }).pipe(catchError(this.handleError))
   }
 
+  employeeLogin(username: string, password: string): Observable<any>{
+    return this.http.post(AUTH_API+'/authEmployee', {
+      username,
+      password
+    }).pipe(catchError(this.handleError))
+  }
+
   customerSignup(username: string, email: string, password: string): Observable<any>{
     return this.http.post(AUTH_API+'signup', {
       username,
