@@ -66,8 +66,15 @@ BEGIN
         FETCH NEXT FROM whiskeysCursor INTO @currentIdWhiskey
         WHILE @@FETCH_STATUS = 0
         BEGIN
-            IF ((SELECT COUNT(idWhiskey) FROM #WhiskeysSelected WHERE idWhiskey = @currentIdWhiskey)
-                - (SELECT currentStock FROM WhiskeyXShop WHERE idShop = @idShop AND idWhiskey = @currentIdWhiskey)) > 0
+            IF (EXISTS(SELECT currentStock FROM WhiskeyXShop WHERE idShop = @idShop AND idWhiskey = @currentIdWhiskey))
+            BEGIN
+                IF ((SELECT COUNT(idWhiskey) FROM #WhiskeysSelected WHERE idWhiskey = @currentIdWhiskey) - (SELECT currentStock FROM WhiskeyXShop WHERE idShop = @idShop AND idWhiskey = @currentIdWhiskey)) > 0
+                BEGIN
+                    SET @stockAvailable = 0
+                    BREAK
+                END
+            END
+            ELSE
             BEGIN
                 SET @stockAvailable = 0
                 BREAK
@@ -175,3 +182,5 @@ BEGIN
         RAISERROR('Null data is not allowed.', 11, 1)
     END
 END
+GO
+EXEC selectSaleInfo @json = N'{"username":"Corne14","cart":[3],"method":1,"location":{}}'
